@@ -48,6 +48,14 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.labels;
+    if (value != null) {
+      result
+        ..add('labels')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -88,6 +96,12 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'labels':
+          result.labels = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -111,13 +125,20 @@ class _$NotesRecord extends NotesRecord {
   @override
   final String? name;
   @override
+  final DocumentReference<Object?>? labels;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$NotesRecord([void Function(NotesRecordBuilder)? updates]) =>
       (new NotesRecordBuilder()..update(updates))._build();
 
   _$NotesRecord._(
-      {this.location, this.description, this.user, this.name, this.ffRef})
+      {this.location,
+      this.description,
+      this.user,
+      this.name,
+      this.labels,
+      this.ffRef})
       : super._();
 
   @override
@@ -135,6 +156,7 @@ class _$NotesRecord extends NotesRecord {
         description == other.description &&
         user == other.user &&
         name == other.name &&
+        labels == other.labels &&
         ffRef == other.ffRef;
   }
 
@@ -142,9 +164,11 @@ class _$NotesRecord extends NotesRecord {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, location.hashCode), description.hashCode),
-                user.hashCode),
-            name.hashCode),
+            $jc(
+                $jc($jc($jc(0, location.hashCode), description.hashCode),
+                    user.hashCode),
+                name.hashCode),
+            labels.hashCode),
         ffRef.hashCode));
   }
 
@@ -155,6 +179,7 @@ class _$NotesRecord extends NotesRecord {
           ..add('description', description)
           ..add('user', user)
           ..add('name', name)
+          ..add('labels', labels)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -179,6 +204,10 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   String? get name => _$this._name;
   set name(String? name) => _$this._name = name;
 
+  DocumentReference<Object?>? _labels;
+  DocumentReference<Object?>? get labels => _$this._labels;
+  set labels(DocumentReference<Object?>? labels) => _$this._labels = labels;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -194,6 +223,7 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
       _description = $v.description;
       _user = $v.user;
       _name = $v.name;
+      _labels = $v.labels;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -221,6 +251,7 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
             description: description,
             user: user,
             name: name,
+            labels: labels,
             ffRef: ffRef);
     replace(_$result);
     return _$result;
