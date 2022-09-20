@@ -53,8 +53,10 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
       result
         ..add('labels')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
     }
     value = object.ffRef;
     if (value != null) {
@@ -97,10 +99,11 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
               specifiedType: const FullType(String)) as String?;
           break;
         case 'labels':
-          result.labels = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.labels.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -125,7 +128,7 @@ class _$NotesRecord extends NotesRecord {
   @override
   final String? name;
   @override
-  final DocumentReference<Object?>? labels;
+  final BuiltList<DocumentReference<Object?>>? labels;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -204,9 +207,11 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   String? get name => _$this._name;
   set name(String? name) => _$this._name = name;
 
-  DocumentReference<Object?>? _labels;
-  DocumentReference<Object?>? get labels => _$this._labels;
-  set labels(DocumentReference<Object?>? labels) => _$this._labels = labels;
+  ListBuilder<DocumentReference<Object?>>? _labels;
+  ListBuilder<DocumentReference<Object?>> get labels =>
+      _$this._labels ??= new ListBuilder<DocumentReference<Object?>>();
+  set labels(ListBuilder<DocumentReference<Object?>>? labels) =>
+      _$this._labels = labels;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -223,7 +228,7 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
       _description = $v.description;
       _user = $v.user;
       _name = $v.name;
-      _labels = $v.labels;
+      _labels = $v.labels?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -245,14 +250,27 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   NotesRecord build() => _build();
 
   _$NotesRecord _build() {
-    final _$result = _$v ??
-        new _$NotesRecord._(
-            location: location,
-            description: description,
-            user: user,
-            name: name,
-            labels: labels,
-            ffRef: ffRef);
+    _$NotesRecord _$result;
+    try {
+      _$result = _$v ??
+          new _$NotesRecord._(
+              location: location,
+              description: description,
+              user: user,
+              name: name,
+              labels: _labels?.build(),
+              ffRef: ffRef);
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'labels';
+        _labels?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'NotesRecord', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
