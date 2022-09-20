@@ -7,7 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NotificationSettingsWidget extends StatefulWidget {
-  const NotificationSettingsWidget({Key key}) : super(key: key);
+  const NotificationSettingsWidget({Key? key}) : super(key: key);
 
   @override
   _NotificationSettingsWidgetState createState() =>
@@ -16,10 +16,17 @@ class NotificationSettingsWidget extends StatefulWidget {
 
 class _NotificationSettingsWidgetState
     extends State<NotificationSettingsWidget> {
-  bool switchListTileValue1;
-  bool switchListTileValue2;
-  bool switchListTileValue3;
+  bool? switchListTileValue1;
+  bool? switchListTileValue2;
+  bool? switchListTileValue3;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +42,10 @@ class _NotificationSettingsWidgetState
           icon: Icon(
             Icons.arrow_back_rounded,
             color: Color(0xFFCE8C00),
-            size: 25,
+            size: 45,
           ),
           onPressed: () async {
-            Navigator.pop(context);
+            context.pop();
           },
         ),
         title: Text(
@@ -46,7 +53,7 @@ class _NotificationSettingsWidgetState
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: 'Montserrat',
                 color: Color(0xFFCE8C00),
-                fontSize: 20,
+                fontSize: 26,
                 fontWeight: FontWeight.normal,
               ),
         ),
@@ -197,7 +204,7 @@ class _NotificationSettingsWidgetState
             padding: EdgeInsetsDirectional.fromSTEB(0, 28, 0, 0),
             child: FFButtonWidget(
               onPressed: () async {
-                Navigator.pop(context);
+                context.pop();
               },
               text: 'Change Changes',
               options: FFButtonOptions(
@@ -215,7 +222,7 @@ class _NotificationSettingsWidgetState
                   color: Colors.transparent,
                   width: 1,
                 ),
-                borderRadius: 8,
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
           ),

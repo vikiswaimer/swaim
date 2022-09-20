@@ -1,45 +1,44 @@
-import '../add_swaim/add_swaim_widget.dart';
+import '../auth/auth_util.dart';
+import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
-import '../burger_general_menu/burger_general_menu_widget.dart';
 import '../flutter_flow/flutter_flow_google_map.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../list_pag/list_pag_widget.dart';
-import '../note_info/note_info_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:text_search/text_search.dart';
 
 class MapPageWidget extends StatefulWidget {
   const MapPageWidget({
-    Key key,
-    this.datanotes,
+    Key? key,
+    this.note,
   }) : super(key: key);
 
-  final ListsMapsDataNotesRecord datanotes;
+  final DocumentReference? note;
 
   @override
   _MapPageWidgetState createState() => _MapPageWidgetState();
 }
 
 class _MapPageWidgetState extends State<MapPageWidget> {
-  LatLng googleMapsCenter;
+  TextEditingController? textController;
+
+  List<NotesRecord>? algoliaSearchResults = [];
+  LatLng? googleMapsCenter;
   final googleMapsController = Completer<GoogleMapController>();
-  List<ListsMapsDataNotesRecord> simpleSearchResults = [];
-  TextEditingController courtSearchFieldController;
-  List<ListsMapsDataNotesRecord> algoliaSearchResults = [];
+  LatLng? currentUserLocationValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  LatLng currentUserLocationValue;
 
   @override
   void initState() {
     super.initState();
-    courtSearchFieldController = TextEditingController();
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
+    textController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -56,339 +55,570 @@ class _MapPageWidgetState extends State<MapPageWidget> {
         ),
       );
     }
-    return FutureBuilder<List<ListsMapsDataNotesRecord>>(
-      future: ListsMapsDataNotesRecord.search(
-        term: '*',
-        location: getCurrentUserLocation(
-            defaultLocation: LatLng(37.4298229, -122.1735655)),
-      ),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Center(
-            child: SizedBox(
-              width: 60,
-              height: 60,
-              child: SpinKitRipple(
-                color: Color(0xFF222235),
-                size: 60,
+    return Scaffold(
+      key: scaffoldKey,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          if (loggedIn)
+            Align(
+              alignment: AlignmentDirectional(0, 0),
+              child: StreamBuilder<List<NotesRecord>>(
+                stream: queryNotesRecord(
+                  queryBuilder: (notesRecord) => notesRecord.where('user',
+                      isEqualTo: currentUserReference),
+                  limit: 50,
+                ),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: SpinKitRipple(
+                          color: Color(0xFF222235),
+                          size: 60,
+                        ),
+                      ),
+                    );
+                  }
+                  List<NotesRecord> googleMapNotesRecordList = snapshot.data!;
+                  return FlutterFlowGoogleMap(
+                    controller: googleMapsController,
+                    onCameraIdle: (latLng) =>
+                        setState(() => googleMapsCenter = latLng),
+                    initialLocation: googleMapsCenter ??=
+                        currentUserLocationValue!,
+                    markers: googleMapNotesRecordList
+                        .map(
+                          (googleMapNotesRecord) => FlutterFlowMarker(
+                            googleMapNotesRecord.reference.path,
+                            googleMapNotesRecord.location!,
+                            () async {
+                              context.pushNamed(
+                                'NoteInfo',
+                                queryParams: {
+                                  'notes': serializeParam(
+                                      googleMapNotesRecord.reference,
+                                      ParamType.DocumentReference),
+                                }.withoutNulls,
+                              );
+                            },
+                          ),
+                        )
+                        .toList(),
+                    markerColor: GoogleMarkerColor.azure,
+                    mapType: MapType.terrain,
+                    style: GoogleMapStyle.retro,
+                    initialZoom: 10,
+                    allowInteraction: true,
+                    allowZoom: true,
+                    showZoomControls: false,
+                    showLocation: true,
+                    showCompass: false,
+                    showMapToolbar: false,
+                    showTraffic: false,
+                    centerMapOnMarkerTap: true,
+                  );
+                },
               ),
             ),
-          );
-        }
-        List<ListsMapsDataNotesRecord> mapPageListsMapsDataNotesRecordList =
-            snapshot.data;
-        return Scaffold(
-          key: scaffoldKey,
-          resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Align(
-                alignment: AlignmentDirectional(0, 0),
-                child: FlutterFlowGoogleMap(
-                  controller: googleMapsController,
-                  onCameraIdle: (latLng) =>
-                      setState(() => googleMapsCenter = latLng),
-                  initialLocation: googleMapsCenter ??=
-                      LatLng(13.106061, -59.613158),
-                  markers: (mapPageListsMapsDataNotesRecordList ?? [])
-                      .map(
-                        (mapPageListsMapsDataNotesRecord) => FlutterFlowMarker(
-                          mapPageListsMapsDataNotesRecord.reference.path,
-                          mapPageListsMapsDataNotesRecord.location,
-                          () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NoteInfoWidget(),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                      .toList(),
-                  markerColor: GoogleMarkerColor.blue,
-                  mapType: MapType.terrain,
-                  style: GoogleMapStyle.retro,
-                  initialZoom: 14,
-                  allowInteraction: true,
-                  allowZoom: true,
-                  showZoomControls: false,
-                  showLocation: true,
-                  showCompass: false,
-                  showMapToolbar: false,
-                  showTraffic: false,
-                  centerMapOnMarkerTap: true,
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-1, -1),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 107,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0x7AD6D6D6), Color(0x8FD4A03B)],
-                      stops: [1, 1],
-                      begin: AlignmentDirectional(0.14, -1),
-                      end: AlignmentDirectional(-0.14, 1),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.74, -0.88),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(90, 0, 20, 0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
+          Align(
+            alignment: AlignmentDirectional(-1, -1),
+            child: Container(
+              width: double.infinity,
+              height: 90,
+              decoration: BoxDecoration(),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
-                      color: Color(0xFFEEEEEE),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 3,
-                          color: Color(0x34000000),
-                          offset: Offset(0, 1),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: FlutterFlowTheme.of(context).grayLines,
-                      ),
+                      shape: BoxShape.rectangle,
                     ),
-                    child: Align(
-                      alignment: AlignmentDirectional(0, -0.3),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
-                        child: TextFormField(
-                          controller: courtSearchFieldController,
-                          onFieldSubmitted: (_) async {
-                            await queryListsMapsDataNotesRecordOnce()
-                                .then(
-                                  (records) => simpleSearchResults = TextSearch(
-                                    records
-                                        .map(
-                                          (record) => TextSearchItem(
-                                              record, [record.name]),
-                                        )
-                                        .toList(),
-                                  )
-                                      .search(widget.datanotes.name)
-                                      .map((r) => r.object)
-                                      .toList(),
-                                )
-                                .onError((_, __) => simpleSearchResults = [])
-                                .whenComplete(() => setState(() {}));
-                          },
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            labelStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Overpass',
-                                      color: Color(0xFF222235),
-                                    ),
-                            hintText: 'Search for interesting...',
-                            hintStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Overpass',
-                                      color: Color(0xCF222235),
-                                    ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 25,
+                          borderWidth: 1,
+                          buttonSize: 50,
+                          fillColor:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          icon: Icon(
+                            Icons.menu,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 30,
                           ),
-                          style:
-                              FlutterFlowTheme.of(context).subtitle2.override(
-                                    fontFamily: 'Overpass',
-                                    color: Color(0xCF222235),
+                          onPressed: () async {
+                            context.pushNamed('BurgerGeneralMenu');
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 20, 20),
+                      child: Container(
+                        width: double.infinity,
+                        height: 90,
+                        decoration: BoxDecoration(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: TextFormField(
+                                controller: textController,
+                                onFieldSubmitted: (_) async {
+                                  currentUserLocationValue =
+                                      await getCurrentUserLocation(
+                                          defaultLocation: LatLng(0.0, 0.0));
+                                  setState(() => algoliaSearchResults = null);
+                                  await NotesRecord.search(
+                                    term: textController!.text,
+                                    location: currentUserLocationValue,
+                                    maxResults: 5,
+                                    searchRadiusMeters: 1000000000,
+                                  )
+                                      .then((r) => algoliaSearchResults = r)
+                                      .onError(
+                                          (_, __) => algoliaSearchResults = [])
+                                      .whenComplete(() => setState(() {}));
+                                },
+                                autofocus: true,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  hintText: 'Find note...',
+                                  hintStyle:
+                                      FlutterFlowTheme.of(context).bodyText2,
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(4.0),
+                                      topRight: Radius.circular(4.0),
+                                    ),
                                   ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(4.0),
+                                      topRight: Radius.circular(4.0),
+                                    ),
+                                  ),
+                                  errorBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(4.0),
+                                      topRight: Radius.circular(4.0),
+                                    ),
+                                  ),
+                                  focusedErrorBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(4.0),
+                                      topRight: Radius.circular(4.0),
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  suffixIcon: Icon(
+                                    Icons.location_searching_outlined,
+                                    color: Color(0xFF757575),
+                                    size: 22,
+                                  ),
+                                ),
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-              Align(
-                alignment: AlignmentDirectional(-1, 1),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 78,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFEEEEEE),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.86, -0.9),
-                child: FlutterFlowIconButton(
-                  borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  borderWidth: 1,
-                  buttonSize: 60,
-                  icon: Icon(
-                    Icons.location_searching,
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    setState(() => algoliaSearchResults = null);
-                    await ListsMapsDataNotesRecord.search(
-                      term: widget.datanotes.name,
-                      location: widget.datanotes.location,
-                    )
-                        .then((r) => algoliaSearchResults = r)
-                        .onError((_, __) => algoliaSearchResults = [])
-                        .whenComplete(() => setState(() {}));
-                  },
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.8, 0.94),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BurgerGeneralMenuWidget(),
-                      ),
-                    );
-                  },
-                  text: '',
-                  icon: Icon(
-                    Icons.tune,
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 15,
-                  ),
-                  options: FFButtonOptions(
-                    width: 60,
-                    height: 50,
-                    color: Color(0xFFEEEEEE),
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Overpass',
-                          color: Colors.white,
-                        ),
-                    borderSide: BorderSide(
-                      color: Color(0xFFEEEEEE),
-                      width: 1,
-                    ),
-                    borderRadius: 8,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-0.88, 0.93),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ListPagWidget(),
-                      ),
-                    );
-                  },
-                  text: '',
-                  icon: Icon(
-                    Icons.list,
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 15,
-                  ),
-                  options: FFButtonOptions(
-                    width: 60,
-                    height: 50,
-                    color: Color(0xFFEEEEEE),
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Overpass',
-                          color: Colors.white,
-                        ),
-                    borderSide: BorderSide(
-                      color: Color(0xFFEEEEEE),
-                      width: 1,
-                    ),
-                    borderRadius: 8,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-0.92, -0.89),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BurgerGeneralMenuWidget(),
-                      ),
-                    );
-                  },
-                  text: '',
-                  icon: Icon(
-                    Icons.menu,
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 15,
-                  ),
-                  options: FFButtonOptions(
-                    width: 60,
-                    height: 50,
-                    color: Color(0xFFEEEEEE),
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Overpass',
-                          color: Colors.white,
-                        ),
-                    borderSide: BorderSide(
-                      color: Color(0xFFEEEEEE),
-                      width: 1,
-                    ),
-                    borderRadius: 8,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-0.02, 0.87),
-                child: FlutterFlowIconButton(
-                  borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  borderWidth: 1,
-                  buttonSize: 65,
-                  fillColor: FlutterFlowTheme.of(context).tertiaryColor,
-                  icon: Icon(
-                    Icons.add_box_outlined,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 300),
-                        reverseDuration: Duration(milliseconds: 300),
-                        child: AddSwaimWidget(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        );
-      },
+          Align(
+            alignment: AlignmentDirectional(0, -0.76),
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+              child: Container(
+                width: double.infinity,
+                height: 60,
+                decoration: BoxDecoration(),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  primary: false,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x7F222235),
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Text(
+                                  'Want to visit',
+                                  style: FlutterFlowTheme.of(context).bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x7F222235),
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Text(
+                                  'Need to buy',
+                                  style: FlutterFlowTheme.of(context).bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x7F222235),
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Text(
+                                  'Photo vie-points',
+                                  style: FlutterFlowTheme.of(context).bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x7F222235),
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Text(
+                                  'Favorite stores',
+                                  style: FlutterFlowTheme.of(context).bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x7F222235),
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Text(
+                                  'Art places',
+                                  style: FlutterFlowTheme.of(context).bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x7F222235),
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                child: Text(
+                                  'Add to Categories',
+                                  style: FlutterFlowTheme.of(context).bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(-1, 1),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 78,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+              ),
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(-0.88, 0.93),
+            child: FFButtonWidget(
+              onPressed: () async {
+                context.pushNamed('NotesPage');
+              },
+              text: '',
+              icon: Icon(
+                Icons.list,
+                color: FlutterFlowTheme.of(context).primaryColor,
+                size: 30,
+              ),
+              options: FFButtonOptions(
+                width: 50,
+                height: 40,
+                color: Color(0xFFEEEEEE),
+                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                      fontFamily: 'Overpass',
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                borderSide: BorderSide(
+                  color: Color(0xFFEEEEEE),
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(0.8, 0.94),
+            child: FFButtonWidget(
+              onPressed: () async {
+                context.pushNamed('SelectInfoSources');
+              },
+              text: '',
+              icon: Icon(
+                Icons.tune,
+                color: FlutterFlowTheme.of(context).primaryColor,
+                size: 30,
+              ),
+              options: FFButtonOptions(
+                width: 50,
+                height: 40,
+                color: Color(0xFFEEEEEE),
+                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                      fontFamily: 'Overpass',
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                borderSide: BorderSide(
+                  color: Color(0xFFEEEEEE),
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(-0.02, 0.87),
+            child: FlutterFlowIconButton(
+              borderColor: Color(0x80222235),
+              borderRadius: 30,
+              borderWidth: 1,
+              buttonSize: 65,
+              fillColor: FlutterFlowTheme.of(context).tertiaryColor,
+              icon: Icon(
+                Icons.add_box_outlined,
+                color: Colors.black,
+                size: 30,
+              ),
+              onPressed: () async {
+                context.pushNamed(
+                  'addSwaim',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.fade,
+                    ),
+                  },
+                );
+              },
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional(0.89, 0.74),
+            child: FFButtonWidget(
+              onPressed: () async {
+                context.pushNamed('AggregationsMapPage');
+              },
+              text: 'Interest Mode',
+              options: FFButtonOptions(
+                width: 130,
+                height: 40,
+                color: FlutterFlowTheme.of(context).secondaryColor,
+                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                      fontFamily: 'Montserrat',
+                      color: FlutterFlowTheme.of(context).primaryColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

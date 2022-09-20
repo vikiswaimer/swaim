@@ -3,14 +3,20 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NoteInfoWidget extends StatefulWidget {
-  const NoteInfoWidget({Key key}) : super(key: key);
+  const NoteInfoWidget({
+    Key? key,
+    this.notes,
+  }) : super(key: key);
+
+  final DocumentReference? notes;
 
   @override
   _NoteInfoWidgetState createState() => _NoteInfoWidgetState();
@@ -20,64 +26,109 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Color(0xFFEEEEEE),
-        automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          buttonSize: 48,
-          icon: Icon(
-            Icons.chevron_left_rounded,
-            color: FlutterFlowTheme.of(context).darkBG,
-            size: 30,
-          ),
-          onPressed: () async {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Add Swaim',
-          style: FlutterFlowTheme.of(context).title3,
-        ),
-        actions: [],
-        centerTitle: false,
-        elevation: 0,
-      ),
-      backgroundColor: Color(0xFFEEEEEE),
-      body: SafeArea(
-        child: StreamBuilder<List<ListsMapsDataNotesRecord>>(
-          stream: queryListsMapsDataNotesRecord(
-            singleRecord: true,
-          ),
-          builder: (context, snapshot) {
-            // Customize what your widget looks like when it's loading.
-            if (!snapshot.hasData) {
-              return Center(
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: SpinKitRipple(
-                    color: Color(0xFF222235),
-                    size: 60,
-                  ),
+    return StreamBuilder<NotesRecord>(
+      stream: NotesRecord.getDocument(widget.notes!),
+      builder: (context, snapshot) {
+        // Customize what your widget looks like when it's loading.
+        if (!snapshot.hasData) {
+          return Center(
+            child: SizedBox(
+              width: 60,
+              height: 60,
+              child: SpinKitRipple(
+                color: Color(0xFF222235),
+                size: 60,
+              ),
+            ),
+          );
+        }
+        final noteInfoNotesRecord = snapshot.data!;
+        return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: Color(0xFFEEEEEE),
+            automaticallyImplyLeading: false,
+            leading: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+              child: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                buttonSize: 48,
+                icon: Icon(
+                  Icons.chevron_left_rounded,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 45,
                 ),
-              );
-            }
-            List<ListsMapsDataNotesRecord> columnListsMapsDataNotesRecordList =
-                snapshot.data;
-            // Return an empty Container when the document does not exist.
-            if (snapshot.data.isEmpty) {
-              return Container();
-            }
-            final columnListsMapsDataNotesRecord =
-                columnListsMapsDataNotesRecordList.isNotEmpty
-                    ? columnListsMapsDataNotesRecordList.first
-                    : null;
-            return Column(
+                onPressed: () async {
+                  context.pop();
+                },
+              ),
+            ),
+            title: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+              child: Text(
+                noteInfoNotesRecord.name!,
+                style: FlutterFlowTheme.of(context).title3.override(
+                      fontFamily: 'Overpass',
+                      color: FlutterFlowTheme.of(context).primaryColor,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+            ),
+            actions: [
+              FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                borderWidth: 1,
+                buttonSize: 60,
+                icon: Icon(
+                  Icons.mode_edit,
+                  color: FlutterFlowTheme.of(context).primaryColor,
+                  size: 30,
+                ),
+                onPressed: () async {
+                  context.pushNamed(
+                    'editSwaim',
+                    queryParams: {
+                      'note': serializeParam(noteInfoNotesRecord.reference,
+                          ParamType.DocumentReference),
+                    }.withoutNulls,
+                  );
+                },
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                child: FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  buttonSize: 60,
+                  icon: Icon(
+                    Icons.favorite_border,
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    print('IconButton pressed ...');
+                  },
+                ),
+              ),
+            ],
+            centerTitle: false,
+            elevation: 0,
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          body: SafeArea(
+            child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
@@ -98,8 +149,9 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    columnListsMapsDataNotesRecord.name,
+                                  AutoSizeText(
+                                    noteInfoNotesRecord.name!
+                                        .maybeHandleOverflow(maxChars: 20),
                                     style: FlutterFlowTheme.of(context).title2,
                                   ),
                                 ],
@@ -112,10 +164,13 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        columnListsMapsDataNotesRecord
-                                            .description,
+                                        noteInfoNotesRecord.name!,
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Overpass',
+                                              fontSize: 22,
+                                            ),
                                       ),
                                     ),
                                   ],
@@ -142,9 +197,8 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           FFButtonWidget(
-                            onPressed: () async {
-                              await launchURL(functions.getMapUrl(
-                                  columnListsMapsDataNotesRecord.location));
+                            onPressed: () {
+                              print('Button pressed ...');
                             },
                             text: 'Go to',
                             icon: FaIcon(
@@ -153,7 +207,8 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                             options: FFButtonOptions(
                               width: 150,
                               height: 50,
-                              color: FlutterFlowTheme.of(context).tertiaryColor,
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
                               textStyle: FlutterFlowTheme.of(context)
                                   .bodyText2
                                   .override(
@@ -162,10 +217,10 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                                     fontWeight: FontWeight.bold,
                                   ),
                               borderSide: BorderSide(
-                                color: Colors.transparent,
+                                color: FlutterFlowTheme.of(context).alternate,
                                 width: 1,
                               ),
-                              borderRadius: 12,
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                         ],
@@ -174,10 +229,10 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                   ],
                 ),
               ],
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
