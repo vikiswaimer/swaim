@@ -15,9 +15,9 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
 
   DocumentReference? get user;
 
-  BuiltList<DocumentReference>? get labels;
-
   String? get name;
+
+  DocumentReference? get labels;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -25,7 +25,6 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
 
   static void _initializeBuilder(NotesRecordBuilder builder) => builder
     ..description = ''
-    ..labels = ListBuilder()
     ..name = '';
 
   static CollectionReference get collection =>
@@ -47,9 +46,8 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
               ))
           ..description = snapshot.data['description']
           ..user = safeGet(() => toRef(snapshot.data['user']))
-          ..labels = safeGet(
-              () => ListBuilder(snapshot.data['labels'].map((s) => toRef(s))))
           ..name = snapshot.data['name']
+          ..labels = safeGet(() => toRef(snapshot.data['labels']))
           ..ffRef = NotesRecord.collection.doc(snapshot.objectID),
       );
 
@@ -83,6 +81,7 @@ Map<String, dynamic> createNotesRecordData({
   String? description,
   DocumentReference? user,
   String? name,
+  DocumentReference? labels,
 }) {
   final firestoreData = serializers.toFirestore(
     NotesRecord.serializer,
@@ -91,8 +90,8 @@ Map<String, dynamic> createNotesRecordData({
         ..location = location
         ..description = description
         ..user = user
-        ..labels = null
-        ..name = name,
+        ..name = name
+        ..labels = labels,
     ),
   );
 
