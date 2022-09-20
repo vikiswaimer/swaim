@@ -26,7 +26,6 @@ class MapPageWidget extends StatefulWidget {
 class _MapPageWidgetState extends State<MapPageWidget> {
   TextEditingController? textController;
 
-  List<NotesRecord>? algoliaSearchResults = [];
   LatLng? googleMapsCenter;
   final googleMapsController = Completer<GoogleMapController>();
   LatLng? currentUserLocationValue;
@@ -177,22 +176,6 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                               width: MediaQuery.of(context).size.width,
                               child: TextFormField(
                                 controller: textController,
-                                onFieldSubmitted: (_) async {
-                                  currentUserLocationValue =
-                                      await getCurrentUserLocation(
-                                          defaultLocation: LatLng(0.0, 0.0));
-                                  setState(() => algoliaSearchResults = null);
-                                  await NotesRecord.search(
-                                    term: textController!.text,
-                                    location: currentUserLocationValue,
-                                    maxResults: 5,
-                                    searchRadiusMeters: 1000000000,
-                                  )
-                                      .then((r) => algoliaSearchResults = r)
-                                      .onError(
-                                          (_, __) => algoliaSearchResults = [])
-                                      .whenComplete(() => setState(() {}));
-                                },
                                 autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
