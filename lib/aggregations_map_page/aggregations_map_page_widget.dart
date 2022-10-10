@@ -1,22 +1,20 @@
+import '../auth/auth_util.dart';
+import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
 import '../components/aggregation_bottom_sheet_widget.dart';
 import '../flutter_flow/flutter_flow_google_map.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AggregationsMapPageWidget extends StatefulWidget {
-  const AggregationsMapPageWidget({
-    Key? key,
-    this.aggregations,
-  }) : super(key: key);
-
-  final DocumentReference? aggregations;
+  const AggregationsMapPageWidget({Key? key}) : super(key: key);
 
   @override
   _AggregationsMapPageWidgetState createState() =>
@@ -24,8 +22,8 @@ class AggregationsMapPageWidget extends StatefulWidget {
 }
 
 class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
+  Completer<List<AggregationsRecord>>? _algoliaRequestCompleter;
   TextEditingController? textController;
-
   LatLng? googleMapsCenter;
   final googleMapsController = Completer<GoogleMapController>();
   LatLng? currentUserLocationValue;
@@ -38,6 +36,12 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
         .then((loc) => setState(() => currentUserLocationValue = loc));
     textController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -57,6 +61,205 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
+      drawer: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          elevation: 16,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 24, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(24, 35, 0, 0),
+                      child: Image.asset(
+                        'assets/images/Frame_8.png',
+                        height: 20,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                    FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 15,
+                      borderWidth: 1,
+                      buttonSize: 30,
+                      icon: Icon(
+                        Icons.chevron_left,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 15,
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(24, 10, 24, 0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 1,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).darkBG,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(24, 28, 0, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Notifications',
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Overpass',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                          ),
+                    ),
+                    Text(
+                      'Settings',
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Overpass',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                          ),
+                    ),
+                    Text(
+                      'Contact Us',
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Overpass',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                          ),
+                    ),
+                    Text(
+                      'FAQ',
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Overpass',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                          ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        await Share.share('https://swaim.com');
+                      },
+                      child: Text(
+                        'Share',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Overpass',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w200,
+                            ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        HapticFeedback.lightImpact();
+                      },
+                      child: Text(
+                        'Rate Us',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Overpass',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w200,
+                            ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        context.pushNamed('LoginAndSignup');
+                      },
+                      child: Text(
+                        'Sign Up/Login',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Overpass',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w200,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (loggedIn)
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(24, 10, 24, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 1,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).darkBG,
+                    ),
+                  ),
+                ),
+              if (loggedIn)
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 24, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 14, 0, 0),
+                        child: Text(
+                          'Signed as ',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Overpass',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                        ),
+                      ),
+                      Text(
+                        currentUserEmail.maybeHandleOverflow(
+                          maxChars: 40,
+                          replacement: '…',
+                        ),
+                        maxLines: 2,
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Overpass',
+                              fontSize: 12,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (loggedIn)
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(24, 6, 0, 0),
+                  child: InkWell(
+                    onTap: () async {
+                      GoRouter.of(context).prepareAuthEvent();
+                      await signOut();
+
+                      context.goNamedAuth('WelcomePage', mounted);
+                    },
+                    child: Text(
+                      'Log out',
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Overpass',
+                            color: Color(0xFFCA235E),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                          ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Container(
@@ -67,10 +270,16 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
             ),
             child: Align(
               alignment: AlignmentDirectional(0, 0),
-              child: StreamBuilder<List<AggregationsRecord>>(
-                stream: queryAggregationsRecord(
-                  limit: 100,
-                ),
+              child: FutureBuilder<List<AggregationsRecord>>(
+                future: (_algoliaRequestCompleter ??=
+                        Completer<List<AggregationsRecord>>()
+                          ..complete(AggregationsRecord.search(
+                            term: textController!.text,
+                            location: getCurrentUserLocation(
+                                defaultLocation:
+                                    LatLng(37.4298229, -122.1735655)),
+                          )))
+                    .future,
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -107,17 +316,12 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
                                   return Padding(
                                     padding: MediaQuery.of(context).viewInsets,
                                     child: AggregationBottomSheetWidget(
-                                      name: googleMapAggregationsRecord.title,
-                                      description: googleMapAggregationsRecord
-                                          .description,
-                                      image:
-                                          googleMapAggregationsRecord.picture,
-                                      ref:
+                                      aggregation:
                                           googleMapAggregationsRecord.reference,
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             },
                           ),
                         )
@@ -160,8 +364,8 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
                       color: FlutterFlowTheme.of(context).primaryText,
                       size: 26,
                     ),
-                    onPressed: () {
-                      print('IconButton pressed ...');
+                    onPressed: () async {
+                      scaffoldKey.currentState!.openDrawer();
                     },
                   ),
                 ),
@@ -172,6 +376,10 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
                       width: 275,
                       child: TextFormField(
                         controller: textController,
+                        onFieldSubmitted: (_) async {
+                          setState(() => _algoliaRequestCompleter = null);
+                          await waitForAlgoliaRequestCompleter();
+                        },
                         autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
@@ -229,365 +437,23 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
               ],
             ),
           ),
-          Align(
-            alignment: AlignmentDirectional(0, -0.76),
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-              child: Container(
-                width: double.infinity,
-                height: 60,
-                decoration: BoxDecoration(),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-                      child: Container(
-                        width: 120,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x7F222235),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                child: Text(
-                                  'Want to visit',
-                                  style: FlutterFlowTheme.of(context).bodyText2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-                      child: Container(
-                        width: 120,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x7F222235),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                child: Text(
-                                  'Need to buy',
-                                  style: FlutterFlowTheme.of(context).bodyText2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-                      child: Container(
-                        width: 120,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x7F222235),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                child: Text(
-                                  'Photo vie-points',
-                                  style: FlutterFlowTheme.of(context).bodyText2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-                      child: Container(
-                        width: 120,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x7F222235),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                child: Text(
-                                  'Favorite stores',
-                                  style: FlutterFlowTheme.of(context).bodyText2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-                      child: Container(
-                        width: 120,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x7F222235),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                child: Text(
-                                  'Art places',
-                                  style: FlutterFlowTheme.of(context).bodyText2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-                      child: Container(
-                        width: 120,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x7F222235),
-                              offset: Offset(0, 2),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                child: Text(
-                                  'Add to Categories',
-                                  style: FlutterFlowTheme.of(context).bodyText2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional(-1, 1),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 78,
-              decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-              ),
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional(-0.88, 0.93),
-            child: FFButtonWidget(
-              onPressed: () async {
-                context.pushNamed('NotesPage');
-              },
-              text: '',
-              icon: Icon(
-                Icons.list,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                size: 25,
-              ),
-              options: FFButtonOptions(
-                width: 50,
-                height: 40,
-                color: Color(0xFFEEEEEE),
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Overpass',
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                borderSide: BorderSide(
-                  color: Color(0xFFEEEEEE),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional(0.8, 0.94),
-            child: FFButtonWidget(
-              onPressed: () async {
-                context.pushNamed('SelectInfoSources');
-              },
-              text: '',
-              icon: Icon(
-                Icons.tune,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
-              ),
-              options: FFButtonOptions(
-                width: 50,
-                height: 40,
-                color: Color(0xFFEEEEEE),
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Overpass',
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                borderSide: BorderSide(
-                  color: Color(0xFFEEEEEE),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional(-0.02, 0.87),
-            child: FlutterFlowIconButton(
-              borderColor: Color(0x80222235),
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 65,
-              fillColor: FlutterFlowTheme.of(context).tertiaryColor,
-              icon: Icon(
-                Icons.add_box_outlined,
-                color: Colors.black,
-                size: 30,
-              ),
-              onPressed: () async {
-                context.pushNamed(
-                  'addSwaim',
-                  extra: <String, dynamic>{
-                    kTransitionInfoKey: TransitionInfo(
-                      hasTransition: true,
-                      transitionType: PageTransitionType.fade,
-                    ),
-                  },
-                );
-              },
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional(0.89, 0.74),
-            child: FFButtonWidget(
-              onPressed: () async {
-                context.pushNamed('AggregationsMapPage');
-              },
-              text: 'Interest Mode',
-              options: FFButtonOptions(
-                width: 130,
-                height: 40,
-                color: FlutterFlowTheme.of(context).secondaryColor,
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Montserrat',
-                      color: FlutterFlowTheme.of(context).primaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
         ],
       ),
     );
+  }
+
+  Future waitForAlgoliaRequestCompleter({
+    double minWait = 0,
+    double maxWait = double.infinity,
+  }) async {
+    final stopwatch = Stopwatch()..start();
+    while (true) {
+      await Future.delayed(Duration(milliseconds: 50));
+      final timeElapsed = stopwatch.elapsedMilliseconds;
+      final requestComplete = _algoliaRequestCompleter?.isCompleted ?? false;
+      if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
+        break;
+      }
+    }
   }
 }

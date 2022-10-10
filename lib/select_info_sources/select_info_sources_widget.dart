@@ -39,6 +39,7 @@ class _SelectInfoSourcesWidgetState extends State<SelectInfoSourcesWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
@@ -60,7 +61,6 @@ class _SelectInfoSourcesWidgetState extends State<SelectInfoSourcesWidget> {
         centerTitle: false,
         elevation: 4,
       ),
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: Stack(
         children: [
           Padding(
@@ -161,7 +161,6 @@ class _SelectInfoSourcesWidgetState extends State<SelectInfoSourcesWidget> {
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(14, 0, 14, 0),
                       child: FlutterFlowCheckboxGroup(
-                        initiallySelected: checkboxGroupValues ??= [],
                         options: [
                           'Want to visit',
                           'Need to buy',
@@ -171,7 +170,7 @@ class _SelectInfoSourcesWidgetState extends State<SelectInfoSourcesWidget> {
                           'Trip places',
                           'Go to chilling',
                           'Art places'
-                        ].toList(),
+                        ],
                         onChanged: (val) =>
                             setState(() => checkboxGroupValues = val),
                         activeColor: FlutterFlowTheme.of(context).primaryColor,
@@ -185,6 +184,7 @@ class _SelectInfoSourcesWidgetState extends State<SelectInfoSourcesWidget> {
                                 ),
                         itemPadding:
                             EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+                        initialized: checkboxGroupValues != null,
                       ),
                     ),
                   ),

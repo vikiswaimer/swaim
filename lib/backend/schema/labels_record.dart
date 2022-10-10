@@ -12,12 +12,18 @@ abstract class LabelsRecord
 
   String? get name;
 
+  DocumentReference? get userId;
+
+  @BuiltValueField(wireName: 'is_base')
+  bool? get isBase;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
-  static void _initializeBuilder(LabelsRecordBuilder builder) =>
-      builder..name = '';
+  static void _initializeBuilder(LabelsRecordBuilder builder) => builder
+    ..name = ''
+    ..isBase = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('labels');
@@ -42,11 +48,16 @@ abstract class LabelsRecord
 
 Map<String, dynamic> createLabelsRecordData({
   String? name,
+  DocumentReference? userId,
+  bool? isBase,
 }) {
   final firestoreData = serializers.toFirestore(
     LabelsRecord.serializer,
     LabelsRecord(
-      (l) => l..name = name,
+      (l) => l
+        ..name = name
+        ..userId = userId
+        ..isBase = isBase,
     ),
   );
 

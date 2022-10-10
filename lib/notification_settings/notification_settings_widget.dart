@@ -32,6 +32,7 @@ class _NotificationSettingsWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).tertiaryColor,
         automaticallyImplyLeading: false,
@@ -61,7 +62,6 @@ class _NotificationSettingsWidgetState
         centerTitle: false,
         elevation: 0,
       ),
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [

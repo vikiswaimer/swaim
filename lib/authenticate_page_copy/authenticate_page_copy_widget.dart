@@ -1,11 +1,12 @@
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart'
+    as smooth_page_indicator;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class AuthenticatePageCopyWidget extends StatefulWidget {
   const AuthenticatePageCopyWidget({Key? key}) : super(key: key);
@@ -31,6 +32,7 @@ class _AuthenticatePageCopyWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
@@ -42,7 +44,6 @@ class _AuthenticatePageCopyWidgetState
         centerTitle: false,
         elevation: 0,
       ),
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -207,7 +208,7 @@ class _AuthenticatePageCopyWidgetState
                         alignment: AlignmentDirectional(0, 1),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                          child: SmoothPageIndicator(
+                          child: smooth_page_indicator.SmoothPageIndicator(
                             controller: pageViewController ??=
                                 PageController(initialPage: 0),
                             count: 3,
@@ -219,7 +220,7 @@ class _AuthenticatePageCopyWidgetState
                                 curve: Curves.ease,
                               );
                             },
-                            effect: ExpandingDotsEffect(
+                            effect: smooth_page_indicator.ExpandingDotsEffect(
                               expansionFactor: 2,
                               spacing: 8,
                               radius: 16,
@@ -241,7 +242,7 @@ class _AuthenticatePageCopyWidgetState
                 padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    context.pushNamed('Login');
+                    context.pushNamed('LoginAndSignup');
                   },
                   text: 'Login',
                   options: FFButtonOptions(

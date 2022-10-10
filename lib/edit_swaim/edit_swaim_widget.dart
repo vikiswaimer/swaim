@@ -1,7 +1,7 @@
 import '../auth/auth_util.dart';
 import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_drop_down.dart';
+import '../components/choose_label_for_add_note_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_place_picker.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -12,96 +12,107 @@ import 'dart:io';
 import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditSwaimWidget extends StatefulWidget {
   const EditSwaimWidget({
     Key? key,
     this.note,
+    this.label,
   }) : super(key: key);
 
   final DocumentReference? note;
+  final LabelsRecord? label;
 
   @override
   _EditSwaimWidgetState createState() => _EditSwaimWidgetState();
 }
 
 class _EditSwaimWidgetState extends State<EditSwaimWidget> {
-  TextEditingController? textController1;
-
-  TextEditingController? textController2;
-
-  String? dropDownValue;
-  var placePickerValue = FFPlace();
   ApiCallResponse? apiResultnck;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController? textController1;
+  TextEditingController? textController2;
+  var placePickerValue = FFPlace();
 
   @override
   void initState() {
     super.initState();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() => FFAppState().labelInEditSwaim = widget.label!.reference);
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<NotesRecord>(
-      stream: NotesRecord.getDocument(widget.note!),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Center(
-            child: SizedBox(
-              width: 60,
-              height: 60,
-              child: SpinKitRipple(
-                color: Color(0xFF222235),
-                size: 60,
-              ),
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+      appBar: AppBar(
+        backgroundColor: Color(0xFFEEEEEE),
+        automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+          child: FlutterFlowIconButton(
+            borderRadius: 30,
+            buttonSize: 40,
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: FlutterFlowTheme.of(context).primaryColor,
+              size: 28,
             ),
-          );
-        }
-        final editSwaimNotesRecord = snapshot.data!;
-        return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: Color(0xFFEEEEEE),
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-              child: FlutterFlowIconButton(
-                borderRadius: 30,
-                buttonSize: 40,
-                icon: Icon(
-                  Icons.chevron_left_rounded,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 45,
-                ),
-                onPressed: () async {
-                  context.pop();
-                },
+            onPressed: () async {
+              context.pop();
+            },
+          ),
+        ),
+        title: Text(
+          'EditingSwaim',
+          style: FlutterFlowTheme.of(context).title3.override(
+                fontFamily: 'Overpass',
+                color: FlutterFlowTheme.of(context).primaryColor,
+                fontSize: 18,
               ),
-            ),
-            title: Text(
-              'EditingSwaim',
-              style: FlutterFlowTheme.of(context).title3.override(
-                    fontFamily: 'Overpass',
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    fontSize: 26,
+        ),
+        actions: [
+          StreamBuilder<NotesRecord>(
+            stream: NotesRecord.getDocument(widget.note!),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: SpinKitRipple(
+                      color: Color(0xFF222235),
+                      size: 60,
+                    ),
                   ),
-            ),
-            actions: [
-              FlutterFlowIconButton(
+                );
+              }
+              final iconButtonNotesRecord = snapshot.data!;
+              return FlutterFlowIconButton(
                 borderRadius: 30,
                 borderWidth: 1,
                 buttonSize: 60,
                 icon: Icon(
                   Icons.done,
                   color: FlutterFlowTheme.of(context).primaryColor,
-                  size: 35,
+                  size: 20,
                 ),
                 onPressed: () async {
                   await UpdateNoteCall.call(
@@ -110,42 +121,65 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                     user: currentUserUid,
                     noteId: functions.getEditeNoteId(
                         'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
+                    latitude: functions.getLatitude(placePickerValue.latLng),
+                    longitude: functions.getLongitude(placePickerValue.latLng),
+                    label: functions.getLabelId(FFAppState().labelInEditSwaim!),
+                    swaimRef: functions
+                        .getIdFromAggregation(iconButtonNotesRecord.swaimRef!),
                   );
 
                   context.pushNamed('NotesPage');
                 },
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                child: FlutterFlowIconButton(
-                  borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  borderWidth: 1,
-                  buttonSize: 60,
-                  icon: Icon(
-                    Icons.delete,
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    apiResultnck = await DeleteNoteCall.call(
-                      noteId: functions.getEditeNoteId(
-                          'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
-                    );
-
-                    context.pushNamed('NotesPage');
-
-                    setState(() {});
-                  },
-                ),
-              ),
-            ],
-            centerTitle: false,
-            elevation: 0,
+              );
+            },
           ),
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-          body: SafeArea(
-            child: Form(
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+            child: FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30,
+              borderWidth: 1,
+              buttonSize: 60,
+              icon: Icon(
+                Icons.delete,
+                color: FlutterFlowTheme.of(context).primaryColor,
+                size: 20,
+              ),
+              onPressed: () async {
+                apiResultnck = await DeleteNoteCall.call(
+                  noteId: functions.getEditeNoteId(
+                      'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
+                );
+
+                context.pushNamed('NotesPage');
+
+                setState(() {});
+              },
+            ),
+          ),
+        ],
+        centerTitle: false,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: StreamBuilder<NotesRecord>(
+          stream: NotesRecord.getDocument(widget.note!),
+          builder: (context, snapshot) {
+            // Customize what your widget looks like when it's loading.
+            if (!snapshot.hasData) {
+              return Center(
+                child: SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: SpinKitRipple(
+                    color: Color(0xFF222235),
+                    size: 60,
+                  ),
+                ),
+              );
+            }
+            final formNotesRecord = snapshot.data!;
+            return Form(
               key: formKey,
               autovalidateMode: AutovalidateMode.disabled,
               child: SingleChildScrollView(
@@ -165,7 +199,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                             child: TextFormField(
                               controller: textController1 ??=
                                   TextEditingController(
-                                text: editSwaimNotesRecord.name,
+                                text: formNotesRecord.name,
                               ),
                               obscureText: false,
                               decoration: InputDecoration(
@@ -178,17 +212,58 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                       fontSize: 24,
                                       fontWeight: FontWeight.normal,
                                     ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                focusedErrorBorder: InputBorder.none,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color:
+                                        FlutterFlowTheme.of(context).text2Gray,
+                                    width: 2,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color:
+                                        FlutterFlowTheme.of(context).text2Gray,
+                                    width: 2,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 2,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 2,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor:
+                                    FlutterFlowTheme.of(context).primaryBtnText,
                               ),
                               style: FlutterFlowTheme.of(context)
                                   .title3
                                   .override(
                                     fontFamily: 'Montserrat',
                                     color: FlutterFlowTheme.of(context).darkBG,
-                                    fontSize: 24,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
@@ -196,7 +271,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                           TextFormField(
                             controller: textController2 ??=
                                 TextEditingController(
-                              text: editSwaimNotesRecord.description,
+                              text: formNotesRecord.description,
                             ),
                             obscureText: false,
                             decoration: InputDecoration(
@@ -210,62 +285,175 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                   ),
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              focusedErrorBorder: InputBorder.none,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).text2Gray,
+                                  width: 2,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).text2Gray,
+                                  width: 2,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 2,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 2,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
                               filled: true,
-                              fillColor:
-                                  FlutterFlowTheme.of(context).tertiaryColor,
+                              fillColor: Colors.white,
                             ),
                             style: FlutterFlowTheme.of(context)
                                 .bodyText1
                                 .override(
                                   fontFamily: 'Montserrat',
                                   color: FlutterFlowTheme.of(context).darkBG,
-                                  fontSize: 20,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
-                            maxLines: 18,
+                            maxLines: 6,
                             keyboardType: TextInputType.multiline,
                           ),
-                          FlutterFlowDropDown(
-                            options: [
-                              'Without',
-                              'Trip places',
-                              'Favorite stores',
-                              'Love places',
-                              'Photo view-points',
-                              'Need to buy',
-                              'Want to visit',
-                              'Go to chilling',
-                              'Art places'
-                            ],
-                            onChanged: (val) =>
-                                setState(() => dropDownValue = val),
+                          Container(
                             width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            textStyle:
-                                FlutterFlowTheme.of(context).bodyText1.override(
-                                      fontFamily: 'Overpass',
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                            hintText: 'Change category',
-                            fillColor:
-                                FlutterFlowTheme.of(context).secondaryColor,
-                            elevation: 2,
-                            borderColor: Colors.transparent,
-                            borderWidth: 0,
-                            borderRadius: 0,
-                            margin:
-                                EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                            hidesUnderline: true,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color:
+                                  FlutterFlowTheme.of(context).primaryBtnText,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 20, 0, 0),
+                                  child: StreamBuilder<LabelsRecord>(
+                                    stream: LabelsRecord.getDocument(
+                                        FFAppState().labelInEditSwaim!),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 60,
+                                            height: 60,
+                                            child: SpinKitRipple(
+                                              color: Color(0xFF222235),
+                                              size: 60,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      final containerLabelsRecord =
+                                          snapshot.data!;
+                                      return Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBtnText,
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              'Label: ',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                            ),
+                                            Text(
+                                              containerLabelsRecord.name!,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                            ),
+                                            FFButtonWidget(
+                                              onPressed: () async {
+                                                await showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Padding(
+                                                      padding:
+                                                          MediaQuery.of(context)
+                                                              .viewInsets,
+                                                      child:
+                                                          ChooseLabelForAddNoteWidget(),
+                                                    );
+                                                  },
+                                                ).then(
+                                                    (value) => setState(() {}));
+                                              },
+                                              text: 'Set label',
+                                              options: FFButtonOptions(
+                                                width: 130,
+                                                height: 40,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryColor,
+                                                textStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .subtitle2
+                                                        .override(
+                                                          fontFamily:
+                                                              'Overpass',
+                                                          color: Colors.white,
+                                                        ),
+                                                borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              color: Color(0xFFEEEEEE),
+                              color:
+                                  FlutterFlowTheme.of(context).primaryBtnText,
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
@@ -276,11 +464,11 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                       0, 12, 0, 30),
                                   child: FlutterFlowPlacePicker(
                                     iOSGoogleMapsApiKey:
-                                        'AIzaSyCDDwo7UDXq61QnC69og80dxeMPF287hsU',
+                                        'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
                                     androidGoogleMapsApiKey:
-                                        'AIzaSyCDDwo7UDXq61QnC69og80dxeMPF287hsU',
+                                        'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
                                     webGoogleMapsApiKey:
-                                        'AIzaSyCDDwo7UDXq61QnC69og80dxeMPF287hsU',
+                                        'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
                                     onSelect: (place) async {
                                       setState(() => placePickerValue = place);
                                     },
@@ -295,14 +483,12 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                       width: 240,
                                       height: 50,
                                       color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
+                                          .lineColor,
                                       textStyle: FlutterFlowTheme.of(context)
-                                          .title3
+                                          .subtitle1
                                           .override(
                                             fontFamily: 'Overpass',
-                                            color: FlutterFlowTheme.of(context)
-                                                .text2Gray,
-                                            fontWeight: FontWeight.normal,
+                                            fontWeight: FontWeight.w300,
                                           ),
                                       borderSide: BorderSide(
                                         color: Colors.transparent,
@@ -315,44 +501,107 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                final notesCreateData = createNotesRecordData(
-                                  name: textController1?.text ?? '',
-                                  location: placePickerValue.latLng,
-                                  description: textController2?.text ?? '',
-                                );
-                                await NotesRecord.collection
-                                    .doc()
-                                    .set(notesCreateData);
-                                context.pop();
-                              },
-                              text: 'Add Swaim',
-                              icon: FaIcon(
-                                FontAwesomeIcons.stripeS,
-                              ),
-                              options: FFButtonOptions(
-                                width: 290,
-                                height: 50,
-                                color:
-                                    FlutterFlowTheme.of(context).tertiaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .title3
-                                    .override(
-                                      fontFamily: 'Overpass',
-                                      color: FlutterFlowTheme.of(context).white,
+                          StreamBuilder<AggregationsRecord>(
+                            stream: AggregationsRecord.getDocument(
+                                formNotesRecord.swaimRef!),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: SpinKitRipple(
+                                      color: Color(0xFF222235),
+                                      size: 60,
                                     ),
-                                elevation: 3,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
+                                  ),
+                                );
+                              }
+                              final containerAggregationsRecord =
+                                  snapshot.data!;
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBtnText,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
+                                child: Visibility(
+                                  visible: containerAggregationsRecord.title !=
+                                      'null',
+                                  child: StreamBuilder<AggregationsRecord>(
+                                    stream: AggregationsRecord.getDocument(
+                                        formNotesRecord.swaimRef!),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 60,
+                                            height: 60,
+                                            child: SpinKitRipple(
+                                              color: Color(0xFF222235),
+                                              size: 60,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      final rowAggregationsRecord =
+                                          snapshot.data!;
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            child: Image.network(
+                                              containerAggregationsRecord
+                                                  .picture!,
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBtnText,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      containerAggregationsRecord
+                                                          .title!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -360,10 +609,10 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                   ],
                 ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }

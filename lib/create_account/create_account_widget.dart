@@ -18,13 +18,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   TextEditingController? confirmPasswordController;
 
   late bool confirmPasswordVisibility;
-
   TextEditingController? emailAddressController;
-
   TextEditingController? passwordController;
 
   late bool passwordVisibility;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -39,71 +36,83 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   }
 
   @override
+  void dispose() {
+    confirmPasswordController?.dispose();
+    emailAddressController?.dispose();
+    passwordController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          flexibleSpace: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 50,
-                        icon: Icon(
-                          Icons.arrow_back_rounded,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 24,
-                        ),
-                        onPressed: () async {
-                          context.pop();
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
-                      child: Text(
-                        'Back',
-                        style: FlutterFlowTheme.of(context).title1.override(
-                              fontFamily: 'Overpass',
-                              fontSize: 16,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(24, 10, 0, 0),
-                child: Text(
-                  'Create Account',
-                  style: FlutterFlowTheme.of(context).title1.override(
-                        fontFamily: 'Overpass',
-                        fontSize: 32,
-                      ),
-                ),
-              ),
-            ],
-          ),
           actions: [],
+          flexibleSpace: FlexibleSpaceBar(
+            title: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 50,
+                          icon: Icon(
+                            Icons.arrow_back_rounded,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 24,
+                          ),
+                          onPressed: () async {
+                            context.pop();
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                        child: Text(
+                          'Back',
+                          style: FlutterFlowTheme.of(context).title1.override(
+                                fontFamily: 'Overpass',
+                                fontSize: 16,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(24, 10, 0, 0),
+                  child: Text(
+                    'Create Account',
+                    style: FlutterFlowTheme.of(context).title1.override(
+                          fontFamily: 'Overpass',
+                          fontSize: 32,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            centerTitle: true,
+            expandedTitleScale: 1.0,
+          ),
           elevation: 0,
         ),
       ),
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [

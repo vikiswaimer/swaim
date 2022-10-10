@@ -48,15 +48,21 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.labels;
+    value = object.swaimRef;
     if (value != null) {
       result
-        ..add('labels')
+        ..add('swaimRef')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(BuiltList, const [
-              const FullType(
-                  DocumentReference, const [const FullType.nullable(Object)])
-            ])));
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
+    value = object.label;
+    if (value != null) {
+      result
+        ..add('label')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.ffRef;
     if (value != null) {
@@ -98,12 +104,17 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'labels':
-          result.labels.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltList, const [
-                const FullType(
-                    DocumentReference, const [const FullType.nullable(Object)])
-              ]))! as BuiltList<Object?>);
+        case 'swaimRef':
+          result.swaimRef = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
+        case 'label':
+          result.label = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -128,7 +139,9 @@ class _$NotesRecord extends NotesRecord {
   @override
   final String? name;
   @override
-  final BuiltList<DocumentReference<Object?>>? labels;
+  final DocumentReference<Object?>? swaimRef;
+  @override
+  final DocumentReference<Object?>? label;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -140,7 +153,8 @@ class _$NotesRecord extends NotesRecord {
       this.description,
       this.user,
       this.name,
-      this.labels,
+      this.swaimRef,
+      this.label,
       this.ffRef})
       : super._();
 
@@ -159,7 +173,8 @@ class _$NotesRecord extends NotesRecord {
         description == other.description &&
         user == other.user &&
         name == other.name &&
-        labels == other.labels &&
+        swaimRef == other.swaimRef &&
+        label == other.label &&
         ffRef == other.ffRef;
   }
 
@@ -168,10 +183,12 @@ class _$NotesRecord extends NotesRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, location.hashCode), description.hashCode),
-                    user.hashCode),
-                name.hashCode),
-            labels.hashCode),
+                $jc(
+                    $jc($jc($jc(0, location.hashCode), description.hashCode),
+                        user.hashCode),
+                    name.hashCode),
+                swaimRef.hashCode),
+            label.hashCode),
         ffRef.hashCode));
   }
 
@@ -182,7 +199,8 @@ class _$NotesRecord extends NotesRecord {
           ..add('description', description)
           ..add('user', user)
           ..add('name', name)
-          ..add('labels', labels)
+          ..add('swaimRef', swaimRef)
+          ..add('label', label)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -207,11 +225,14 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   String? get name => _$this._name;
   set name(String? name) => _$this._name = name;
 
-  ListBuilder<DocumentReference<Object?>>? _labels;
-  ListBuilder<DocumentReference<Object?>> get labels =>
-      _$this._labels ??= new ListBuilder<DocumentReference<Object?>>();
-  set labels(ListBuilder<DocumentReference<Object?>>? labels) =>
-      _$this._labels = labels;
+  DocumentReference<Object?>? _swaimRef;
+  DocumentReference<Object?>? get swaimRef => _$this._swaimRef;
+  set swaimRef(DocumentReference<Object?>? swaimRef) =>
+      _$this._swaimRef = swaimRef;
+
+  DocumentReference<Object?>? _label;
+  DocumentReference<Object?>? get label => _$this._label;
+  set label(DocumentReference<Object?>? label) => _$this._label = label;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -228,7 +249,8 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
       _description = $v.description;
       _user = $v.user;
       _name = $v.name;
-      _labels = $v.labels?.toBuilder();
+      _swaimRef = $v.swaimRef;
+      _label = $v.label;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -250,27 +272,15 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   NotesRecord build() => _build();
 
   _$NotesRecord _build() {
-    _$NotesRecord _$result;
-    try {
-      _$result = _$v ??
-          new _$NotesRecord._(
-              location: location,
-              description: description,
-              user: user,
-              name: name,
-              labels: _labels?.build(),
-              ffRef: ffRef);
-    } catch (_) {
-      late String _$failedField;
-      try {
-        _$failedField = 'labels';
-        _labels?.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            r'NotesRecord', _$failedField, e.toString());
-      }
-      rethrow;
-    }
+    final _$result = _$v ??
+        new _$NotesRecord._(
+            location: location,
+            description: description,
+            user: user,
+            name: name,
+            swaimRef: swaimRef,
+            label: label,
+            ffRef: ffRef);
     replace(_$result);
     return _$result;
   }

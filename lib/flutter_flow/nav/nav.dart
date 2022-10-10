@@ -10,6 +10,8 @@ import '../../auth/firebase_user_provider.dart';
 
 import '../../index.dart';
 import '../../main.dart';
+import '../lat_lng.dart';
+import '../place.dart';
 import 'serialization_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -67,13 +69,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? MapPageWidget() : WelcomePageWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : WelcomePageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? MapPageWidget() : WelcomePageWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : WelcomePageWidget(),
           routes: [
             FFRoute(
               name: 'WelcomePage',
@@ -81,24 +83,52 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => WelcomePageWidget(),
             ),
             FFRoute(
+              name: 'AggregationsMapPage',
+              path: 'aggregationsMapPage',
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'AggregationsMapPage')
+                  : AggregationsMapPageWidget(),
+            ),
+            FFRoute(
               name: 'MapPage',
               path: 'mapPage',
-              builder: (context, params) => MapPageWidget(
-                note: params.getParam(
-                    'note', ParamType.DocumentReference, 'notes'),
-              ),
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'MapPage')
+                  : MapPageWidget(
+                      note: params.getParam(
+                          'note', ParamType.DocumentReference, false, 'notes'),
+                    ),
             ),
             FFRoute(
               name: 'AgregateDatatListPage',
               path: 'agregateDatatListPage',
-              builder: (context, params) => AgregateDatatListPageWidget(
-                aggregations: params.getParam(
-                    'aggregations', ParamType.DocumentReference, 'countries'),
-              ),
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'AgregateDatatListPage')
+                  : AgregateDatatListPageWidget(
+                      aggregations: params.getParam('aggregations',
+                          ParamType.DocumentReference, false, 'countries'),
+                    ),
+            ),
+            FFRoute(
+              name: 'NotesPage',
+              path: 'notesPage',
+              requireAuth: true,
+              asyncParams: {
+                'notes': getDoc('notes', NotesRecord.serializer),
+              },
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'NotesPage')
+                  : NotesPageWidget(
+                      notes: params.getParam('notes', ParamType.Document),
+                    ),
             ),
             FFRoute(
               name: 'SelectInfoSources',
               path: 'selectInfoSources',
+              requireAuth: true,
               asyncParams: {
                 'notes': getDoc('notes', NotesRecord.serializer),
               },
@@ -109,24 +139,37 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'addSwaim',
               path: 'addSwaim',
+              requireAuth: true,
               asyncParams: {
-                'payload': getDoc('notes', NotesRecord.serializer),
+                'initialLabel': getDoc('labels', LabelsRecord.serializer),
               },
               builder: (context, params) => AddSwaimWidget(
-                payload: params.getParam('payload', ParamType.Document),
+                payloadFromAggregation: params.getParam(
+                    'payloadFromAggregation',
+                    ParamType.DocumentReference,
+                    false,
+                    'aggregations'),
+                initialLabel:
+                    params.getParam('initialLabel', ParamType.Document),
               ),
             ),
             FFRoute(
               name: 'editSwaim',
               path: 'editSwaim',
+              requireAuth: true,
+              asyncParams: {
+                'label': getDoc('labels', LabelsRecord.serializer),
+              },
               builder: (context, params) => EditSwaimWidget(
                 note: params.getParam(
-                    'note', ParamType.DocumentReference, 'notes'),
+                    'note', ParamType.DocumentReference, false, 'notes'),
+                label: params.getParam('label', ParamType.Document),
               ),
             ),
             FFRoute(
               name: 'BurgerGeneralMenu',
               path: 'burgerGeneralMenu',
+              requireAuth: true,
               builder: (context, params) => BurgerGeneralMenuWidget(),
             ),
             FFRoute(
@@ -137,6 +180,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'NotificationSettings',
               path: 'notificationSettings',
+              requireAuth: true,
               builder: (context, params) => NotificationSettingsWidget(),
             ),
             FFRoute(
@@ -147,45 +191,62 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'AuthenticatePageCopy',
               path: 'authenticatePageCopy',
+              requireAuth: true,
               builder: (context, params) => AuthenticatePageCopyWidget(),
-            ),
-            FFRoute(
-              name: 'Login',
-              path: 'login',
-              builder: (context, params) => LoginWidget(),
-            ),
-            FFRoute(
-              name: 'AggregationsMapPage',
-              path: 'aggregationsMapPage',
-              builder: (context, params) => AggregationsMapPageWidget(
-                aggregations: params.getParam('aggregations',
-                    ParamType.DocumentReference, 'aggregations'),
-              ),
-            ),
-            FFRoute(
-              name: 'NotesPage',
-              path: 'notesPage',
-              asyncParams: {
-                'notes': getDoc('notes', NotesRecord.serializer),
-              },
-              builder: (context, params) => NotesPageWidget(
-                notes: params.getParam('notes', ParamType.Document),
-              ),
             ),
             FFRoute(
               name: 'NoteInfo',
               path: 'noteInfo',
+              requireAuth: true,
+              asyncParams: {
+                'swaim': getDoc('favorite_aggregations',
+                    FavoriteAggregationsRecord.serializer),
+              },
               builder: (context, params) => NoteInfoWidget(
                 notes: params.getParam(
-                    'notes', ParamType.DocumentReference, 'notes'),
+                    'notes', ParamType.DocumentReference, false, 'notes'),
+                swaim: params.getParam('swaim', ParamType.Document),
               ),
             ),
             FFRoute(
               name: 'AggregationInfo',
               path: 'aggregationInfo',
+              requireAuth: true,
               builder: (context, params) => AggregationInfoWidget(
-                aggregation: params.getParam(
-                    'aggregation', ParamType.DocumentReference, 'aggregations'),
+                aggregation: params.getParam('aggregation',
+                    ParamType.DocumentReference, false, 'aggregations'),
+              ),
+            ),
+            FFRoute(
+              name: 'FavoriteAggregationsListPage',
+              path: 'favoriteAggregationsListPage',
+              requireAuth: true,
+              builder: (context, params) =>
+                  FavoriteAggregationsListPageWidget(),
+            ),
+            FFRoute(
+              name: 'LoginAndSignup',
+              path: 'loginAndSignup',
+              builder: (context, params) => LoginAndSignupWidget(),
+            ),
+            FFRoute(
+              name: 'FavoriteSwaimPage',
+              path: 'favoriteSwaimPage',
+              requireAuth: true,
+              asyncParams: {
+                'favAggregation': getDoc('favorite_aggregations',
+                    FavoriteAggregationsRecord.serializer),
+              },
+              builder: (context, params) => FavoriteSwaimPageWidget(
+                favAggregation:
+                    params.getParam('favAggregation', ParamType.Document),
+                swaimRef: params.getParam(
+                    'swaimRef',
+                    ParamType.DocumentReference,
+                    false,
+                    'favorite_aggregations'),
+                label: params.getParam(
+                    'label', ParamType.DocumentReference, false, 'labels'),
               ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
@@ -295,9 +356,10 @@ class FFParameters {
         ),
       ).onError((_, __) => [false]).then((v) => v.every((e) => e));
 
-  dynamic getParam(
+  dynamic getParam<T>(
     String paramName,
     ParamType type, [
+    bool isList = false,
     String? collectionName,
   ]) {
     if (futureParamValues.containsKey(paramName)) {
@@ -312,7 +374,7 @@ class FFParameters {
       return param;
     }
     // Return serialized value.
-    return deserializeParam(param, type, collectionName);
+    return deserializeParam<T>(param, type, isList, collectionName);
   }
 }
 
@@ -360,11 +422,9 @@ class FFRoute {
           final child = appStateNotifier.loading
               ? Container(
                   color: Colors.transparent,
-                  child: Builder(
-                    builder: (context) => Image.asset(
-                      'assets/images/Frame_8.png',
-                      fit: BoxFit.contain,
-                    ),
+                  child: Image.asset(
+                    'assets/images/Frame_8.png',
+                    fit: BoxFit.contain,
                   ),
                 )
               : page;

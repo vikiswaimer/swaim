@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:from_css_color/from_css_color.dart';
+
 import 'index.dart';
 import 'serializers.dart';
 import 'package:built_value/built_value.dart';
@@ -17,7 +19,9 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
 
   String? get name;
 
-  BuiltList<DocumentReference>? get labels;
+  DocumentReference? get swaimRef;
+
+  DocumentReference? get label;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -25,8 +29,7 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
 
   static void _initializeBuilder(NotesRecordBuilder builder) => builder
     ..description = ''
-    ..name = ''
-    ..labels = ListBuilder();
+    ..name = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('notes');
@@ -48,8 +51,8 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
           ..description = snapshot.data['description']
           ..user = safeGet(() => toRef(snapshot.data['user']))
           ..name = snapshot.data['name']
-          ..labels = safeGet(
-              () => ListBuilder(snapshot.data['labels'].map((s) => toRef(s))))
+          ..swaimRef = safeGet(() => toRef(snapshot.data['swaimRef']))
+          ..label = safeGet(() => toRef(snapshot.data['label']))
           ..ffRef = NotesRecord.collection.doc(snapshot.objectID),
       );
 
@@ -83,6 +86,8 @@ Map<String, dynamic> createNotesRecordData({
   String? description,
   DocumentReference? user,
   String? name,
+  DocumentReference? swaimRef,
+  DocumentReference? label,
 }) {
   final firestoreData = serializers.toFirestore(
     NotesRecord.serializer,
@@ -92,7 +97,8 @@ Map<String, dynamic> createNotesRecordData({
         ..description = description
         ..user = user
         ..name = name
-        ..labels = null,
+        ..swaimRef = swaimRef
+        ..label = label,
     ),
   );
 

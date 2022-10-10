@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{document} {
       allow create: if request.auth.uid == document;
-      allow read: if true;
+      allow read: if request.auth.uid == document;
       allow write: if request.auth.uid == document;
       allow delete: if false;
     }
@@ -30,6 +30,20 @@ service cloud.firestore {
     }
 
     match /countries/{document} {
+      allow create: if false;
+      allow read: if request.auth.uid == resource.data.name;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /favorite_aggregations/{document} {
+      allow create: if request.resource.data.userId == /databases/$(database)/documents/users/$(request.auth.uid);
+      allow read: if resource.data.userId == /databases/$(database)/documents/users/$(request.auth.uid);
+      allow write: if resource.data.userId == /databases/$(database)/documents/users/$(request.auth.uid);
+      allow delete: if resource.data.userId == /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    match /aggregation_categories/{document} {
       allow create: if false;
       allow read: if request.auth.uid == resource.data.name;
       allow write: if false;

@@ -27,12 +27,17 @@ export 'nav/nav.dart';
 T valueOrDefault<T>(T? value, T defaultValue) =>
     (value is String && value.isEmpty) || value == null ? defaultValue : value;
 
-String dateTimeFormat(String format, DateTime? dateTime) {
+void _setTimeagoLocales() {
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+}
+
+String dateTimeFormat(String format, DateTime? dateTime, {String? locale}) {
   if (dateTime == null) {
     return '';
   }
   if (format == 'relative') {
-    return timeago.format(dateTime);
+    _setTimeagoLocales();
+    return timeago.format(dateTime, locale: locale);
   }
   return DateFormat(format).format(dateTime);
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:from_css_color/from_css_color.dart';
+
 import 'index.dart';
 import 'serializers.dart';
 import 'package:built_value/built_value.dart';
@@ -21,7 +23,7 @@ abstract class AggregationsRecord
 
   DocumentReference? get country;
 
-  BuiltList<DocumentReference>? get labels;
+  DocumentReference? get category;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -30,8 +32,7 @@ abstract class AggregationsRecord
   static void _initializeBuilder(AggregationsRecordBuilder builder) => builder
     ..title = ''
     ..description = ''
-    ..picture = ''
-    ..labels = ListBuilder();
+    ..picture = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('aggregations');
@@ -55,8 +56,7 @@ abstract class AggregationsRecord
                 snapshot.data['_geoloc']['lng'],
               ))
           ..country = safeGet(() => toRef(snapshot.data['country']))
-          ..labels = safeGet(
-              () => ListBuilder(snapshot.data['labels'].map((s) => toRef(s))))
+          ..category = safeGet(() => toRef(snapshot.data['category']))
           ..ffRef = AggregationsRecord.collection.doc(snapshot.objectID),
       );
 
@@ -92,6 +92,7 @@ Map<String, dynamic> createAggregationsRecordData({
   String? picture,
   LatLng? location,
   DocumentReference? country,
+  DocumentReference? category,
 }) {
   final firestoreData = serializers.toFirestore(
     AggregationsRecord.serializer,
@@ -102,7 +103,7 @@ Map<String, dynamic> createAggregationsRecordData({
         ..picture = picture
         ..location = location
         ..country = country
-        ..labels = null,
+        ..category = category,
     ),
   );
 

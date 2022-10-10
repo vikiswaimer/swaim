@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/lat_lng.dart';
 
 class FFAppState {
@@ -19,6 +21,18 @@ class FFAppState {
   late SharedPreferences prefs;
 
   String noteName = '';
+
+  List<DocumentReference> filterByLabel = [];
+
+  DocumentReference? labelInAddSwaim;
+
+  DocumentReference? labelForSwaim;
+
+  List<DocumentReference> searchResults = [];
+
+  DocumentReference? firstSearchREsult;
+
+  DocumentReference? labelInEditSwaim;
 }
 
 LatLng? _latLngFromString(String? val) {

@@ -9,6 +9,8 @@ import 'schema/aggregations_record.dart';
 import 'schema/notes_record.dart';
 import 'schema/labels_record.dart';
 import 'schema/countries_record.dart';
+import 'schema/favorite_aggregations_record.dart';
+import 'schema/aggregation_categories_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -21,6 +23,8 @@ export 'schema/aggregations_record.dart';
 export 'schema/notes_record.dart';
 export 'schema/labels_record.dart';
 export 'schema/countries_record.dart';
+export 'schema/favorite_aggregations_record.dart';
+export 'schema/aggregation_categories_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Stream<List<UsersRecord>> queryUsersRecord({
@@ -231,6 +235,92 @@ Future<FFFirestorePage<CountriesRecord>> queryCountriesRecordPage({
       pageSize: pageSize,
       isStream: isStream,
     );
+
+/// Functions to query FavoriteAggregationsRecords (as a Stream and as a Future).
+Stream<List<FavoriteAggregationsRecord>> queryFavoriteAggregationsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      FavoriteAggregationsRecord.collection,
+      FavoriteAggregationsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<FavoriteAggregationsRecord>> queryFavoriteAggregationsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      FavoriteAggregationsRecord.collection,
+      FavoriteAggregationsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<FavoriteAggregationsRecord>>
+    queryFavoriteAggregationsRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+        queryCollectionPage(
+          FavoriteAggregationsRecord.collection,
+          FavoriteAggregationsRecord.serializer,
+          queryBuilder: queryBuilder,
+          nextPageMarker: nextPageMarker,
+          pageSize: pageSize,
+          isStream: isStream,
+        );
+
+/// Functions to query AggregationCategoriesRecords (as a Stream and as a Future).
+Stream<List<AggregationCategoriesRecord>> queryAggregationCategoriesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      AggregationCategoriesRecord.collection,
+      AggregationCategoriesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<AggregationCategoriesRecord>> queryAggregationCategoriesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      AggregationCategoriesRecord.collection,
+      AggregationCategoriesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<AggregationCategoriesRecord>>
+    queryAggregationCategoriesRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+        queryCollectionPage(
+          AggregationCategoriesRecord.collection,
+          AggregationCategoriesRecord.serializer,
+          queryBuilder: queryBuilder,
+          nextPageMarker: nextPageMarker,
+          pageSize: pageSize,
+          isStream: isStream,
+        );
 
 Stream<List<T>> queryCollection<T>(Query collection, Serializer<T> serializer,
     {Query Function(Query)? queryBuilder,

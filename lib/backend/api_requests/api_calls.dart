@@ -13,6 +13,7 @@ class AddNoteCall {
     String? user = '',
     double? longitude,
     double? latitude,
+    String? labels = '',
   }) {
     final body = '''
 {
@@ -29,10 +30,11 @@ class AddNoteCall {
     "user": {
       "referenceValue": "projects/swaim-test-2/databases/(default)/documents/users/${user}"
     },
-    "labels": {
-      "arrayValue": {
-        "values": []
-      }
+    "label": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/labels/${labels}"
+    },
+    "swaimRef": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/aggregations/n1IGSXe0ioF24SRWBLK8"
     },
     "description": {
       "stringValue": "${description}"
@@ -44,10 +46,7 @@ class AddNoteCall {
       apiUrl:
           'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/notes',
       callType: ApiCallType.POST,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
+      headers: {},
       params: {},
       body: body,
       bodyType: BodyType.JSON,
@@ -60,9 +59,12 @@ class UpdateNoteCall {
   static Future<ApiCallResponse> call({
     String? name = '',
     String? description = '',
-    String? location = '',
     String? user = '',
     String? noteId = '',
+    double? latitude,
+    double? longitude,
+    String? label = '',
+    String? swaimRef = '',
   }) {
     final body = '''
 {
@@ -72,17 +74,18 @@ class UpdateNoteCall {
     },
     "location": {
       "geoPointValue": {
-        "latitude": 53.85845,
-        "longitude": 27.474881
+        "latitude": ${latitude},
+        "longitude": ${longitude}
       }
     },
     "user": {
       "referenceValue": "projects/swaim-test-2/databases/(default)/documents/users/${user}"
     },
-    "labels": {
-      "arrayValue": {
-        "values": []
-      }
+    "label": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/labels/${label}"
+    },
+    "swaimRef": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/aggregations/${swaimRef}"
     },
     "description": {
       "stringValue": "${description}"
@@ -122,4 +125,203 @@ class DeleteNoteCall {
       returnBody: true,
     );
   }
+}
+
+class AddAggregationToFavesCall {
+  static Future<ApiCallResponse> call({
+    String? aggregationId = '',
+    String? userId = '',
+  }) {
+    final body = '''
+{
+  "fields": {
+    "aggregation": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/aggregations/${aggregationId}"
+    },
+    "userId": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/users/${userId}"
+    },
+    "labelRef": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/labels/er7SZTHrkAdI2E1WBERe"
+    }
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'addAggregationToFaves',
+      apiUrl:
+          'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/favorite_aggregations',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+    );
+  }
+}
+
+class RemoveAggregationFromFavesCall {
+  static Future<ApiCallResponse> call({
+    String? favAggregationId = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'removeAggregationFromFaves',
+      apiUrl:
+          'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/favorite_aggregations/${favAggregationId}',
+      callType: ApiCallType.DELETE,
+      headers: {},
+      params: {},
+      returnBody: true,
+    );
+  }
+}
+
+class SetLabelForSwaimCall {
+  static Future<ApiCallResponse> call({
+    String? swaimId = '',
+    String? labelId = '',
+    String? userId = '',
+    String? aggregationId = '',
+  }) {
+    final body = '''
+{
+  "fields": {
+    "labelRef": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/labels/${labelId}"
+    },
+    "userId": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/users/${userId}"
+    },
+    "aggregation": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/aggregations/${aggregationId}"
+    }
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'setLabelForSwaim',
+      apiUrl:
+          'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/favorite_aggregations/${swaimId}',
+      callType: ApiCallType.PATCH,
+      headers: {},
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+    );
+  }
+}
+
+class AddLabelCall {
+  static Future<ApiCallResponse> call({
+    String? userId = '',
+    String? title = '',
+  }) {
+    final body = '''
+{
+  "fields": {
+    "name": {
+      "stringValue": "${title}"
+    },
+    "userId": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/users/${userId}"
+    },
+    "is_base": {
+      "booleanValue": false
+    }
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'addLabel',
+      apiUrl:
+          'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/labels',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+    );
+  }
+}
+
+class RemoveLabelCall {
+  static Future<ApiCallResponse> call({
+    String? labelId = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'removeLabel',
+      apiUrl:
+          'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/labels/${labelId}',
+      callType: ApiCallType.DELETE,
+      headers: {},
+      params: {},
+      returnBody: true,
+    );
+  }
+}
+
+class AddNoteWithAttachedSwaimCall {
+  static Future<ApiCallResponse> call({
+    String? name = '',
+    String? description = '',
+    double? latitude,
+    double? longitude,
+    String? user = '',
+    String? labels = '',
+    String? swaimRef = '',
+  }) {
+    final body = '''
+{
+  "fields": {
+    "name": {
+      "stringValue": "${name}"
+    },
+    "location": {
+      "geoPointValue": {
+        "latitude": ${latitude},
+        "longitude": ${longitude}
+      }
+    },
+    "user": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/users/${user}"
+    },
+    "label": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/labels/${labels}"
+    },
+    "swaimRef": {
+      "referenceValue": "projects/swaim-test-2/databases/(default)/documents/aggregations/${swaimRef}"
+    },
+    "description": {
+      "stringValue": "${description}"
+    }
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'addNoteWithAttachedSwaim',
+      apiUrl:
+          'https://firestore.googleapis.com/v1/projects/swaim-test-2/databases/(default)/documents/notes',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+    );
+  }
+}
+
+class ApiPagingParams {
+  int nextPageNumber = 0;
+  int numItems = 0;
+  dynamic lastResponse;
+
+  ApiPagingParams({
+    required this.nextPageNumber,
+    required this.numItems,
+    required this.lastResponse,
+  });
+
+  @override
+  String toString() =>
+      'PagingParams(nextPageNumber: $nextPageNumber, numItems: $numItems, lastResponse: $lastResponse,)';
 }

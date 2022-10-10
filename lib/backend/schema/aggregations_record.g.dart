@@ -58,15 +58,13 @@ class _$AggregationsRecordSerializer
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
-    value = object.labels;
+    value = object.category;
     if (value != null) {
       result
-        ..add('labels')
+        ..add('category')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(BuiltList, const [
-              const FullType(
-                  DocumentReference, const [const FullType.nullable(Object)])
-            ])));
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.ffRef;
     if (value != null) {
@@ -113,12 +111,11 @@ class _$AggregationsRecordSerializer
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
-        case 'labels':
-          result.labels.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltList, const [
-                const FullType(
-                    DocumentReference, const [const FullType.nullable(Object)])
-              ]))! as BuiltList<Object?>);
+        case 'category':
+          result.category = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -145,7 +142,7 @@ class _$AggregationsRecord extends AggregationsRecord {
   @override
   final DocumentReference<Object?>? country;
   @override
-  final BuiltList<DocumentReference<Object?>>? labels;
+  final DocumentReference<Object?>? category;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -159,7 +156,7 @@ class _$AggregationsRecord extends AggregationsRecord {
       this.picture,
       this.location,
       this.country,
-      this.labels,
+      this.category,
       this.ffRef})
       : super._();
 
@@ -181,7 +178,7 @@ class _$AggregationsRecord extends AggregationsRecord {
         picture == other.picture &&
         location == other.location &&
         country == other.country &&
-        labels == other.labels &&
+        category == other.category &&
         ffRef == other.ffRef;
   }
 
@@ -195,7 +192,7 @@ class _$AggregationsRecord extends AggregationsRecord {
                         picture.hashCode),
                     location.hashCode),
                 country.hashCode),
-            labels.hashCode),
+            category.hashCode),
         ffRef.hashCode));
   }
 
@@ -207,7 +204,7 @@ class _$AggregationsRecord extends AggregationsRecord {
           ..add('picture', picture)
           ..add('location', location)
           ..add('country', country)
-          ..add('labels', labels)
+          ..add('category', category)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -237,11 +234,10 @@ class AggregationsRecordBuilder
   DocumentReference<Object?>? get country => _$this._country;
   set country(DocumentReference<Object?>? country) => _$this._country = country;
 
-  ListBuilder<DocumentReference<Object?>>? _labels;
-  ListBuilder<DocumentReference<Object?>> get labels =>
-      _$this._labels ??= new ListBuilder<DocumentReference<Object?>>();
-  set labels(ListBuilder<DocumentReference<Object?>>? labels) =>
-      _$this._labels = labels;
+  DocumentReference<Object?>? _category;
+  DocumentReference<Object?>? get category => _$this._category;
+  set category(DocumentReference<Object?>? category) =>
+      _$this._category = category;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -259,7 +255,7 @@ class AggregationsRecordBuilder
       _picture = $v.picture;
       _location = $v.location;
       _country = $v.country;
-      _labels = $v.labels?.toBuilder();
+      _category = $v.category;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -281,28 +277,15 @@ class AggregationsRecordBuilder
   AggregationsRecord build() => _build();
 
   _$AggregationsRecord _build() {
-    _$AggregationsRecord _$result;
-    try {
-      _$result = _$v ??
-          new _$AggregationsRecord._(
-              title: title,
-              description: description,
-              picture: picture,
-              location: location,
-              country: country,
-              labels: _labels?.build(),
-              ffRef: ffRef);
-    } catch (_) {
-      late String _$failedField;
-      try {
-        _$failedField = 'labels';
-        _labels?.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            r'AggregationsRecord', _$failedField, e.toString());
-      }
-      rethrow;
-    }
+    final _$result = _$v ??
+        new _$AggregationsRecord._(
+            title: title,
+            description: description,
+            picture: picture,
+            location: location,
+            country: country,
+            category: category,
+            ffRef: ffRef);
     replace(_$result);
     return _$result;
   }

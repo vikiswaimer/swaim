@@ -1,8 +1,10 @@
+import '../auth/firebase_user_provider.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,84 +17,82 @@ class WelcomePageWidget extends StatefulWidget {
 
 class _WelcomePageWidgetState extends State<WelcomePageWidget>
     with TickerProviderStateMixin {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  var hasColumnTriggered = false;
   final animationsMap = {
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
-      duration: 1970,
-      delay: 400,
-      hideBeforeAnimating: false,
-      fadeIn: true,
-      initialState: AnimationState(
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        opacity: 1,
-      ),
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 400.ms,
+          duration: 1970.ms,
+          begin: 0,
+          end: 1,
+        ),
+        ScaleEffect(
+          curve: Curves.easeInOut,
+          delay: 400.ms,
+          duration: 1970.ms,
+          begin: 1,
+          end: 1,
+        ),
+      ],
     ),
     'textOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      delay: 1100,
-      hideBeforeAnimating: false,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, 70),
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        opacity: 1,
-      ),
-    ),
-    'columnOnActionTriggerAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onActionTrigger,
-      duration: 1120,
-      delay: 390,
-      hideBeforeAnimating: false,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 1100.ms,
+          duration: 600.ms,
+          begin: 0,
+          end: 1,
+        ),
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 1100.ms,
+          duration: 600.ms,
+          begin: Offset(0, 70),
+          end: Offset(0, 0),
+        ),
+        ScaleEffect(
+          curve: Curves.easeInOut,
+          delay: 1100.ms,
+          duration: 600.ms,
+          begin: 1,
+          end: 1,
+        ),
+      ],
     ),
     'columnOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
-      duration: 1260,
-      delay: 420,
-      hideBeforeAnimating: false,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
+      applyInitialState: false,
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 420.ms,
+          duration: 1260.ms,
+          begin: 0,
+          end: 1,
+        ),
+      ],
     ),
   };
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    startPageLoadAnimations(
-      animationsMap.values
-          .where((anim) => anim.trigger == AnimationTrigger.onPageLoad),
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
       this,
     );
-    setupTriggerAnimations(
-      animationsMap.values
-          .where((anim) => anim.trigger == AnimationTrigger.onActionTrigger),
-      this,
-    );
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      animationsMap['columnOnPageLoadAnimation']!.controller.forward(from: 0.0);
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -130,140 +130,138 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
             shape: BoxShape.rectangle,
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 115, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Welcome to',
-                          textAlign: TextAlign.center,
-                          style: FlutterFlowTheme.of(context).title1.override(
-                                fontFamily: 'Montserrat',
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                fontSize: 28,
-                                fontWeight: FontWeight.normal,
-                              ),
-                        ).animated([animationsMap['textOnPageLoadAnimation']!]),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 130),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 48, 0, 0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.height * 0.11,
-                            decoration: BoxDecoration(
-                              color: Color(0x00EEEEEE),
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: Image.asset(
-                                  'assets/images/Frame_8.png',
-                                ).image,
-                              ),
-                            ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 115, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Welcome to',
+                      textAlign: TextAlign.center,
+                      style: FlutterFlowTheme.of(context).title1.override(
+                            fontFamily: 'Montserrat',
+                            color: FlutterFlowTheme.of(context).primaryColor,
+                            fontSize: 28,
+                            fontWeight: FontWeight.normal,
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: 3,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 45, 0, 0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            decoration: BoxDecoration(
-                              color: Color(0x00EEEEEE),
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: Image.asset(
-                                  'assets/images/Frame_14.png',
-                                ).image,
-                              ),
-                              borderRadius: BorderRadius.circular(0),
-                              shape: BoxShape.rectangle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ).animated([
-                      animationsMap['columnOnActionTriggerAnimation']!,
-                      animationsMap['columnOnPageLoadAnimation']!
-                    ]),
-                  ),
-                ],
+                    ).animateOnPageLoad(
+                        animationsMap['textOnPageLoadAnimation']!),
+                  ],
+                ),
               ),
-              InkWell(
-                onTap: () async {
-                  context.pushNamed('MapPage');
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).tertiaryColor,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 100, 12),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(40, 0, 48, 0),
-                          child: Text(
-                            'LET’S START\nYOUR JOURNEY',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyText1
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: FlutterFlowTheme.of(context).grayLines,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 130),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 48, 0, 0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.11,
+                        decoration: BoxDecoration(
+                          color: Color(0x00EEEEEE),
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: Image.asset(
+                              'assets/images/Frame_8.png',
+                            ).image,
                           ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0, 0),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 3),
-                            child: FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderRadius: 0,
-                              buttonSize: 60,
-                              icon: Icon(
-                                Icons.arrow_forward_sharp,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                size: 45,
-                              ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 45, 0, 0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        decoration: BoxDecoration(
+                          color: Color(0x00EEEEEE),
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: Image.asset(
+                              'assets/images/Frame_14.png',
+                            ).image,
+                          ),
+                          borderRadius: BorderRadius.circular(0),
+                          shape: BoxShape.rectangle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ).animateOnPageLoad(
+                    animationsMap['columnOnPageLoadAnimation']!),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional(0, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).tertiaryColor,
+                    ),
+                    child: InkWell(
+                      onTap: () async {
+                        if (loggedIn) {
+                          context.pushNamed('MapPage');
+                        } else {
+                          context.pushNamed('LoginAndSignup');
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                            child: InkWell(
+                              onTap: () async {
+                                if (loggedIn) {
+                                  context.pushNamed('AggregationsMapPage');
+                                } else {
+                                  context.pushNamed('LoginAndSignup');
+                                }
                               },
+                              child: Text(
+                                'LET\'S START OUR JOURNEY',
+                                textAlign: TextAlign.start,
+                                maxLines: 2,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Overpass',
+                                      fontSize: 20,
+                                      lineHeight: 1.2,
+                                    ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.black,
+                            size: 24,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -271,7 +269,7 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
             ],
           ),
         ),
-      ).animated([animationsMap['containerOnPageLoadAnimation']!]),
+      ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation']!),
     );
   }
 }

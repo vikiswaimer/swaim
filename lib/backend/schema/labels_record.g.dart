@@ -27,6 +27,21 @@ class _$LabelsRecordSerializer implements StructuredSerializer<LabelsRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.userId;
+    if (value != null) {
+      result
+        ..add('userId')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
+    value = object.isBase;
+    if (value != null) {
+      result
+        ..add('is_base')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -54,6 +69,16 @@ class _$LabelsRecordSerializer implements StructuredSerializer<LabelsRecord> {
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'userId':
+          result.userId = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
+        case 'is_base':
+          result.isBase = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -71,12 +96,17 @@ class _$LabelsRecord extends LabelsRecord {
   @override
   final String? name;
   @override
+  final DocumentReference<Object?>? userId;
+  @override
+  final bool? isBase;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$LabelsRecord([void Function(LabelsRecordBuilder)? updates]) =>
       (new LabelsRecordBuilder()..update(updates))._build();
 
-  _$LabelsRecord._({this.name, this.ffRef}) : super._();
+  _$LabelsRecord._({this.name, this.userId, this.isBase, this.ffRef})
+      : super._();
 
   @override
   LabelsRecord rebuild(void Function(LabelsRecordBuilder) updates) =>
@@ -88,18 +118,26 @@ class _$LabelsRecord extends LabelsRecord {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is LabelsRecord && name == other.name && ffRef == other.ffRef;
+    return other is LabelsRecord &&
+        name == other.name &&
+        userId == other.userId &&
+        isBase == other.isBase &&
+        ffRef == other.ffRef;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, name.hashCode), ffRef.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, name.hashCode), userId.hashCode), isBase.hashCode),
+        ffRef.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'LabelsRecord')
           ..add('name', name)
+          ..add('userId', userId)
+          ..add('isBase', isBase)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -113,6 +151,14 @@ class LabelsRecordBuilder
   String? get name => _$this._name;
   set name(String? name) => _$this._name = name;
 
+  DocumentReference<Object?>? _userId;
+  DocumentReference<Object?>? get userId => _$this._userId;
+  set userId(DocumentReference<Object?>? userId) => _$this._userId = userId;
+
+  bool? _isBase;
+  bool? get isBase => _$this._isBase;
+  set isBase(bool? isBase) => _$this._isBase = isBase;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -125,6 +171,8 @@ class LabelsRecordBuilder
     final $v = _$v;
     if ($v != null) {
       _name = $v.name;
+      _userId = $v.userId;
+      _isBase = $v.isBase;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -146,7 +194,9 @@ class LabelsRecordBuilder
   LabelsRecord build() => _build();
 
   _$LabelsRecord _build() {
-    final _$result = _$v ?? new _$LabelsRecord._(name: name, ffRef: ffRef);
+    final _$result = _$v ??
+        new _$LabelsRecord._(
+            name: name, userId: userId, isBase: isBase, ffRef: ffRef);
     replace(_$result);
     return _$result;
   }
