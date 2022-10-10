@@ -189,8 +189,7 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                                           ? containerLabelsRecordList.first
                                           : null;
                                   return Container(
-                                    width: 100,
-                                    height: 100,
+                                    width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
@@ -212,7 +211,7 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                                               ),
                                         ),
                                         Container(
-                                          width: double.infinity,
+                                          width: 120,
                                           height: 30,
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
@@ -269,11 +268,16 @@ class _NoteInfoWidgetState extends State<NoteInfoWidget> {
                                             ],
                                           ),
                                         ),
-                                        Text(
-                                          noteInfoNotesRecord.description!,
-                                          textAlign: TextAlign.start,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 6, 0, 0),
+                                          child: Text(
+                                            noteInfoNotesRecord.description!,
+                                            textAlign: TextAlign.start,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
+                                          ),
                                         ),
                                       ],
                                     ),
