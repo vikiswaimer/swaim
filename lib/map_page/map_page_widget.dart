@@ -693,6 +693,70 @@ class _MapPageWidgetState extends State<MapPageWidget> {
               ),
             ),
           ),
+          Align(
+            alignment: AlignmentDirectional(0.86, 0.76),
+            child: StreamBuilder<List<LabelsRecord>>(
+              stream: queryLabelsRecord(
+                queryBuilder: (labelsRecord) =>
+                    labelsRecord.where('name', isEqualTo: 'Not set'),
+                singleRecord: true,
+              ),
+              builder: (context, snapshot) {
+                // Customize what your widget looks like when it's loading.
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: SpinKitRipple(
+                        color: Color(0xFF222235),
+                        size: 60,
+                      ),
+                    ),
+                  );
+                }
+                List<LabelsRecord> iconButtonLabelsRecordList = snapshot.data!;
+                // Return an empty Container when the document does not exist.
+                if (snapshot.data!.isEmpty) {
+                  return Container();
+                }
+                final iconButtonLabelsRecord =
+                    iconButtonLabelsRecordList.isNotEmpty
+                        ? iconButtonLabelsRecordList.first
+                        : null;
+                return FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  buttonSize: 60,
+                  fillColor: FlutterFlowTheme.of(context).background,
+                  icon: Icon(
+                    Icons.add,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 30,
+                  ),
+                  onPressed: () async {
+                    context.pushNamed(
+                      'addSwaim',
+                      queryParams: {
+                        'initialLabel': serializeParam(
+                          iconButtonLabelsRecord,
+                          ParamType.Document,
+                        ),
+                      }.withoutNulls,
+                      extra: <String, dynamic>{
+                        'initialLabel': iconButtonLabelsRecord,
+                        kTransitionInfoKey: TransitionInfo(
+                          hasTransition: true,
+                          transitionType: PageTransitionType.rightToLeft,
+                        ),
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

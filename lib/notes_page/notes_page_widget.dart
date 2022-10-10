@@ -7,8 +7,10 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:text_search/text_search.dart';
 
 class NotesPageWidget extends StatefulWidget {
@@ -76,6 +78,216 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          drawer: Container(
+            width: MediaQuery.of(context).size.width * 0.75,
+            child: Drawer(
+              elevation: 16,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 24, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(24, 35, 0, 0),
+                          child: Image.asset(
+                            'assets/images/Frame_8.png',
+                            height: 20,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                        FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 15,
+                          borderWidth: 1,
+                          buttonSize: 30,
+                          icon: Icon(
+                            Icons.chevron_left,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 15,
+                          ),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(24, 10, 24, 0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 1,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).darkBG,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(24, 28, 0, 0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Notifications',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Overpass',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                        ),
+                        Text(
+                          'Settings',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Overpass',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                        ),
+                        Text(
+                          'Contact Us',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Overpass',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                        ),
+                        Text(
+                          'FAQ',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Overpass',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            await Share.share('https://swaim.com');
+                          },
+                          child: Text(
+                            'Share',
+                            style:
+                                FlutterFlowTheme.of(context).bodyText1.override(
+                                      fontFamily: 'Overpass',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            HapticFeedback.lightImpact();
+                          },
+                          child: Text(
+                            'Rate Us',
+                            style:
+                                FlutterFlowTheme.of(context).bodyText1.override(
+                                      fontFamily: 'Overpass',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            context.pushNamed('LoginAndSignup');
+                          },
+                          child: Text(
+                            'Sign Up/Login',
+                            style:
+                                FlutterFlowTheme.of(context).bodyText1.override(
+                                      fontFamily: 'Overpass',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (loggedIn)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(24, 10, 24, 0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 1,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).darkBG,
+                        ),
+                      ),
+                    ),
+                  if (loggedIn)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 24, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(24, 14, 0, 0),
+                            child: Text(
+                              'Signed as ',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Overpass',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                            ),
+                          ),
+                          Text(
+                            currentUserEmail.maybeHandleOverflow(
+                              maxChars: 40,
+                              replacement: '…',
+                            ),
+                            maxLines: 2,
+                            style:
+                                FlutterFlowTheme.of(context).bodyText1.override(
+                                      fontFamily: 'Overpass',
+                                      fontSize: 12,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (loggedIn)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(24, 6, 0, 0),
+                      child: InkWell(
+                        onTap: () async {
+                          GoRouter.of(context).prepareAuthEvent();
+                          await signOut();
+
+                          context.goNamedAuth('WelcomePage', mounted);
+                        },
+                        child: Text(
+                          'Log out',
+                          style:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Overpass',
+                                    color: Color(0xFFCA235E),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
           body: Stack(
             children: [
               Padding(
