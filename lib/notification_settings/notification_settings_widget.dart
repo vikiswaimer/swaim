@@ -34,33 +34,33 @@ class _NotificationSettingsWidgetState
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).tertiaryColor,
+        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
           borderRadius: 30,
-          buttonSize: 46,
+          borderWidth: 1,
+          buttonSize: 60,
           icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Color(0xFFCE8C00),
-            size: 45,
+            Icons.chevron_left,
+            color: FlutterFlowTheme.of(context).primaryColor,
+            size: 30,
           ),
           onPressed: () async {
             context.pop();
           },
         ),
         title: Text(
-          'Settings Page',
-          style: FlutterFlowTheme.of(context).bodyText1.override(
+          'Notifications',
+          style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Montserrat',
-                color: Color(0xFFCE8C00),
-                fontSize: 26,
-                fontWeight: FontWeight.normal,
+                color: FlutterFlowTheme.of(context).primaryColor,
+                fontSize: 22,
               ),
         ),
         actions: [],
         centerTitle: false,
-        elevation: 0,
+        elevation: 2,
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,

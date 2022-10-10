@@ -107,10 +107,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'AgregateDatatListPage')
-                  : AgregateDatatListPageWidget(
-                      aggregations: params.getParam('aggregations',
-                          ParamType.DocumentReference, false, 'countries'),
-                    ),
+                  : AgregateDatatListPageWidget(),
             ),
             FFRoute(
               name: 'NotesPage',
@@ -167,12 +164,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'BurgerGeneralMenu',
-              path: 'burgerGeneralMenu',
-              requireAuth: true,
-              builder: (context, params) => BurgerGeneralMenuWidget(),
-            ),
-            FFRoute(
               name: 'AuthenticatePage',
               path: 'authenticatePage',
               builder: (context, params) => AuthenticatePageWidget(),
@@ -182,17 +173,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'notificationSettings',
               requireAuth: true,
               builder: (context, params) => NotificationSettingsWidget(),
-            ),
-            FFRoute(
-              name: 'createAccount',
-              path: 'createAccount',
-              builder: (context, params) => CreateAccountWidget(),
-            ),
-            FFRoute(
-              name: 'AuthenticatePageCopy',
-              path: 'authenticatePageCopy',
-              requireAuth: true,
-              builder: (context, params) => AuthenticatePageCopyWidget(),
             ),
             FFRoute(
               name: 'NoteInfo',

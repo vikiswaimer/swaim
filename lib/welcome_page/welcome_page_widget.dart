@@ -78,6 +78,19 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
         ),
       ],
     ),
+    'rowOnPageLoadAnimation': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        VisibilityEffect(duration: 1700.ms),
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 1700.ms,
+          duration: 600.ms,
+          begin: Offset(0, 42),
+          end: Offset(0, 0),
+        ),
+      ],
+    ),
   };
 
   @override
@@ -186,61 +199,46 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 45, 0, 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        decoration: BoxDecoration(
-                          color: Color(0x00EEEEEE),
-                          image: DecorationImage(
-                            fit: BoxFit.contain,
-                            image: Image.asset(
-                              'assets/images/Frame_14.png',
-                            ).image,
-                          ),
-                          borderRadius: BorderRadius.circular(0),
-                          shape: BoxShape.rectangle,
-                        ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Color(0x00E0E3E7),
                       ),
-                    ),
-                  ],
-                ).animateOnPageLoad(
-                    animationsMap['columnOnPageLoadAnimation']!),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: AlignmentDirectional(0, 0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).tertiaryColor,
-                    ),
-                    child: InkWell(
-                      onTap: () async {
-                        if (loggedIn) {
-                          context.pushNamed('MapPage');
-                        } else {
-                          context.pushNamed('LoginAndSignup');
-                        }
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                            child: InkWell(
-                              onTap: () async {
-                                if (loggedIn) {
-                                  context.pushNamed('AggregationsMapPage');
-                                } else {
-                                  context.pushNamed('LoginAndSignup');
-                                }
+                      child: InkWell(
+                        onTap: () async {
+                          if (loggedIn) {
+                            context.pushNamed(
+                              'AggregationsMapPage',
+                              extra: <String, dynamic>{
+                                kTransitionInfoKey: TransitionInfo(
+                                  hasTransition: true,
+                                  transitionType:
+                                      PageTransitionType.rightToLeft,
+                                ),
                               },
+                            );
+                          } else {
+                            context.pushNamed(
+                              'LoginAndSignup',
+                              extra: <String, dynamic>{
+                                kTransitionInfoKey: TransitionInfo(
+                                  hasTransition: true,
+                                  transitionType:
+                                      PageTransitionType.rightToLeft,
+                                ),
+                              },
+                            );
+                          }
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                               child: Text(
                                 'LET\'S START OUR JOURNEY',
                                 textAlign: TextAlign.start,
@@ -254,13 +252,30 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
                                     ),
                               ),
                             ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.black,
-                            size: 24,
-                          ),
-                        ],
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      ).animateOnPageLoad(
+                          animationsMap['rowOnPageLoadAnimation']!),
+                    ),
+                  ],
+                ).animateOnPageLoad(
+                    animationsMap['columnOnPageLoadAnimation']!),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional(0, 0),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).tertiaryColor,
                       ),
                     ),
                   ),

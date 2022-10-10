@@ -10,15 +10,10 @@ export 'select_info_sources/select_info_sources_widget.dart'
     show SelectInfoSourcesWidget;
 export 'add_swaim/add_swaim_widget.dart' show AddSwaimWidget;
 export 'edit_swaim/edit_swaim_widget.dart' show EditSwaimWidget;
-export 'burger_general_menu/burger_general_menu_widget.dart'
-    show BurgerGeneralMenuWidget;
 export 'authenticate_page/authenticate_page_widget.dart'
     show AuthenticatePageWidget;
 export 'notification_settings/notification_settings_widget.dart'
     show NotificationSettingsWidget;
-export 'create_account/create_account_widget.dart' show CreateAccountWidget;
-export 'authenticate_page_copy/authenticate_page_copy_widget.dart'
-    show AuthenticatePageCopyWidget;
 export 'note_info/note_info_widget.dart' show NoteInfoWidget;
 export 'aggregation_info/aggregation_info_widget.dart'
     show AggregationInfoWidget;

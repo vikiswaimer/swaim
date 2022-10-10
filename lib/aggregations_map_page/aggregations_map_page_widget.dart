@@ -380,7 +380,6 @@ class _AggregationsMapPageWidgetState extends State<AggregationsMapPageWidget> {
                           setState(() => _algoliaRequestCompleter = null);
                           await waitForAlgoliaRequestCompleter();
                         },
-                        autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
                           hintText: 'Find a swaim',

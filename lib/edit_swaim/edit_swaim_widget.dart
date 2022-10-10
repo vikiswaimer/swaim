@@ -75,7 +75,21 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
               size: 28,
             ),
             onPressed: () async {
-              context.pop();
+              context.pushNamed(
+                'NoteInfo',
+                queryParams: {
+                  'notes': serializeParam(
+                    widget.note,
+                    ParamType.DocumentReference,
+                  ),
+                }.withoutNulls,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.leftToRight,
+                  ),
+                },
+              );
             },
           ),
         ),
@@ -128,7 +142,15 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                         .getIdFromAggregation(iconButtonNotesRecord.swaimRef!),
                   );
 
-                  context.pushNamed('NotesPage');
+                  context.pushNamed(
+                    'NotesPage',
+                    extra: <String, dynamic>{
+                      kTransitionInfoKey: TransitionInfo(
+                        hasTransition: true,
+                        transitionType: PageTransitionType.bottomToTop,
+                      ),
+                    },
+                  );
                 },
               );
             },
@@ -151,7 +173,15 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                       'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
                 );
 
-                context.pushNamed('NotesPage');
+                context.pushNamed(
+                  'NotesPage',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.bottomToTop,
+                    ),
+                  },
+                );
 
                 setState(() {});
               },

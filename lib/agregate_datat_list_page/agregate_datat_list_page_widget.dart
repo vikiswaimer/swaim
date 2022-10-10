@@ -4,7 +4,6 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -13,12 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:text_search/text_search.dart';
 
 class AgregateDatatListPageWidget extends StatefulWidget {
-  const AgregateDatatListPageWidget({
-    Key? key,
-    this.aggregations,
-  }) : super(key: key);
-
-  final DocumentReference? aggregations;
+  const AgregateDatatListPageWidget({Key? key}) : super(key: key);
 
   @override
   _AgregateDatatListPageWidgetState createState() =>
@@ -303,7 +297,6 @@ class _AgregateDatatListPageWidgetState
                                 .onError((_, __) => simpleSearchResults = [])
                                 .whenComplete(() => setState(() {}));
                           },
-                          autofocus: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: 'Find a swaim',
@@ -362,12 +355,13 @@ class _AgregateDatatListPageWidgetState
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(5, 110, 5, 120),
+              padding: EdgeInsetsDirectional.fromSTEB(5, 85, 5, 60),
               child: StreamBuilder<List<AggregationsRecord>>(
                 stream: queryAggregationsRecord(
-                  queryBuilder: (aggregationsRecord) =>
-                      aggregationsRecord.whereIn('title',
-                          simpleSearchResults.map((e) => e.title!).toList()),
+                  queryBuilder: (aggregationsRecord) => aggregationsRecord
+                      .whereIn('title',
+                          simpleSearchResults.map((e) => e.title!).toList())
+                      .where('title', isNotEqualTo: 'null'),
                 ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
@@ -404,14 +398,20 @@ class _AgregateDatatListPageWidgetState
                                   ParamType.DocumentReference,
                                 ),
                               }.withoutNulls,
+                              extra: <String, dynamic>{
+                                kTransitionInfoKey: TransitionInfo(
+                                  hasTransition: true,
+                                  transitionType:
+                                      PageTransitionType.rightToLeft,
+                                ),
+                              },
                             );
                           },
                           child: Container(
                             width: double.infinity,
                             height: 460,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                              color: Colors.white,
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
@@ -461,7 +461,7 @@ class _AgregateDatatListPageWidgetState
                                       height: 30,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                            .primaryBtnText,
                                       ),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
@@ -510,7 +510,15 @@ class _AgregateDatatListPageWidgetState
                   size: 30,
                 ),
                 onPressed: () async {
-                  context.pushNamed('FavoriteAggregationsListPage');
+                  context.pushNamed(
+                    'FavoriteAggregationsListPage',
+                    extra: <String, dynamic>{
+                      kTransitionInfoKey: TransitionInfo(
+                        hasTransition: true,
+                        transitionType: PageTransitionType.rightToLeft,
+                      ),
+                    },
+                  );
                 },
               ),
             ),

@@ -185,6 +185,8 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.normal,
                                               ),
+                                          keyboardType:
+                                              TextInputType.emailAddress,
                                         ),
                                       ),
                                     ),
@@ -322,8 +324,19 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                               return;
                                             }
 
-                                            context.goNamedAuth(
-                                                'MapPage', mounted);
+                                            context.pushNamedAuth(
+                                              'AggregationsMapPage',
+                                              mounted,
+                                              extra: <String, dynamic>{
+                                                kTransitionInfoKey:
+                                                    TransitionInfo(
+                                                  hasTransition: true,
+                                                  transitionType:
+                                                      PageTransitionType
+                                                          .bottomToTop,
+                                                ),
+                                              },
+                                            );
                                           },
                                           text: 'Sign In',
                                           options: FFButtonOptions(
@@ -446,6 +459,8 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.normal,
                                               ),
+                                          keyboardType:
+                                              TextInputType.emailAddress,
                                         ),
                                       ),
                                     ),
@@ -708,8 +723,19 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                               return;
                                             }
 
-                                            context.goNamedAuth(
-                                                'MapPage', mounted);
+                                            context.pushNamedAuth(
+                                              'AggregationsMapPage',
+                                              mounted,
+                                              extra: <String, dynamic>{
+                                                kTransitionInfoKey:
+                                                    TransitionInfo(
+                                                  hasTransition: true,
+                                                  transitionType:
+                                                      PageTransitionType
+                                                          .bottomToTop,
+                                                ),
+                                              },
+                                            );
                                           },
                                           text: 'Sign up',
                                           options: FFButtonOptions(

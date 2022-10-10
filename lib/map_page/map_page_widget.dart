@@ -379,8 +379,8 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                   children: [
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: StreamBuilder<List<LabelsRecord>>(
-                        stream: queryLabelsRecord(
+                      child: FutureBuilder<List<LabelsRecord>>(
+                        future: queryLabelsRecordOnce(
                           queryBuilder: (labelsRecord) => labelsRecord
                               .where('is_base', isEqualTo: true)
                               .where('name', isNotEqualTo: 'Not set'),

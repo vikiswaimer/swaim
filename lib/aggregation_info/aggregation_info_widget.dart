@@ -74,7 +74,15 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                context.pushNamed('AgregateDatatListPage');
+                context.pushNamed(
+                  'AgregateDatatListPage',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.leftToRight,
+                    ),
+                  },
+                );
               },
             ),
             title: Text(
@@ -331,6 +339,11 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                   }.withoutNulls,
                                   extra: <String, dynamic>{
                                     'initialLabel': buttonLabelsRecord,
+                                    kTransitionInfoKey: TransitionInfo(
+                                      hasTransition: true,
+                                      transitionType:
+                                          PageTransitionType.rightToLeft,
+                                    ),
                                   },
                                 );
                               },

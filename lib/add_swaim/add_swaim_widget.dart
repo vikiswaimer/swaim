@@ -77,7 +77,15 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
             size: 30,
           ),
           onPressed: () async {
-            context.pop();
+            context.pushNamed(
+              'NotesPage',
+              extra: <String, dynamic>{
+                kTransitionInfoKey: TransitionInfo(
+                  hasTransition: true,
+                  transitionType: PageTransitionType.leftToRight,
+                ),
+              },
+            );
           },
         ),
         title: Text(
@@ -122,7 +130,15 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                 );
               }
 
-              context.pushNamed('NotesPage');
+              context.pushNamed(
+                'NotesPage',
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.bottomToTop,
+                  ),
+                },
+              );
             },
           ),
         ],

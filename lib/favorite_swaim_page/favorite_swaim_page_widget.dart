@@ -78,7 +78,15 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                context.pushNamed('FavoriteAggregationsListPage');
+                context.pushNamed(
+                  'FavoriteAggregationsListPage',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.leftToRight,
+                    ),
+                  },
+                );
               },
             ),
             title: Text(
@@ -146,8 +154,16 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                               .toList()),
                                 );
 
-                                context
-                                    .pushNamed('FavoriteAggregationsListPage');
+                                context.pushNamed(
+                                  'FavoriteAggregationsListPage',
+                                  extra: <String, dynamic>{
+                                    kTransitionInfoKey: TransitionInfo(
+                                      hasTransition: true,
+                                      transitionType:
+                                          PageTransitionType.leftToRight,
+                                    ),
+                                  },
+                                );
 
                                 setState(() {});
                               },
@@ -366,6 +382,15 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                                 ParamType.DocumentReference,
                                               ),
                                             }.withoutNulls,
+                                            extra: <String, dynamic>{
+                                              kTransitionInfoKey:
+                                                  TransitionInfo(
+                                                hasTransition: true,
+                                                transitionType:
+                                                    PageTransitionType
+                                                        .rightToLeft,
+                                              ),
+                                            },
                                           );
                                         },
                                         text: 'Add to note',
