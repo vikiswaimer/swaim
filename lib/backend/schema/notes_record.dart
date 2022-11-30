@@ -23,6 +23,10 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
 
   DocumentReference? get label;
 
+  DateTime? get createdAt;
+
+  DateTime? get updatedAt;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -53,6 +57,10 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
           ..name = snapshot.data['name']
           ..swaimRef = safeGet(() => toRef(snapshot.data['swaimRef']))
           ..label = safeGet(() => toRef(snapshot.data['label']))
+          ..createdAt = safeGet(() =>
+              DateTime.fromMillisecondsSinceEpoch(snapshot.data['createdAt']))
+          ..updatedAt = safeGet(() =>
+              DateTime.fromMillisecondsSinceEpoch(snapshot.data['updatedAt']))
           ..ffRef = NotesRecord.collection.doc(snapshot.objectID),
       );
 
@@ -88,6 +96,8 @@ Map<String, dynamic> createNotesRecordData({
   String? name,
   DocumentReference? swaimRef,
   DocumentReference? label,
+  DateTime? createdAt,
+  DateTime? updatedAt,
 }) {
   final firestoreData = serializers.toFirestore(
     NotesRecord.serializer,
@@ -98,7 +108,9 @@ Map<String, dynamic> createNotesRecordData({
         ..user = user
         ..name = name
         ..swaimRef = swaimRef
-        ..label = label,
+        ..label = label
+        ..createdAt = createdAt
+        ..updatedAt = updatedAt,
     ),
   );
 

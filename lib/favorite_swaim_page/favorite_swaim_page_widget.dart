@@ -51,11 +51,11 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 60,
-              height: 60,
+              width: 30,
+              height: 30,
               child: SpinKitRipple(
-                color: Color(0xFF222235),
-                size: 60,
+                color: Color(0x80E8AA21),
+                size: 30,
               ),
             ),
           );
@@ -63,9 +63,9 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
         final favoriteSwaimPageAggregationsRecord = snapshot.data!;
         return Scaffold(
           key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
             automaticallyImplyLeading: false,
             leading: FlutterFlowIconButton(
               borderColor: Colors.transparent,
@@ -111,11 +111,11 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                   if (!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
-                        width: 60,
-                        height: 60,
+                        width: 30,
+                        height: 30,
                         child: SpinKitRipple(
-                          color: Color(0xFF222235),
-                          size: 60,
+                          color: Color(0x80E8AA21),
+                          size: 30,
                         ),
                       ),
                     );
@@ -126,7 +126,7 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      color: FlutterFlowTheme.of(context).primaryBtnText,
                     ),
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(25, 0, 0, 0),
@@ -176,7 +176,7 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
               ),
             ],
             centerTitle: false,
-            elevation: 2,
+            elevation: 0,
           ),
           body: SafeArea(
             child: Column(
@@ -193,7 +193,7 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               StreamBuilder<AggregationsRecord>(
                                 stream: AggregationsRecord.getDocument(
@@ -203,11 +203,11 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                   if (!snapshot.hasData) {
                                     return Center(
                                       child: SizedBox(
-                                        width: 60,
-                                        height: 60,
+                                        width: 30,
+                                        height: 30,
                                         child: SpinKitRipple(
-                                          color: Color(0xFF222235),
-                                          size: 60,
+                                          color: Color(0x80E8AA21),
+                                          size: 30,
                                         ),
                                       ),
                                     );
@@ -236,11 +236,11 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 60,
-                                            height: 60,
+                                            width: 30,
+                                            height: 30,
                                             child: SpinKitRipple(
-                                              color: Color(0xFF222235),
-                                              size: 60,
+                                              color: Color(0x80E8AA21),
+                                              size: 30,
                                             ),
                                           ),
                                         );
@@ -273,11 +273,11 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                           if (!snapshot.hasData) {
                                             return Center(
                                               child: SizedBox(
-                                                width: 60,
-                                                height: 60,
+                                                width: 30,
+                                                height: 30,
                                                 child: SpinKitRipple(
-                                                  color: Color(0xFF222235),
-                                                  size: 60,
+                                                  color: Color(0x80E8AA21),
+                                                  size: 30,
                                                 ),
                                               ),
                                             );
@@ -291,7 +291,7 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1
                                                 .override(
-                                                  fontFamily: 'Overpass',
+                                                  fontFamily: 'Montserrat',
                                                   fontSize: 22,
                                                 ),
                                           );
@@ -315,19 +315,20 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 60,
-                                            height: 60,
+                                            width: 30,
+                                            height: 30,
                                             child: SpinKitRipple(
-                                              color: Color(0xFF222235),
-                                              size: 60,
+                                              color: Color(0x80E8AA21),
+                                              size: 30,
                                             ),
                                           ),
                                         );
                                       }
-                                      final textAggregationCategoriesRecord =
+                                      final categoryAggregationCategoriesRecord =
                                           snapshot.data!;
                                       return Text(
-                                        textAggregationCategoriesRecord.name!,
+                                        categoryAggregationCategoriesRecord
+                                            .name!,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
                                       );
@@ -341,192 +342,193 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                         Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            StreamBuilder<LabelsRecord>(
-                              stream: LabelsRecord.getDocument(
-                                  widget.favAggregation!.labelRef!),
-                              builder: (context, snapshot) {
-                                // Customize what your widget looks like when it's loading.
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: SpinKitRipple(
-                                        color: Color(0xFF222235),
-                                        size: 60,
-                                      ),
-                                    ),
-                                  );
-                                }
-                                final containerLabelsRecord = snapshot.data!;
-                                return Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      FFButtonWidget(
-                                        onPressed: () async {
-                                          context.pushNamed(
-                                            'addSwaim',
-                                            queryParams: {
-                                              'payloadFromAggregation':
-                                                  serializeParam(
-                                                favoriteSwaimPageAggregationsRecord
-                                                    .reference,
-                                                ParamType.DocumentReference,
-                                              ),
-                                            }.withoutNulls,
-                                            extra: <String, dynamic>{
-                                              kTransitionInfoKey:
-                                                  TransitionInfo(
-                                                hasTransition: true,
-                                                transitionType:
-                                                    PageTransitionType
-                                                        .rightToLeft,
-                                              ),
-                                            },
-                                          );
-                                        },
-                                        text: 'Add to note',
-                                        options: FFButtonOptions(
-                                          width: 130,
-                                          height: 40,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryColor,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .subtitle2
-                                                  .override(
-                                                    fontFamily: 'Overpass',
-                                                    color: Colors.white,
-                                                  ),
-                                          borderSide: BorderSide(
-                                            color: Colors.transparent,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                              child: StreamBuilder<LabelsRecord>(
+                                stream: LabelsRecord.getDocument(
+                                    widget.favAggregation!.labelRef!),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: SpinKitRipple(
+                                          color: Color(0x80E8AA21),
+                                          size: 30,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 20, 0, 0),
-                                        child: StreamBuilder<LabelsRecord>(
-                                          stream: LabelsRecord.getDocument(
-                                              widget.label!),
-                                          builder: (context, snapshot) {
-                                            // Customize what your widget looks like when it's loading.
-                                            if (!snapshot.hasData) {
-                                              return Center(
-                                                child: SizedBox(
-                                                  width: 60,
-                                                  height: 60,
-                                                  child: SpinKitRipple(
-                                                    color: Color(0xFF222235),
-                                                    size: 60,
-                                                  ),
+                                    );
+                                  }
+                                  final containerLabelsRecord = snapshot.data!;
+                                  return Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        FFButtonWidget(
+                                          onPressed: () async {
+                                            context.pushNamed(
+                                              'addSwaim',
+                                              queryParams: {
+                                                'payloadFromAggregation':
+                                                    serializeParam(
+                                                  favoriteSwaimPageAggregationsRecord
+                                                      .reference,
+                                                  ParamType.DocumentReference,
                                                 ),
-                                              );
-                                            }
-                                            final chooseLabeLabelsRecord =
-                                                snapshot.data!;
-                                            return Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 30,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  Text(
-                                                    'Label: ',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
-                                                  ),
-                                                  Text(
-                                                    chooseLabeLabelsRecord
-                                                        .name!,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
-                                                  ),
-                                                  FFButtonWidget(
-                                                    onPressed: () async {
-                                                      await showModalBottomSheet(
-                                                        isScrollControlled:
-                                                            true,
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return Padding(
-                                                            padding:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .viewInsets,
-                                                            child:
-                                                                ChooseLabelWidget(
-                                                              swaimRef: widget
-                                                                  .favAggregation,
-                                                            ),
-                                                          );
-                                                        },
-                                                      ).then((value) =>
-                                                          setState(() {}));
-                                                    },
-                                                    text: 'Set label',
-                                                    options: FFButtonOptions(
-                                                      width: 130,
-                                                      height: 40,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryColor,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .subtitle2
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Overpass',
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            Colors.transparent,
-                                                        width: 1,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                'initialLabel': serializeParam(
+                                                  containerLabelsRecord,
+                                                  ParamType.Document,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                'initialLabel':
+                                                    containerLabelsRecord,
+                                                kTransitionInfoKey:
+                                                    TransitionInfo(
+                                                  hasTransition: true,
+                                                  transitionType:
+                                                      PageTransitionType
+                                                          .rightToLeft,
+                                                ),
+                                              },
                                             );
                                           },
+                                          text: 'Add to note',
+                                          options: FFButtonOptions(
+                                            width: 130,
+                                            height: 40,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryColor,
+                                            textStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .subtitle2
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Colors.white,
+                                                    ),
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 20, 0, 0),
+                                          child: StreamBuilder<LabelsRecord>(
+                                            stream: LabelsRecord.getDocument(
+                                                widget.label!),
+                                            builder: (context, snapshot) {
+                                              // Customize what your widget looks like when it's loading.
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: SpinKitRipple(
+                                                      color: Color(0x80E8AA21),
+                                                      size: 30,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              final chooseLabeLabelsRecord =
+                                                  snapshot.data!;
+                                              return Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBtnText,
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    FFButtonWidget(
+                                                      onPressed: () async {
+                                                        await showModalBottomSheet(
+                                                          isScrollControlled:
+                                                              true,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return Padding(
+                                                              padding: MediaQuery
+                                                                      .of(context)
+                                                                  .viewInsets,
+                                                              child:
+                                                                  ChooseLabelWidget(
+                                                                swaimRef: widget
+                                                                    .favAggregation,
+                                                              ),
+                                                            );
+                                                          },
+                                                        ).then((value) =>
+                                                            setState(() {}));
+                                                      },
+                                                      text:
+                                                          chooseLabeLabelsRecord
+                                                              .name!,
+                                                      options: FFButtonOptions(
+                                                        width: 130,
+                                                        height: 40,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                        textStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .subtitle2
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Montserrat',
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                        borderSide: BorderSide(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: 1,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),

@@ -11,6 +11,8 @@ import 'schema/labels_record.dart';
 import 'schema/countries_record.dart';
 import 'schema/favorite_aggregations_record.dart';
 import 'schema/aggregation_categories_record.dart';
+import 'schema/pinned_notes_record.dart';
+import 'schema/test_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -25,6 +27,8 @@ export 'schema/labels_record.dart';
 export 'schema/countries_record.dart';
 export 'schema/favorite_aggregations_record.dart';
 export 'schema/aggregation_categories_record.dart';
+export 'schema/pinned_notes_record.dart';
+export 'schema/test_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Stream<List<UsersRecord>> queryUsersRecord({
@@ -321,6 +325,90 @@ Future<FFFirestorePage<AggregationCategoriesRecord>>
           pageSize: pageSize,
           isStream: isStream,
         );
+
+/// Functions to query PinnedNotesRecords (as a Stream and as a Future).
+Stream<List<PinnedNotesRecord>> queryPinnedNotesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PinnedNotesRecord.collection,
+      PinnedNotesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PinnedNotesRecord>> queryPinnedNotesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PinnedNotesRecord.collection,
+      PinnedNotesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<PinnedNotesRecord>> queryPinnedNotesRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      PinnedNotesRecord.collection,
+      PinnedNotesRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query TestRecords (as a Stream and as a Future).
+Stream<List<TestRecord>> queryTestRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      TestRecord.collection,
+      TestRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<TestRecord>> queryTestRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      TestRecord.collection,
+      TestRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<TestRecord>> queryTestRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      TestRecord.collection,
+      TestRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
 
 Stream<List<T>> queryCollection<T>(Query collection, Serializer<T> serializer,
     {Query Function(Query)? queryBuilder,

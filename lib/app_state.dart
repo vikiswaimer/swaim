@@ -16,6 +16,7 @@ class FFAppState {
 
   Future initializePersistedState() async {
     prefs = await SharedPreferences.getInstance();
+    _isGuideVisible = prefs.getBool('ff_isGuideVisible') ?? _isGuideVisible;
   }
 
   late SharedPreferences prefs;
@@ -33,6 +34,33 @@ class FFAppState {
   DocumentReference? firstSearchREsult;
 
   DocumentReference? labelInEditSwaim;
+
+  bool isSwaimsMode = false;
+
+  bool isSearchOnMapEnabled = false;
+
+  String searchInputValue = '';
+
+  bool isSearchOnNotesListEnabled = false;
+
+  List<DocumentReference> selectedSwaimsCategoriesInFilter = [];
+
+  bool isSettingsOpened = false;
+
+  bool isSearchModeOnSwaimsEnabled = false;
+
+  bool _isGuideVisible = true;
+  bool get isGuideVisible => _isGuideVisible;
+  set isGuideVisible(bool _value) {
+    _isGuideVisible = _value;
+    prefs.setBool('ff_isGuideVisible', _value);
+  }
+
+  bool isCodeSent = false;
+
+  String citySearch = 'Warsaw';
+
+  String countrySearch = 'Poland';
 }
 
 LatLng? _latLngFromString(String? val) {

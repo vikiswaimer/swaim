@@ -17,7 +17,7 @@ abstract class FlutterFlowTheme {
   late Color primaryText;
   late Color secondaryText;
 
-  late Color white;
+  late Color yellowSwaim;
   late Color text2Gray;
   late Color grayDark;
   late Color darkBG;
@@ -33,6 +33,15 @@ abstract class FlutterFlowTheme {
   late Color lineColor;
   late Color backgroundComponents;
   late Color customColor1;
+  late Color maximumBlueGreen;
+  late Color plumpPurple;
+  late Color platinum;
+  late Color ashGray;
+  late Color darkSeaGreen;
+  late Color btnText;
+  late Color customColor3;
+  late Color customColor4;
+  late Color white;
 
   String get title1Family => typography.title1Family;
   TextStyle get title1 => typography.title1;
@@ -62,7 +71,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color primaryText = const Color(0xFF090F13);
   late Color secondaryText = const Color(0xFF95A1AC);
 
-  late Color white = Color(0xFFD4A03B);
+  late Color yellowSwaim = Color(0xFFE8AA21);
   late Color text2Gray = Color(0xFF8B97A2);
   late Color grayDark = Color(0xFF57636C);
   late Color darkBG = Color(0xFF111417);
@@ -78,6 +87,15 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color lineColor = Color(0xFFE0E3E7);
   late Color backgroundComponents = Color(0xFF1D2428);
   late Color customColor1 = Color(0xFF2FB73C);
+  late Color maximumBlueGreen = Color(0xFF59C3C3);
+  late Color plumpPurple = Color(0xFF52489C);
+  late Color platinum = Color(0xFFEBEBEB);
+  late Color ashGray = Color(0xFFCAD2C5);
+  late Color darkSeaGreen = Color(0xFF84A98C);
+  late Color btnText = Color(0xFFFFFFFF);
+  late Color customColor3 = Color(0xFFDF3F3F);
+  late Color customColor4 = Color(0xFF090F13);
+  late Color white = Color(0xFFFFFFFF);
 }
 
 abstract class Typography {
@@ -102,51 +120,51 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get title1Family => 'Overpass';
+  String get title1Family => 'Syne Mono';
   TextStyle get title1 => GoogleFonts.getFont(
-        'Overpass',
+        'Syne Mono',
         color: theme.darkBG,
         fontWeight: FontWeight.bold,
-        fontSize: 30,
+        fontSize: 22,
       );
-  String get title2Family => 'Overpass';
+  String get title2Family => 'Syne';
   TextStyle get title2 => GoogleFonts.getFont(
-        'Overpass',
-        color: theme.darkBG,
-        fontWeight: FontWeight.bold,
-        fontSize: 24,
+        'Syne',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 18,
       );
-  String get title3Family => 'Overpass';
+  String get title3Family => 'Montserrat';
   TextStyle get title3 => GoogleFonts.getFont(
-        'Overpass',
-        color: theme.darkBG,
-        fontWeight: FontWeight.w600,
+        'Montserrat',
+        color: Color(0xFF5F5F5F),
+        fontWeight: FontWeight.w500,
         fontSize: 20,
       );
-  String get subtitle1Family => 'Overpass';
+  String get subtitle1Family => 'Syne';
   TextStyle get subtitle1 => GoogleFonts.getFont(
-        'Overpass',
-        color: theme.primaryColor,
+        'Syne',
+        color: theme.primaryBackground,
         fontWeight: FontWeight.w500,
         fontSize: 18,
       );
-  String get subtitle2Family => 'Overpass';
+  String get subtitle2Family => 'Montserrat';
   TextStyle get subtitle2 => GoogleFonts.getFont(
-        'Overpass',
-        color: theme.darkBG,
-        fontWeight: FontWeight.normal,
-        fontSize: 16,
-      );
-  String get bodyText1Family => 'Overpass';
-  TextStyle get bodyText1 => GoogleFonts.getFont(
-        'Overpass',
-        color: theme.grayDark,
+        'Montserrat',
+        color: theme.primaryBackground,
         fontWeight: FontWeight.normal,
         fontSize: 14,
       );
-  String get bodyText2Family => 'Overpass';
+  String get bodyText1Family => 'Montserrat';
+  TextStyle get bodyText1 => GoogleFonts.getFont(
+        'Montserrat',
+        color: Color(0xFF5F5F5F),
+        fontWeight: FontWeight.normal,
+        fontSize: 18,
+      );
+  String get bodyText2Family => 'Montserrat';
   TextStyle get bodyText2 => GoogleFonts.getFont(
-        'Overpass',
+        'Montserrat',
         color: theme.darkBG,
         fontWeight: FontWeight.normal,
         fontSize: 14,

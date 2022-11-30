@@ -13,6 +13,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(FavoriteAggregationsRecord.serializer)
       ..add(LabelsRecord.serializer)
       ..add(NotesRecord.serializer)
+      ..add(PinnedNotesRecord.serializer)
+      ..add(TestRecord.serializer)
       ..add(UsersRecord.serializer))
     .build();
 

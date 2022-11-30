@@ -209,7 +209,7 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
                         onTap: () async {
                           if (loggedIn) {
                             context.pushNamed(
-                              'AggregationsMapPage',
+                              'MapPage',
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: TransitionInfo(
                                   hasTransition: true,
@@ -246,7 +246,7 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget>
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
-                                      fontFamily: 'Overpass',
+                                      fontFamily: 'Montserrat',
                                       fontSize: 20,
                                       lineHeight: 1.2,
                                     ),

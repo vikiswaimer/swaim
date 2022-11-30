@@ -249,7 +249,7 @@ class _AuthenticatePageWidgetState extends State<AuthenticatePageWidget> {
                     height: 50,
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Overpass',
+                          fontFamily: 'Montserrat',
                           color: FlutterFlowTheme.of(context).primaryText,
                         ),
                     elevation: 2,
@@ -280,7 +280,7 @@ class _AuthenticatePageWidgetState extends State<AuthenticatePageWidget> {
                     height: 50,
                     color: FlutterFlowTheme.of(context).primaryText,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Overpass',
+                          fontFamily: 'Montserrat',
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
                         ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../flutter_flow/flutter_flow_util.dart';
 
 import 'api_manager.dart';
@@ -13,7 +15,9 @@ class AddNoteCall {
     String? user = '',
     double? longitude,
     double? latitude,
-    String? labels = '',
+    String? labels = 'er7SZTHrkAdI2E1WBERe',
+    String? createdAt = '',
+    String? updatedAt = '',
   }) {
     final body = '''
 {
@@ -38,6 +42,12 @@ class AddNoteCall {
     },
     "description": {
       "stringValue": "${description}"
+    },
+    "createdAt": {
+      "timestampValue": "${createdAt}"
+    },
+    "updatedAt": {
+      "timestampValue": "${updatedAt}"
     }
   }
 }''';
@@ -51,6 +61,7 @@ class AddNoteCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -65,6 +76,8 @@ class UpdateNoteCall {
     double? longitude,
     String? label = '',
     String? swaimRef = '',
+    String? createdAt = '',
+    String? updatedAt = '',
   }) {
     final body = '''
 {
@@ -89,6 +102,12 @@ class UpdateNoteCall {
     },
     "description": {
       "stringValue": "${description}"
+    },
+    "createdAt": {
+      "timestampValue": "${createdAt}"
+    },
+    "updatedAt": {
+      "timestampValue": "${updatedAt}"
     }
   }
 }''';
@@ -102,6 +121,7 @@ class UpdateNoteCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      cache: false,
     );
   }
 
@@ -123,6 +143,7 @@ class DeleteNoteCall {
       headers: {},
       params: {},
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -156,6 +177,7 @@ class AddAggregationToFavesCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -172,6 +194,7 @@ class RemoveAggregationFromFavesCall {
       headers: {},
       params: {},
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -207,6 +230,7 @@ class SetLabelForSwaimCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -240,6 +264,7 @@ class AddLabelCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -256,6 +281,7 @@ class RemoveLabelCall {
       headers: {},
       params: {},
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -269,6 +295,8 @@ class AddNoteWithAttachedSwaimCall {
     String? user = '',
     String? labels = '',
     String? swaimRef = '',
+    String? createdAt = '',
+    String? updatedAt = '',
   }) {
     final body = '''
 {
@@ -293,6 +321,12 @@ class AddNoteWithAttachedSwaimCall {
     },
     "description": {
       "stringValue": "${description}"
+    },
+    "createdAt": {
+      "timestampValue": "${createdAt}"
+    },
+    "updatedAt": {
+      "timestampValue": "${updatedAt}"
     }
   }
 }''';
@@ -306,6 +340,7 @@ class AddNoteWithAttachedSwaimCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      cache: false,
     );
   }
 }
@@ -324,4 +359,13 @@ class ApiPagingParams {
   @override
   String toString() =>
       'PagingParams(nextPageNumber: $nextPageNumber, numItems: $numItems, lastResponse: $lastResponse,)';
+}
+
+String _serializeList(List? list) {
+  list ??= <String>[];
+  try {
+    return json.encode(list);
+  } catch (_) {
+    return '[]';
+  }
 }

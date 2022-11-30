@@ -171,7 +171,7 @@ class _PopupWidgetState extends State<PopupWidget> {
                               textStyle: FlutterFlowTheme.of(context)
                                   .subtitle2
                                   .override(
-                                    fontFamily: 'Overpass',
+                                    fontFamily: 'Montserrat',
                                     color: Colors.white,
                                   ),
                               borderSide: BorderSide(

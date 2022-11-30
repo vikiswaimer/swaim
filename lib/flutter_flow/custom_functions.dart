@@ -87,3 +87,81 @@ String getIdFromAggregation(DocumentReference aggregationRef) {
   // Add your function code here!
   return aggregationRef.id;
 }
+
+List<AggregationsRecord> filterAlgoliaResultsByCategories(
+  List<AggregationsRecord> data,
+  List<AggregationCategoriesRecord> categories,
+) {
+  // Add your function code here!
+  if (categories.length == 0) {
+    return data;
+  }
+  return data
+      .where((item) =>
+          categories.map((el) => el.reference).contains(item.category))
+      .toList();
+}
+
+List<NotesRecord> filterNotesFromEmptyLocations(
+  List<NotesRecord> notes,
+  String val,
+) {
+  // filter out notes with empty location
+  if (val == '') {
+    return notes
+        .where((note) =>
+            note.location?.latitude != 0 && note.location?.longitude != 0)
+        .toList();
+  }
+  return notes
+      .where((note) =>
+          note.location?.latitude != 0 && note.location?.longitude != 0)
+      .where((note) => note.name!.toLowerCase().contains(val.toLowerCase()))
+      .toList();
+}
+
+bool hasNotEmptyLocation(NotesRecord note) {
+  // Add your function code here!
+  return note.location?.latitude != 0 && note.location?.longitude != 0;
+}
+
+String getNoteId(DocumentReference note) {
+  // Add your function code here!
+  return note.id;
+}
+
+List<AggregationsRecord> filterSwaimsByInputVal(
+  List<AggregationsRecord> swaims,
+  String val,
+) {
+  // Add your function code here!
+  if (val == '') {
+    return swaims;
+  }
+  return swaims
+      .where((swaim) => swaim.title!.toLowerCase().contains(val.toLowerCase()))
+      .toList();
+}
+
+String dateToString(DateTime date) {
+  // Add your function code here!
+  DateTime utc = date.toUtc();
+  return '${utc.toIso8601String()}';
+}
+
+String composeNameAndDate(
+  String name,
+  String date,
+) {
+  // Add your function code here!
+  return '${name}\n${date}';
+}
+
+bool isLocationEmpty(LatLng location) {
+  // Add your function code here!
+  if (location.latitude == 0 && location.longitude == 0) {
+    return true;
+  } else {
+    return false;
+  }
+}

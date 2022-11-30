@@ -121,7 +121,7 @@ class _LabelDeleteConfirmationWidgetState
                               textStyle: FlutterFlowTheme.of(context)
                                   .subtitle2
                                   .override(
-                                    fontFamily: 'Overpass',
+                                    fontFamily: 'Montserrat',
                                     color: Colors.white,
                                   ),
                               borderSide: BorderSide(
@@ -143,7 +143,7 @@ class _LabelDeleteConfirmationWidgetState
                               textStyle: FlutterFlowTheme.of(context)
                                   .subtitle2
                                   .override(
-                                    fontFamily: 'Overpass',
+                                    fontFamily: 'Montserrat',
                                     color: Colors.white,
                                   ),
                               borderSide: BorderSide(

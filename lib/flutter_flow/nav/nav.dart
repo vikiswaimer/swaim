@@ -69,13 +69,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? NavBarPage() : WelcomePageWidget(),
+          appStateNotifier.loggedIn ? MapPageWidget() : WelcomePageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : WelcomePageWidget(),
+              appStateNotifier.loggedIn ? MapPageWidget() : WelcomePageWidget(),
           routes: [
             FFRoute(
               name: 'WelcomePage',
@@ -83,31 +83,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => WelcomePageWidget(),
             ),
             FFRoute(
-              name: 'AggregationsMapPage',
-              path: 'aggregationsMapPage',
-              requireAuth: true,
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'AggregationsMapPage')
-                  : AggregationsMapPageWidget(),
-            ),
-            FFRoute(
               name: 'MapPage',
               path: 'mapPage',
               requireAuth: true,
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'MapPage')
-                  : MapPageWidget(
-                      note: params.getParam(
-                          'note', ParamType.DocumentReference, false, 'notes'),
-                    ),
-            ),
-            FFRoute(
-              name: 'AgregateDatatListPage',
-              path: 'agregateDatatListPage',
-              requireAuth: true,
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'AgregateDatatListPage')
-                  : AgregateDatatListPageWidget(),
+              builder: (context, params) => MapPageWidget(
+                note: params.getParam(
+                    'note', ParamType.DocumentReference, false, 'notes'),
+                noteLocation: params.getParam('noteLocation', ParamType.LatLng),
+                swaimLocation:
+                    params.getParam('swaimLocation', ParamType.LatLng),
+              ),
             ),
             FFRoute(
               name: 'NotesPage',
@@ -116,22 +101,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               asyncParams: {
                 'notes': getDoc('notes', NotesRecord.serializer),
               },
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'NotesPage')
-                  : NotesPageWidget(
-                      notes: params.getParam('notes', ParamType.Document),
-                    ),
-            ),
-            FFRoute(
-              name: 'SelectInfoSources',
-              path: 'selectInfoSources',
-              requireAuth: true,
-              asyncParams: {
-                'notes': getDoc('notes', NotesRecord.serializer),
-              },
-              builder: (context, params) => SelectInfoSourcesWidget(
+              builder: (context, params) => NotesPageWidget(
                 notes: params.getParam('notes', ParamType.Document),
               ),
+            ),
+            FFRoute(
+              name: 'AgregateDatatListPage',
+              path: 'agregateDatatListPage',
+              requireAuth: true,
+              builder: (context, params) => AgregateDatatListPageWidget(),
             ),
             FFRoute(
               name: 'addSwaim',
@@ -164,6 +142,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
+              name: 'AggregationInfo',
+              path: 'aggregationInfo',
+              requireAuth: true,
+              builder: (context, params) => AggregationInfoWidget(
+                aggregation: params.getParam('aggregation',
+                    ParamType.DocumentReference, false, 'aggregations'),
+              ),
+            ),
+            FFRoute(
               name: 'AuthenticatePage',
               path: 'authenticatePage',
               builder: (context, params) => AuthenticatePageWidget(),
@@ -173,29 +160,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'notificationSettings',
               requireAuth: true,
               builder: (context, params) => NotificationSettingsWidget(),
-            ),
-            FFRoute(
-              name: 'NoteInfo',
-              path: 'noteInfo',
-              requireAuth: true,
-              asyncParams: {
-                'swaim': getDoc('favorite_aggregations',
-                    FavoriteAggregationsRecord.serializer),
-              },
-              builder: (context, params) => NoteInfoWidget(
-                notes: params.getParam(
-                    'notes', ParamType.DocumentReference, false, 'notes'),
-                swaim: params.getParam('swaim', ParamType.Document),
-              ),
-            ),
-            FFRoute(
-              name: 'AggregationInfo',
-              path: 'aggregationInfo',
-              requireAuth: true,
-              builder: (context, params) => AggregationInfoWidget(
-                aggregation: params.getParam('aggregation',
-                    ParamType.DocumentReference, false, 'aggregations'),
-              ),
             ),
             FFRoute(
               name: 'FavoriteAggregationsListPage',
@@ -228,6 +192,37 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 label: params.getParam(
                     'label', ParamType.DocumentReference, false, 'labels'),
               ),
+            ),
+            FFRoute(
+              name: 'ExampleSwaimContentpage',
+              path: 'exampleSwaimContentpage',
+              requireAuth: true,
+              builder: (context, params) => ExampleSwaimContentpageWidget(),
+            ),
+            FFRoute(
+              name: 'TypeEmailCodePage',
+              path: 'typeEmailCodePage',
+              builder: (context, params) => TypeEmailCodePageWidget(),
+            ),
+            FFRoute(
+              name: 'PrivacyPolicy',
+              path: 'privacyPolicy',
+              builder: (context, params) => PrivacyPolicyWidget(),
+            ),
+            FFRoute(
+              name: 'TermConditions',
+              path: 'TermsConditions',
+              builder: (context, params) => TermConditionsWidget(),
+            ),
+            FFRoute(
+              name: 'FAQ',
+              path: 'FAQ',
+              builder: (context, params) => FaqWidget(),
+            ),
+            FFRoute(
+              name: 'ContactUs',
+              path: 'ContactUs',
+              builder: (context, params) => ContactUsWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
@@ -402,9 +397,12 @@ class FFRoute {
           final child = appStateNotifier.loading
               ? Container(
                   color: Colors.transparent,
-                  child: Image.asset(
-                    'assets/images/Frame_8.png',
-                    fit: BoxFit.contain,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/Group_39.png',
+                      width: 70,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               : page;

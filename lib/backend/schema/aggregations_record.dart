@@ -21,9 +21,20 @@ abstract class AggregationsRecord
 
   LatLng? get location;
 
-  DocumentReference? get country;
-
   DocumentReference? get category;
+
+  String? get city;
+
+  String? get country;
+
+  @BuiltValueField(wireName: 'working_hours')
+  String? get workingHours;
+
+  String? get website;
+
+  String? get source;
+
+  String? get contactData;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -32,7 +43,13 @@ abstract class AggregationsRecord
   static void _initializeBuilder(AggregationsRecordBuilder builder) => builder
     ..title = ''
     ..description = ''
-    ..picture = '';
+    ..picture = ''
+    ..city = ''
+    ..country = ''
+    ..workingHours = ''
+    ..website = ''
+    ..source = ''
+    ..contactData = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('aggregations');
@@ -55,8 +72,13 @@ abstract class AggregationsRecord
                 snapshot.data['_geoloc']['lat'],
                 snapshot.data['_geoloc']['lng'],
               ))
-          ..country = safeGet(() => toRef(snapshot.data['country']))
           ..category = safeGet(() => toRef(snapshot.data['category']))
+          ..city = snapshot.data['city']
+          ..country = snapshot.data['country']
+          ..workingHours = snapshot.data['working_hours']
+          ..website = snapshot.data['website']
+          ..source = snapshot.data['source']
+          ..contactData = snapshot.data['contactData']
           ..ffRef = AggregationsRecord.collection.doc(snapshot.objectID),
       );
 
@@ -91,8 +113,13 @@ Map<String, dynamic> createAggregationsRecordData({
   String? description,
   String? picture,
   LatLng? location,
-  DocumentReference? country,
   DocumentReference? category,
+  String? city,
+  String? country,
+  String? workingHours,
+  String? website,
+  String? source,
+  String? contactData,
 }) {
   final firestoreData = serializers.toFirestore(
     AggregationsRecord.serializer,
@@ -102,8 +129,13 @@ Map<String, dynamic> createAggregationsRecordData({
         ..description = description
         ..picture = picture
         ..location = location
+        ..category = category
+        ..city = city
         ..country = country
-        ..category = category,
+        ..workingHours = workingHours
+        ..website = website
+        ..source = source
+        ..contactData = contactData,
     ),
   );
 

@@ -61,11 +61,11 @@ class _AggregationBottomSheetWidgetState
             if (!snapshot.hasData) {
               return Center(
                 child: SizedBox(
-                  width: 60,
-                  height: 60,
+                  width: 30,
+                  height: 30,
                   child: SpinKitRipple(
-                    color: Color(0xFF222235),
-                    size: 60,
+                    color: Color(0x80E8AA21),
+                    size: 30,
                   ),
                 ),
               );
@@ -142,7 +142,7 @@ class _AggregationBottomSheetWidgetState
                       color: FlutterFlowTheme.of(context).primaryColor,
                       textStyle:
                           FlutterFlowTheme.of(context).subtitle2.override(
-                                fontFamily: 'Overpass',
+                                fontFamily: 'Montserrat',
                                 color: Colors.white,
                               ),
                       borderSide: BorderSide(

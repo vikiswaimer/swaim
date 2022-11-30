@@ -32,8 +32,8 @@ class AddSwaimWidget extends StatefulWidget {
 
 class _AddSwaimWidgetState extends State<AddSwaimWidget> {
   TextEditingController? textController1;
-  TextEditingController? textController2;
   var placePickerValue = FFPlace();
+  TextEditingController? textController2;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -62,39 +62,34 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.chevron_left,
-            color: FlutterFlowTheme.of(context).primaryColor,
-            size: 30,
+        leading: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+          child: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
+            icon: Icon(
+              Icons.chevron_left,
+              color: FlutterFlowTheme.of(context).primaryColor,
+              size: 28,
+            ),
+            onPressed: () async {
+              context.pushNamed(
+                'NotesPage',
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.leftToRight,
+                  ),
+                },
+              );
+            },
           ),
-          onPressed: () async {
-            context.pushNamed(
-              'NotesPage',
-              extra: <String, dynamic>{
-                kTransitionInfoKey: TransitionInfo(
-                  hasTransition: true,
-                  transitionType: PageTransitionType.leftToRight,
-                ),
-              },
-            );
-          },
-        ),
-        title: Text(
-          'Page Title',
-          style: FlutterFlowTheme.of(context).title2.override(
-                fontFamily: 'Montserrat',
-                color: FlutterFlowTheme.of(context).primaryColor,
-                fontSize: 22,
-              ),
         ),
         actions: [
           FlutterFlowIconButton(
@@ -116,6 +111,8 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                   latitude: functions.getLatitude(placePickerValue.latLng),
                   longitude: functions.getLongitude(placePickerValue.latLng),
                   labels: functions.getLabelId(FFAppState().labelInAddSwaim!),
+                  createdAt: functions.dateToString(getCurrentTimestamp),
+                  updatedAt: functions.dateToString(getCurrentTimestamp),
                 );
               } else {
                 await AddNoteWithAttachedSwaimCall.call(
@@ -127,6 +124,8 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                   labels: functions.getLabelId(FFAppState().labelInAddSwaim!),
                   swaimRef: functions
                       .getIdFromAggregation(widget.payloadFromAggregation!),
+                  createdAt: functions.dateToString(getCurrentTimestamp),
+                  updatedAt: functions.dateToString(getCurrentTimestamp),
                 );
               }
 
@@ -143,7 +142,7 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
           ),
         ],
         centerTitle: true,
-        elevation: 2,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Form(
@@ -161,84 +160,221 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                        child: TextFormField(
-                          controller: textController1,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            labelText: 'Name',
-                            labelStyle:
-                                FlutterFlowTheme.of(context).title3.override(
-                                      fontFamily: 'Overpass',
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                        child: StreamBuilder<LabelsRecord>(
+                          stream: LabelsRecord.getDocument(
+                              FFAppState().labelInAddSwaim!),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: SpinKitRipple(
+                                    color: Color(0x80E8AA21),
+                                    size: 30,
+                                  ),
+                                ),
+                              );
+                            }
+                            final containerLabelsRecord = snapshot.data!;
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color:
+                                    FlutterFlowTheme.of(context).primaryBtnText,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    height: 25,
+                                    decoration: BoxDecoration(
+                                      color: functions
+                                                  .getLatitude(
+                                                      placePickerValue.latLng)
+                                                  .toString() !=
+                                              '0'
+                                          ? Color(0xFFE8AA21)
+                                          : Color(0xFFD9D9D9),
+                                    ),
+                                    child: FlutterFlowPlacePicker(
+                                      iOSGoogleMapsApiKey:
+                                          'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
+                                      androidGoogleMapsApiKey:
+                                          'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
+                                      webGoogleMapsApiKey:
+                                          'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
+                                      onSelect: (place) async {
+                                        setState(
+                                            () => placePickerValue = place);
+                                      },
+                                      defaultText: '+ LOCATION',
+                                      buttonOptions: FFButtonOptions(
+                                        width: 120,
+                                        height: 25,
+                                        color: Colors.transparent,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .subtitle2,
+                                        elevation: 0,
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(0),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        10, 0, 0, 0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          context: context,
+                                          builder: (context) {
+                                            return Padding(
+                                              padding: MediaQuery.of(context)
+                                                  .viewInsets,
+                                              child:
+                                                  ChooseLabelForAddNoteWidget(),
+                                            );
+                                          },
+                                        ).then((value) => setState(() {}));
+                                      },
+                                      text: containerLabelsRecord.name ==
+                                              'Not set'
+                                          ? '+ LABEL'
+                                          : containerLabelsRecord.name!,
+                                      options: FFButtonOptions(
+                                        width: 120,
+                                        height: 25,
+                                        color: functions.getLabelId(FFAppState()
+                                                    .labelInAddSwaim!) !=
+                                                'er7SZTHrkAdI2E1WBERe'
+                                            ? FlutterFlowTheme.of(context)
+                                                .primaryBtnText
+                                            : Color(0xFFD9D9D9),
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .subtitle2
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              color: functions.getLabelId(
+                                                          FFAppState()
+                                                              .labelInAddSwaim!) !=
+                                                      'er7SZTHrkAdI2E1WBERe'
+                                                  ? Color(0xFFE8AA21)
+                                                  : FlutterFlowTheme.of(context)
+                                                      .primaryBtnText,
+                                            ),
+                                        elevation: 0,
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                            child: Text(
+                              'H1',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 22,
+                                  ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              controller: textController1,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelStyle: FlutterFlowTheme.of(context)
+                                    .title3
+                                    .override(
+                                      fontFamily: 'Montserrat',
                                       color: Color(0xFF8B97A2),
                                       fontSize: 24,
                                       fontWeight: FontWeight.normal,
                                     ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).text2Gray,
-                                width: 2,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
                               ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).text2Gray,
-                                width: 2,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 2,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 2,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
+                              style: FlutterFlowTheme.of(context).title3,
                             ),
                           ),
-                          style:
-                              FlutterFlowTheme.of(context).bodyText1.override(
-                                    fontFamily: 'Overpass',
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                        ),
+                        ],
                       ),
                       TextFormField(
                         controller: textController2,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Description',
-                          labelStyle: FlutterFlowTheme.of(context)
-                              .bodyText1
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).text2Gray,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          labelStyle:
+                              FlutterFlowTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).text2Gray,
-                              width: 2,
+                              color: Color(0x00000000),
+                              width: 1,
                             ),
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(4.0),
@@ -247,8 +383,8 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).text2Gray,
-                              width: 2,
+                              color: Color(0x00000000),
+                              width: 1,
                             ),
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(4.0),
@@ -258,7 +394,7 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                           errorBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0x00000000),
-                              width: 2,
+                              width: 1,
                             ),
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(4.0),
@@ -268,7 +404,7 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0x00000000),
-                              width: 2,
+                              width: 1,
                             ),
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(4.0),
@@ -276,249 +412,12 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Color(0xFFEEEEEE),
+                          fillColor:
+                              FlutterFlowTheme.of(context).primaryBtnText,
                         ),
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Montserrat',
-                              color: FlutterFlowTheme.of(context).darkBG,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                            ),
-                        maxLines: 6,
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                        maxLines: 26,
                         keyboardType: TextInputType.multiline,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                              child: StreamBuilder<LabelsRecord>(
-                                stream: LabelsRecord.getDocument(
-                                    FFAppState().labelInAddSwaim!),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 60,
-                                        height: 60,
-                                        child: SpinKitRipple(
-                                          color: Color(0xFF222235),
-                                          size: 60,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  final containerLabelsRecord = snapshot.data!;
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Text(
-                                          'Label: ',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
-                                        ),
-                                        Text(
-                                          containerLabelsRecord.name!,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
-                                        ),
-                                        FFButtonWidget(
-                                          onPressed: () async {
-                                            await showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              context: context,
-                                              builder: (context) {
-                                                return Padding(
-                                                  padding:
-                                                      MediaQuery.of(context)
-                                                          .viewInsets,
-                                                  child:
-                                                      ChooseLabelForAddNoteWidget(),
-                                                );
-                                              },
-                                            ).then((value) => setState(() {}));
-                                          },
-                                          text: 'Set label',
-                                          options: FFButtonOptions(
-                                            width: 130,
-                                            height: 40,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryColor,
-                                            textStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .subtitle2
-                                                    .override(
-                                                      fontFamily: 'Overpass',
-                                                      color: Colors.white,
-                                                    ),
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (widget.payloadFromAggregation != null)
-                        StreamBuilder<AggregationsRecord>(
-                          stream: AggregationsRecord.getDocument(
-                              widget.payloadFromAggregation!),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: SpinKitRipple(
-                                    color: Color(0xFF222235),
-                                    size: 60,
-                                  ),
-                                ),
-                              );
-                            }
-                            final containerAggregationsRecord = snapshot.data!;
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(30),
-                                    child: Image.network(
-                                      containerAggregationsRecord.picture !=
-                                                  null &&
-                                              containerAggregationsRecord
-                                                      .picture !=
-                                                  ''
-                                          ? containerAggregationsRecord.picture!
-                                          : 'https://mycodetips.com/wp-content/uploads/2020/01/null-vale.png',
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            20, 0, 0, 0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              containerAggregationsRecord
-                                                  .title!,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFEEEEEE),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 30),
-                              child: FlutterFlowPlacePicker(
-                                iOSGoogleMapsApiKey:
-                                    'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
-                                androidGoogleMapsApiKey:
-                                    'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
-                                webGoogleMapsApiKey:
-                                    'AIzaSyCPvCM4JF4R50eTKWv_Kam874FBsodPqbE',
-                                onSelect: (place) async {
-                                  setState(() => placePickerValue = place);
-                                },
-                                defaultText: 'Set Location',
-                                icon: Icon(
-                                  Icons.place,
-                                  color: FlutterFlowTheme.of(context).text2Gray,
-                                  size: 24,
-                                ),
-                                buttonOptions: FFButtonOptions(
-                                  width: 240,
-                                  height: 50,
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .title3
-                                      .override(
-                                        fontFamily: 'Overpass',
-                                        color: FlutterFlowTheme.of(context)
-                                            .text2Gray,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),

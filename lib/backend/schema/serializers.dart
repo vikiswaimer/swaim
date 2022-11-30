@@ -8,6 +8,8 @@ import 'labels_record.dart';
 import 'countries_record.dart';
 import 'favorite_aggregations_record.dart';
 import 'aggregation_categories_record.dart';
+import 'pinned_notes_record.dart';
+import 'test_record.dart';
 
 import 'index.dart';
 
@@ -26,6 +28,8 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   CountriesRecord,
   FavoriteAggregationsRecord,
   AggregationCategoriesRecord,
+  PinnedNotesRecord,
+  TestRecord,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())

@@ -50,14 +50,6 @@ class _$AggregationsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(LatLng)));
     }
-    value = object.country;
-    if (value != null) {
-      result
-        ..add('country')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
     value = object.category;
     if (value != null) {
       result
@@ -65,6 +57,48 @@ class _$AggregationsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
+    }
+    value = object.city;
+    if (value != null) {
+      result
+        ..add('city')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.country;
+    if (value != null) {
+      result
+        ..add('country')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.workingHours;
+    if (value != null) {
+      result
+        ..add('working_hours')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.website;
+    if (value != null) {
+      result
+        ..add('website')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.source;
+    if (value != null) {
+      result
+        ..add('source')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.contactData;
+    if (value != null) {
+      result
+        ..add('contactData')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -105,17 +139,35 @@ class _$AggregationsRecordSerializer
           result.location = serializers.deserialize(value,
               specifiedType: const FullType(LatLng)) as LatLng?;
           break;
-        case 'country':
-          result.country = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
         case 'category':
           result.category = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
+          break;
+        case 'city':
+          result.city = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'country':
+          result.country = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'working_hours':
+          result.workingHours = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'website':
+          result.website = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'source':
+          result.source = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'contactData':
+          result.contactData = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -140,9 +192,19 @@ class _$AggregationsRecord extends AggregationsRecord {
   @override
   final LatLng? location;
   @override
-  final DocumentReference<Object?>? country;
-  @override
   final DocumentReference<Object?>? category;
+  @override
+  final String? city;
+  @override
+  final String? country;
+  @override
+  final String? workingHours;
+  @override
+  final String? website;
+  @override
+  final String? source;
+  @override
+  final String? contactData;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -155,8 +217,13 @@ class _$AggregationsRecord extends AggregationsRecord {
       this.description,
       this.picture,
       this.location,
-      this.country,
       this.category,
+      this.city,
+      this.country,
+      this.workingHours,
+      this.website,
+      this.source,
+      this.contactData,
       this.ffRef})
       : super._();
 
@@ -177,8 +244,13 @@ class _$AggregationsRecord extends AggregationsRecord {
         description == other.description &&
         picture == other.picture &&
         location == other.location &&
-        country == other.country &&
         category == other.category &&
+        city == other.city &&
+        country == other.country &&
+        workingHours == other.workingHours &&
+        website == other.website &&
+        source == other.source &&
+        contactData == other.contactData &&
         ffRef == other.ffRef;
   }
 
@@ -188,11 +260,23 @@ class _$AggregationsRecord extends AggregationsRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, title.hashCode), description.hashCode),
-                        picture.hashCode),
-                    location.hashCode),
-                country.hashCode),
-            category.hashCode),
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc(
+                                            $jc($jc(0, title.hashCode),
+                                                description.hashCode),
+                                            picture.hashCode),
+                                        location.hashCode),
+                                    category.hashCode),
+                                city.hashCode),
+                            country.hashCode),
+                        workingHours.hashCode),
+                    website.hashCode),
+                source.hashCode),
+            contactData.hashCode),
         ffRef.hashCode));
   }
 
@@ -203,8 +287,13 @@ class _$AggregationsRecord extends AggregationsRecord {
           ..add('description', description)
           ..add('picture', picture)
           ..add('location', location)
-          ..add('country', country)
           ..add('category', category)
+          ..add('city', city)
+          ..add('country', country)
+          ..add('workingHours', workingHours)
+          ..add('website', website)
+          ..add('source', source)
+          ..add('contactData', contactData)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -230,14 +319,34 @@ class AggregationsRecordBuilder
   LatLng? get location => _$this._location;
   set location(LatLng? location) => _$this._location = location;
 
-  DocumentReference<Object?>? _country;
-  DocumentReference<Object?>? get country => _$this._country;
-  set country(DocumentReference<Object?>? country) => _$this._country = country;
-
   DocumentReference<Object?>? _category;
   DocumentReference<Object?>? get category => _$this._category;
   set category(DocumentReference<Object?>? category) =>
       _$this._category = category;
+
+  String? _city;
+  String? get city => _$this._city;
+  set city(String? city) => _$this._city = city;
+
+  String? _country;
+  String? get country => _$this._country;
+  set country(String? country) => _$this._country = country;
+
+  String? _workingHours;
+  String? get workingHours => _$this._workingHours;
+  set workingHours(String? workingHours) => _$this._workingHours = workingHours;
+
+  String? _website;
+  String? get website => _$this._website;
+  set website(String? website) => _$this._website = website;
+
+  String? _source;
+  String? get source => _$this._source;
+  set source(String? source) => _$this._source = source;
+
+  String? _contactData;
+  String? get contactData => _$this._contactData;
+  set contactData(String? contactData) => _$this._contactData = contactData;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -254,8 +363,13 @@ class AggregationsRecordBuilder
       _description = $v.description;
       _picture = $v.picture;
       _location = $v.location;
-      _country = $v.country;
       _category = $v.category;
+      _city = $v.city;
+      _country = $v.country;
+      _workingHours = $v.workingHours;
+      _website = $v.website;
+      _source = $v.source;
+      _contactData = $v.contactData;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -283,8 +397,13 @@ class AggregationsRecordBuilder
             description: description,
             picture: picture,
             location: location,
-            country: country,
             category: category,
+            city: city,
+            country: country,
+            workingHours: workingHours,
+            website: website,
+            source: source,
+            contactData: contactData,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

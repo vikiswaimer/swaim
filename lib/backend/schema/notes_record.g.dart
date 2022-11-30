@@ -64,6 +64,20 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.createdAt;
+    if (value != null) {
+      result
+        ..add('createdAt')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
+    }
+    value = object.updatedAt;
+    if (value != null) {
+      result
+        ..add('updatedAt')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -116,6 +130,14 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'createdAt':
+          result.createdAt = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime?;
+          break;
+        case 'updatedAt':
+          result.updatedAt = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -143,6 +165,10 @@ class _$NotesRecord extends NotesRecord {
   @override
   final DocumentReference<Object?>? label;
   @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$NotesRecord([void Function(NotesRecordBuilder)? updates]) =>
@@ -155,6 +181,8 @@ class _$NotesRecord extends NotesRecord {
       this.name,
       this.swaimRef,
       this.label,
+      this.createdAt,
+      this.updatedAt,
       this.ffRef})
       : super._();
 
@@ -175,6 +203,8 @@ class _$NotesRecord extends NotesRecord {
         name == other.name &&
         swaimRef == other.swaimRef &&
         label == other.label &&
+        createdAt == other.createdAt &&
+        updatedAt == other.updatedAt &&
         ffRef == other.ffRef;
   }
 
@@ -184,11 +214,17 @@ class _$NotesRecord extends NotesRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, location.hashCode), description.hashCode),
-                        user.hashCode),
-                    name.hashCode),
-                swaimRef.hashCode),
-            label.hashCode),
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc($jc(0, location.hashCode),
+                                    description.hashCode),
+                                user.hashCode),
+                            name.hashCode),
+                        swaimRef.hashCode),
+                    label.hashCode),
+                createdAt.hashCode),
+            updatedAt.hashCode),
         ffRef.hashCode));
   }
 
@@ -201,6 +237,8 @@ class _$NotesRecord extends NotesRecord {
           ..add('name', name)
           ..add('swaimRef', swaimRef)
           ..add('label', label)
+          ..add('createdAt', createdAt)
+          ..add('updatedAt', updatedAt)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -234,6 +272,14 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   DocumentReference<Object?>? get label => _$this._label;
   set label(DocumentReference<Object?>? label) => _$this._label = label;
 
+  DateTime? _createdAt;
+  DateTime? get createdAt => _$this._createdAt;
+  set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
+
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _$this._updatedAt;
+  set updatedAt(DateTime? updatedAt) => _$this._updatedAt = updatedAt;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -251,6 +297,8 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
       _name = $v.name;
       _swaimRef = $v.swaimRef;
       _label = $v.label;
+      _createdAt = $v.createdAt;
+      _updatedAt = $v.updatedAt;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -280,6 +328,8 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
             name: name,
             swaimRef: swaimRef,
             label: label,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

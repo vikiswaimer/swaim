@@ -52,11 +52,7 @@ class _NotificationSettingsWidgetState
         ),
         title: Text(
           'Notifications',
-          style: FlutterFlowTheme.of(context).title2.override(
-                fontFamily: 'Montserrat',
-                color: FlutterFlowTheme.of(context).primaryColor,
-                fontSize: 22,
-              ),
+          style: FlutterFlowTheme.of(context).title2,
         ),
         actions: [],
         centerTitle: false,
@@ -101,8 +97,9 @@ class _NotificationSettingsWidgetState
             padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
             child: SwitchListTile.adaptive(
               value: switchListTileValue1 ??= true,
-              onChanged: (newValue) =>
-                  setState(() => switchListTileValue1 = newValue),
+              onChanged: (newValue) async {
+                setState(() => switchListTileValue1 = newValue!);
+              },
               title: Text(
                 'Push Notifications',
                 style: FlutterFlowTheme.of(context).title3.override(
@@ -132,8 +129,9 @@ class _NotificationSettingsWidgetState
             padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
             child: SwitchListTile.adaptive(
               value: switchListTileValue2 ??= true,
-              onChanged: (newValue) =>
-                  setState(() => switchListTileValue2 = newValue),
+              onChanged: (newValue) async {
+                setState(() => switchListTileValue2 = newValue!);
+              },
               title: Text(
                 'Email Notifications',
                 style: FlutterFlowTheme.of(context).title3.override(
@@ -163,8 +161,9 @@ class _NotificationSettingsWidgetState
             padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
             child: SwitchListTile.adaptive(
               value: switchListTileValue3 ??= true,
-              onChanged: (newValue) =>
-                  setState(() => switchListTileValue3 = newValue),
+              onChanged: (newValue) async {
+                setState(() => switchListTileValue3 = newValue!);
+              },
               title: Text(
                 'Location Services',
                 style: FlutterFlowTheme.of(context).title3.override(
@@ -208,15 +207,9 @@ class _NotificationSettingsWidgetState
               },
               text: 'Change Changes',
               options: FFButtonOptions(
-                width: 330,
                 height: 50,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Lexend Deca',
-                      color: FlutterFlowTheme.of(context).tertiaryColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                color: FlutterFlowTheme.of(context).yellowSwaim,
+                textStyle: FlutterFlowTheme.of(context).subtitle1,
                 elevation: 3,
                 borderSide: BorderSide(
                   color: Colors.transparent,
