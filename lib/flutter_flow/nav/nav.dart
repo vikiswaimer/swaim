@@ -193,14 +193,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => TermConditionsWidget(),
             ),
             FFRoute(
-              name: 'FAQ',
-              path: 'FAQ',
-              builder: (context, params) => FaqWidget(),
-            ),
-            FFRoute(
               name: 'ContactUs',
               path: 'ContactUs',
               builder: (context, params) => ContactUsWidget(),
+            ),
+            FFRoute(
+              name: 'FAQ',
+              path: 'FAQ',
+              builder: (context, params) => FaqWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

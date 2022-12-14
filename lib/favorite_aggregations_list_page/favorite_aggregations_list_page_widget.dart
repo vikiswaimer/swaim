@@ -32,316 +32,331 @@ class _FavoriteAggregationsListPageWidgetState
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
-        automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.chevron_left,
-            color: FlutterFlowTheme.of(context).yellowSwaim,
-            size: 30,
-          ),
-          onPressed: () async {
-            context.pushNamed('NotesPage');
-          },
-        ),
-        title: Text(
-          'Swaims',
-          style: FlutterFlowTheme.of(context).title2,
-        ),
-        actions: [],
-        centerTitle: false,
-        elevation: 0,
-      ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-            child: Stack(
-              children: [],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(5, 10, 5, 10),
-            child: StreamBuilder<List<FavoriteAggregationsRecord>>(
-              stream: queryFavoriteAggregationsRecord(
-                queryBuilder: (favoriteAggregationsRecord) =>
-                    favoriteAggregationsRecord.where('userId',
-                        isEqualTo: currentUserReference),
+    return Title(
+        title: 'FavoriteAggregationsListPage',
+        color: FlutterFlowTheme.of(context).primaryColor,
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          appBar: AppBar(
+            backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+            automaticallyImplyLeading: false,
+            leading: FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30,
+              borderWidth: 1,
+              buttonSize: 60,
+              icon: Icon(
+                Icons.chevron_left,
+                color: FlutterFlowTheme.of(context).yellowSwaim,
+                size: 30,
               ),
-              builder: (context, snapshot) {
-                // Customize what your widget looks like when it's loading.
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: SpinKitRipple(
-                        color: Color(0x80E8AA21),
-                        size: 30,
-                      ),
-                    ),
-                  );
-                }
-                List<FavoriteAggregationsRecord>
-                    listViewFavoriteAggregationsRecordList = snapshot.data!;
-                if (listViewFavoriteAggregationsRecordList.isEmpty) {
-                  return EmptyListWidget();
-                }
-                return ListView.builder(
-                  padding: EdgeInsets.zero,
-                  scrollDirection: Axis.vertical,
-                  itemCount: listViewFavoriteAggregationsRecordList.length,
-                  itemBuilder: (context, listViewIndex) {
-                    final listViewFavoriteAggregationsRecord =
-                        listViewFavoriteAggregationsRecordList[listViewIndex];
-                    return Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(5, 0, 5, 1),
-                      child: StreamBuilder<LabelsRecord>(
-                        stream: LabelsRecord.getDocument(
-                            listViewFavoriteAggregationsRecord.labelRef!),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: SpinKitRipple(
-                                  color: Color(0x80E8AA21),
-                                  size: 30,
-                                ),
-                              ),
-                            );
-                          }
-                          final storeListViewLabelsRecord = snapshot.data!;
-                          return InkWell(
-                            onTap: () async {
-                              context.pushNamed(
-                                'FavoriteSwaimPage',
-                                queryParams: {
-                                  'swaimRef': serializeParam(
-                                    listViewFavoriteAggregationsRecord
-                                        .reference,
-                                    ParamType.DocumentReference,
-                                  ),
-                                  'favAggregation': serializeParam(
-                                    listViewFavoriteAggregationsRecord,
-                                    ParamType.Document,
-                                  ),
-                                  'label': serializeParam(
-                                    listViewFavoriteAggregationsRecord.labelRef,
-                                    ParamType.DocumentReference,
-                                  ),
-                                }.withoutNulls,
-                                extra: <String, dynamic>{
-                                  'favAggregation':
-                                      listViewFavoriteAggregationsRecord,
-                                  kTransitionInfoKey: TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.rightToLeft,
-                                  ),
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              height: 460,
-                              decoration: BoxDecoration(
-                                color:
-                                    FlutterFlowTheme.of(context).primaryBtnText,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  StreamBuilder<AggregationsRecord>(
-                                    stream: AggregationsRecord.getDocument(
-                                        listViewFavoriteAggregationsRecord
-                                            .aggregation!),
-                                    builder: (context, snapshot) {
-                                      // Customize what your widget looks like when it's loading.
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 30,
-                                            height: 30,
-                                            child: SpinKitRipple(
-                                              color: Color(0x80E8AA21),
-                                              size: 30,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      final imageAggregationsRecord =
-                                          snapshot.data!;
-                                      return Image.network(
-                                        imageAggregationsRecord.picture!,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 20, 0, 0),
-                                    child: StreamBuilder<AggregationsRecord>(
-                                      stream: AggregationsRecord.getDocument(
-                                          listViewFavoriteAggregationsRecord
-                                              .aggregation!),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 30,
-                                              height: 30,
-                                              child: SpinKitRipple(
-                                                color: Color(0x80E8AA21),
-                                                size: 30,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        final textAggregationsRecord =
-                                            snapshot.data!;
-                                        return Text(
-                                          textAggregationsRecord.title!,
-                                          textAlign: TextAlign.center,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1
-                                              .override(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 24,
-                                              ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  if (storeListViewLabelsRecord.name !=
-                                      'Not set')
-                                    StreamBuilder<AggregationsRecord>(
-                                      stream: AggregationsRecord.getDocument(
-                                          listViewFavoriteAggregationsRecord
-                                              .aggregation!),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 30,
-                                              height: 30,
-                                              child: SpinKitRipple(
-                                                color: Color(0x80E8AA21),
-                                                size: 30,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        final containerAggregationsRecord =
-                                            snapshot.data!;
-                                        return Container(
-                                          width: 100,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .background,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                storeListViewLabelsRecord.name!,
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyText1
-                                                    .override(
-                                                      fontFamily: 'Montserrat',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryBtnText,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 10, 0, 0),
-                                    child: StreamBuilder<AggregationsRecord>(
-                                      stream: AggregationsRecord.getDocument(
-                                          listViewFavoriteAggregationsRecord
-                                              .aggregation!),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 30,
-                                              height: 30,
-                                              child: SpinKitRipple(
-                                                color: Color(0x80E8AA21),
-                                                size: 30,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        final textAggregationsRecord =
-                                            snapshot.data!;
-                                        return Text(
-                                          textAggregationsRecord.description!
-                                              .maybeHandleOverflow(
-                                            maxChars: 100,
-                                            replacement: '…',
-                                          ),
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 20, 0, 0),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFD9D9D9),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                );
+              onPressed: () async {
+                context.pushNamed('NotesPage');
               },
             ),
+            title: Text(
+              'Swaims',
+              style: FlutterFlowTheme.of(context).title2,
+            ),
+            actions: [],
+            centerTitle: false,
+            elevation: 0,
           ),
-        ],
-      ),
-    );
+          body: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                child: Stack(
+                  children: [],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(5, 10, 5, 10),
+                child: StreamBuilder<List<FavoriteAggregationsRecord>>(
+                  stream: queryFavoriteAggregationsRecord(
+                    queryBuilder: (favoriteAggregationsRecord) =>
+                        favoriteAggregationsRecord.where('userId',
+                            isEqualTo: currentUserReference),
+                  ),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: SpinKitRipple(
+                            color: Color(0x80E8AA21),
+                            size: 30,
+                          ),
+                        ),
+                      );
+                    }
+                    List<FavoriteAggregationsRecord>
+                        listViewFavoriteAggregationsRecordList = snapshot.data!;
+                    if (listViewFavoriteAggregationsRecordList.isEmpty) {
+                      return EmptyListWidget();
+                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.vertical,
+                      itemCount: listViewFavoriteAggregationsRecordList.length,
+                      itemBuilder: (context, listViewIndex) {
+                        final listViewFavoriteAggregationsRecord =
+                            listViewFavoriteAggregationsRecordList[
+                                listViewIndex];
+                        return Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(5, 0, 5, 1),
+                          child: StreamBuilder<LabelsRecord>(
+                            stream: LabelsRecord.getDocument(
+                                listViewFavoriteAggregationsRecord.labelRef!),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: SpinKitRipple(
+                                      color: Color(0x80E8AA21),
+                                      size: 30,
+                                    ),
+                                  ),
+                                );
+                              }
+                              final storeListViewLabelsRecord = snapshot.data!;
+                              return InkWell(
+                                onTap: () async {
+                                  context.pushNamed(
+                                    'FavoriteSwaimPage',
+                                    queryParams: {
+                                      'swaimRef': serializeParam(
+                                        listViewFavoriteAggregationsRecord
+                                            .reference,
+                                        ParamType.DocumentReference,
+                                      ),
+                                      'favAggregation': serializeParam(
+                                        listViewFavoriteAggregationsRecord,
+                                        ParamType.Document,
+                                      ),
+                                      'label': serializeParam(
+                                        listViewFavoriteAggregationsRecord
+                                            .labelRef,
+                                        ParamType.DocumentReference,
+                                      ),
+                                    }.withoutNulls,
+                                    extra: <String, dynamic>{
+                                      'favAggregation':
+                                          listViewFavoriteAggregationsRecord,
+                                      kTransitionInfoKey: TransitionInfo(
+                                        hasTransition: true,
+                                        transitionType:
+                                            PageTransitionType.rightToLeft,
+                                      ),
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 460,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBtnText,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<AggregationsRecord>(
+                                        stream: AggregationsRecord.getDocument(
+                                            listViewFavoriteAggregationsRecord
+                                                .aggregation!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 30,
+                                                height: 30,
+                                                child: SpinKitRipple(
+                                                  color: Color(0x80E8AA21),
+                                                  size: 30,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final imageAggregationsRecord =
+                                              snapshot.data!;
+                                          return Image.network(
+                                            imageAggregationsRecord.picture!,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            height: 200,
+                                            fit: BoxFit.cover,
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 20, 0, 0),
+                                        child:
+                                            StreamBuilder<AggregationsRecord>(
+                                          stream: AggregationsRecord.getDocument(
+                                              listViewFavoriteAggregationsRecord
+                                                  .aggregation!),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: SpinKitRipple(
+                                                    color: Color(0x80E8AA21),
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            final textAggregationsRecord =
+                                                snapshot.data!;
+                                            return Text(
+                                              textAggregationsRecord.title!,
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontSize: 24,
+                                                      ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      if (storeListViewLabelsRecord.name !=
+                                          'Not set')
+                                        StreamBuilder<AggregationsRecord>(
+                                          stream: AggregationsRecord.getDocument(
+                                              listViewFavoriteAggregationsRecord
+                                                  .aggregation!),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: SpinKitRipple(
+                                                    color: Color(0x80E8AA21),
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            final containerAggregationsRecord =
+                                                snapshot.data!;
+                                            return Container(
+                                              width: 100,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .background,
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    storeListViewLabelsRecord
+                                                        .name!,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryBtnText,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 10, 0, 0),
+                                        child:
+                                            StreamBuilder<AggregationsRecord>(
+                                          stream: AggregationsRecord.getDocument(
+                                              listViewFavoriteAggregationsRecord
+                                                  .aggregation!),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: SpinKitRipple(
+                                                    color: Color(0x80E8AA21),
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            final textAggregationsRecord =
+                                                snapshot.data!;
+                                            return Text(
+                                              textAggregationsRecord
+                                                  .description!
+                                                  .maybeHandleOverflow(
+                                                maxChars: 100,
+                                                replacement: '…',
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 20, 0, 0),
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFD9D9D9),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }

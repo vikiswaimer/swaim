@@ -16,5 +16,5 @@ export 'type_email_code_page/type_email_code_page_widget.dart'
     show TypeEmailCodePageWidget;
 export 'privacy_policy/privacy_policy_widget.dart' show PrivacyPolicyWidget;
 export 'term_conditions/term_conditions_widget.dart' show TermConditionsWidget;
-export 'faq/faq_widget.dart' show FaqWidget;
 export 'contact_us/contact_us_widget.dart' show ContactUsWidget;
+export 'faq/faq_widget.dart' show FaqWidget;
