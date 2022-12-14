@@ -6,6 +6,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class TypeEmailCodePageWidget extends StatefulWidget {
   const TypeEmailCodePageWidget({Key? key}) : super(key: key);
@@ -34,6 +35,8 @@ class _TypeEmailCodePageWidgetState extends State<TypeEmailCodePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
@@ -155,7 +158,7 @@ class _TypeEmailCodePageWidgetState extends State<TypeEmailCodePageWidget> {
                         context: context,
                       );
 
-                      context.pushNamed('LoginAndSignup');
+                      context.goNamed('LoginAndSignup');
                     },
                     text: 'Submit',
                     options: FFButtonOptions(

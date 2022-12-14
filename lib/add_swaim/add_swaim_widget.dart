@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AddSwaimWidget extends StatefulWidget {
   const AddSwaimWidget({
@@ -42,8 +43,9 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(
-          () => FFAppState().labelInAddSwaim = widget.initialLabel!.reference);
+      setState(() {
+        FFAppState().labelInAddSwaim = widget.initialLabel!.reference;
+      });
     });
 
     textController1 = TextEditingController();
@@ -60,6 +62,8 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
@@ -75,19 +79,11 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
             buttonSize: 60,
             icon: Icon(
               Icons.chevron_left,
-              color: FlutterFlowTheme.of(context).primaryColor,
+              color: FlutterFlowTheme.of(context).yellowSwaim,
               size: 28,
             ),
             onPressed: () async {
-              context.pushNamed(
-                'NotesPage',
-                extra: <String, dynamic>{
-                  kTransitionInfoKey: TransitionInfo(
-                    hasTransition: true,
-                    transitionType: PageTransitionType.leftToRight,
-                  ),
-                },
-              );
+              context.pop();
             },
           ),
         ),
@@ -99,7 +95,7 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
             buttonSize: 60,
             icon: Icon(
               Icons.check,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: FlutterFlowTheme.of(context).yellowSwaim,
               size: 20,
             ),
             onPressed: () async {

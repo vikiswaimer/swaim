@@ -16,6 +16,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class EditSwaimWidget extends StatefulWidget {
@@ -45,7 +46,9 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() => FFAppState().labelInEditSwaim = widget.label!.reference);
+      setState(() {
+        FFAppState().labelInEditSwaim = widget.label!.reference;
+      });
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
@@ -60,6 +63,8 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
@@ -136,7 +141,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                     icon: Icon(
                                       Icons.chevron_right_rounded,
                                       color: FlutterFlowTheme.of(context)
-                                          .primaryText,
+                                          .yellowSwaim,
                                       size: 24,
                                     ),
                                     onPressed: () async {
@@ -465,12 +470,13 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                           buttonSize: 40,
                                           icon: Icon(
                                             Icons.ios_share,
-                                            color: Color(0xFF777777),
+                                            color: FlutterFlowTheme.of(context)
+                                                .yellowSwaim,
                                             size: 24,
                                           ),
                                           onPressed: () async {
                                             await Share.share(
-                                                'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}');
+                                                'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}');
                                           },
                                         ),
                                       ),
@@ -485,7 +491,8 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                           buttonSize: 40,
                                           icon: Icon(
                                             Icons.map_rounded,
-                                            color: Color(0xFF777777),
+                                            color: FlutterFlowTheme.of(context)
+                                                .yellowSwaim,
                                             size: 24,
                                           ),
                                           onPressed: () async {
@@ -523,7 +530,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                           apiResultb9b =
                                               await DeleteNoteCall.call(
                                             noteId: functions.getEditeNoteId(
-                                                'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
+                                                'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
                                           );
                                           _shouldSetState = true;
                                           if ((apiResultb9b?.succeeded ??
@@ -564,19 +571,11 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
             buttonSize: 60,
             icon: Icon(
               Icons.chevron_left,
-              color: FlutterFlowTheme.of(context).primaryColor,
+              color: FlutterFlowTheme.of(context).yellowSwaim,
               size: 28,
             ),
             onPressed: () async {
-              context.pushNamed(
-                'NotesPage',
-                extra: <String, dynamic>{
-                  kTransitionInfoKey: TransitionInfo(
-                    hasTransition: true,
-                    transitionType: PageTransitionType.leftToRight,
-                  ),
-                },
-              );
+              context.pop();
             },
           ),
         ),
@@ -588,7 +587,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
             buttonSize: 40,
             icon: FaIcon(
               FontAwesomeIcons.ellipsisV,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: FlutterFlowTheme.of(context).yellowSwaim,
               size: 20,
             ),
             onPressed: () async {
@@ -618,7 +617,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                 buttonSize: 60,
                 icon: Icon(
                   Icons.check,
-                  color: FlutterFlowTheme.of(context).primaryColor,
+                  color: FlutterFlowTheme.of(context).yellowSwaim,
                   size: 20,
                 ),
                 onPressed: () async {
@@ -627,7 +626,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                     description: textController2?.text ?? '',
                     user: currentUserUid,
                     noteId: functions.getEditeNoteId(
-                        'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
+                        'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
                     latitude: functions
                                 .getLatitude(placePickerValue.latLng)
                                 .toString() !=
@@ -826,7 +825,8 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                       buttonSize: 36,
                                       icon: Icon(
                                         Icons.map_rounded,
-                                        color: Color(0xFF777777),
+                                        color: FlutterFlowTheme.of(context)
+                                            .yellowSwaim,
                                         size: 20,
                                       ),
                                       onPressed: () async {

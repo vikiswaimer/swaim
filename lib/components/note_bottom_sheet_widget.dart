@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class NoteBottomSheetWidget extends StatefulWidget {
   const NoteBottomSheetWidget({
@@ -29,22 +30,14 @@ class _NoteBottomSheetWidgetState extends State<NoteBottomSheetWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(0),
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      child: Container(
-        width: double.infinity,
-        height: 370,
-        decoration: BoxDecoration(
-          color: Colors.white,
+    context.watch<FFAppState>();
+
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+      child: Material(
+        color: Colors.transparent,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(0),
             bottomRight: Radius.circular(0),
@@ -52,112 +45,123 @@ class _NoteBottomSheetWidgetState extends State<NoteBottomSheetWidget> {
             topRight: Radius.circular(16),
           ),
         ),
-        child: StreamBuilder<NotesRecord>(
-          stream: NotesRecord.getDocument(widget.note!),
-          builder: (context, snapshot) {
-            // Customize what your widget looks like when it's loading.
-            if (!snapshot.hasData) {
-              return Center(
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: SpinKitRipple(
-                    color: Color(0x80E8AA21),
-                    size: 30,
-                  ),
-                ),
-              );
-            }
-            final columnNotesRecord = snapshot.data!;
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                    child: Text(
-                      columnNotesRecord.name!,
-                      style: FlutterFlowTheme.of(context).title2.override(
-                            fontFamily: 'Outfit',
-                            color: Color(0xFF101213),
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                          ),
+        child: Container(
+          width: double.infinity,
+          height: 370,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(0),
+              bottomRight: Radius.circular(0),
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          child: StreamBuilder<NotesRecord>(
+            stream: NotesRecord.getDocument(widget.note!),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: SpinKitRipple(
+                      color: Color(0x80E8AA21),
+                      size: 30,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                    child: Text(
-                      columnNotesRecord.description!
-                          .maybeHandleOverflow(maxChars: 100),
-                      style: FlutterFlowTheme.of(context).bodyText2.override(
-                            fontFamily: 'Outfit',
-                            color: Color(0xFF57636C),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                    ),
-                  ),
-                  StreamBuilder<LabelsRecord>(
-                    stream: LabelsRecord.getDocument(columnNotesRecord.label!),
-                    builder: (context, snapshot) {
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: SpinKitRipple(
-                              color: Color(0x80E8AA21),
-                              size: 30,
-                            ),
-                          ),
-                        );
-                      }
-                      final buttonLabelsRecord = snapshot.data!;
-                      return FFButtonWidget(
-                        onPressed: () async {
-                          context.pushNamed(
-                            'editSwaim',
-                            queryParams: {
-                              'note': serializeParam(
-                                columnNotesRecord.reference,
-                                ParamType.DocumentReference,
-                              ),
-                              'label': serializeParam(
-                                buttonLabelsRecord,
-                                ParamType.Document,
-                              ),
-                            }.withoutNulls,
-                            extra: <String, dynamic>{
-                              'label': buttonLabelsRecord,
-                            },
-                          );
-                        },
-                        text: 'Go!',
-                        options: FFButtonOptions(
-                          width: 130,
-                          height: 40,
-                          color: FlutterFlowTheme.of(context).primaryColor,
-                          textStyle:
-                              FlutterFlowTheme.of(context).subtitle2.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                  ),
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
+                );
+              }
+              final columnNotesRecord = snapshot.data!;
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 20),
+                      child: Container(
+                        width: 50,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).lineColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
+                      ),
+                    ),
+                    Text(
+                      columnNotesRecord.name!,
+                      style: FlutterFlowTheme.of(context).title3,
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      child: Text(
+                        columnNotesRecord.description!
+                            .maybeHandleOverflow(maxChars: 100),
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                      child: StreamBuilder<LabelsRecord>(
+                        stream:
+                            LabelsRecord.getDocument(columnNotesRecord.label!),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: SpinKitRipple(
+                                  color: Color(0x80E8AA21),
+                                  size: 30,
+                                ),
+                              ),
+                            );
+                          }
+                          final buttonLabelsRecord = snapshot.data!;
+                          return FFButtonWidget(
+                            onPressed: () async {
+                              context.pushNamed(
+                                'editSwaim',
+                                queryParams: {
+                                  'note': serializeParam(
+                                    columnNotesRecord.reference,
+                                    ParamType.DocumentReference,
+                                  ),
+                                  'label': serializeParam(
+                                    buttonLabelsRecord,
+                                    ParamType.Document,
+                                  ),
+                                }.withoutNulls,
+                                extra: <String, dynamic>{
+                                  'label': buttonLabelsRecord,
+                                },
+                              );
+                            },
+                            text: 'More info',
+                            options: FFButtonOptions(
+                              width: 130,
+                              height: 40,
+                              color: FlutterFlowTheme.of(context).yellowSwaim,
+                              textStyle: FlutterFlowTheme.of(context).subtitle1,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

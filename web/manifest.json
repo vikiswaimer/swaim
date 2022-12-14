@@ -1,6 +1,6 @@
 {
-    "name": "SwaimPlayGround",
-    "short_name": "SwaimPlayGround",
+    "name": "Swaim",
+    "short_name": "Swaim",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

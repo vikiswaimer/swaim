@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FavoriteSwaimPageWidget extends StatefulWidget {
   const FavoriteSwaimPageWidget({
@@ -43,6 +44,8 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<AggregationsRecord>(
       stream:
           AggregationsRecord.getDocument(widget.favAggregation!.aggregation!),
@@ -74,19 +77,11 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
               buttonSize: 60,
               icon: Icon(
                 Icons.chevron_left,
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).yellowSwaim,
                 size: 30,
               ),
               onPressed: () async {
-                context.pushNamed(
-                  'FavoriteAggregationsListPage',
-                  extra: <String, dynamic>{
-                    kTransitionInfoKey: TransitionInfo(
-                      hasTransition: true,
-                      transitionType: PageTransitionType.leftToRight,
-                    ),
-                  },
-                );
+                context.pushNamed('FavoriteAggregationsListPage');
               },
             ),
             title: Text(
@@ -141,7 +136,7 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                               buttonSize: 60,
                               icon: Icon(
                                 Icons.star_rate_rounded,
-                                color: FlutterFlowTheme.of(context).primaryText,
+                                color: FlutterFlowTheme.of(context).yellowSwaim,
                                 size: 30,
                               ),
                               onPressed: () async {
@@ -408,14 +403,10 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                             width: 130,
                                             height: 40,
                                             color: FlutterFlowTheme.of(context)
-                                                .primaryColor,
+                                                .yellowSwaim,
                                             textStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .subtitle2
-                                                    .override(
-                                                      fontFamily: 'Montserrat',
-                                                      color: Colors.white,
-                                                    ),
+                                                    .subtitle1,
                                             borderSide: BorderSide(
                                               color: Colors.transparent,
                                               width: 1,
@@ -497,7 +488,7 @@ class _FavoriteSwaimPageWidgetState extends State<FavoriteSwaimPageWidget> {
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .primaryColor,
+                                                                .yellowSwaim,
                                                         textStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)

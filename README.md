@@ -1,4 +1,4 @@
-# SwaimPlayGround
+# Swaim
 
 A new Flutter project.
 

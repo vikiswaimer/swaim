@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FaqWidget extends StatefulWidget {
   const FaqWidget({Key? key}) : super(key: key);
@@ -24,6 +25,8 @@ class _FaqWidgetState extends State<FaqWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
@@ -37,7 +40,7 @@ class _FaqWidgetState extends State<FaqWidget> {
           buttonSize: 60,
           icon: Icon(
             Icons.chevron_left,
-            color: FlutterFlowTheme.of(context).primaryColor,
+            color: FlutterFlowTheme.of(context).yellowSwaim,
             size: 30,
           ),
           onPressed: () async {
@@ -57,16 +60,41 @@ class _FaqWidgetState extends State<FaqWidget> {
         elevation: 2,
       ),
       body: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+        padding: EdgeInsetsDirectional.fromSTEB(20, 100, 20, 0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
               child: Text(
-                'Hello World',
+                'The FAQ is currently under development and is available at',
                 textAlign: TextAlign.start,
                 style: FlutterFlowTheme.of(context).bodyText1,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      await launchURL(
+                          'https://www.notion.so/swaim/swaim-links-terms-privasy-1f9dfd5617c2487193d4fed3936814e9#c8064abf2e904b59ac9ecf748726b777');
+                    },
+                    child: Text(
+                      'Link',
+                      textAlign: TextAlign.center,
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Montserrat',
+                            color: FlutterFlowTheme.of(context).yellowSwaim,
+                            fontSize: 22,
+                          ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

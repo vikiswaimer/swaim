@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AggregationInfoWidget extends StatefulWidget {
@@ -42,6 +43,8 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<AggregationsRecord>(
       stream: AggregationsRecord.getDocument(widget.aggregation!),
       builder: (context, snapshot) {
@@ -96,7 +99,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                   icon: Icon(
                                     Icons.chevron_right_rounded,
                                     color: FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                        .yellowSwaim,
                                     size: 24,
                                   ),
                                   onPressed: () async {
@@ -331,12 +334,13 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                       buttonSize: 40,
                                       icon: Icon(
                                         Icons.ios_share,
-                                        color: Color(0xFF777777),
+                                        color: FlutterFlowTheme.of(context)
+                                            .yellowSwaim,
                                         size: 24,
                                       ),
                                       onPressed: () async {
                                         await Share.share(
-                                            'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}');
+                                            'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}');
                                       },
                                     ),
                                   ),
@@ -350,7 +354,8 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                     buttonSize: 40,
                                     icon: Icon(
                                       Icons.map_rounded,
-                                      color: Color(0xFF777777),
+                                      color: FlutterFlowTheme.of(context)
+                                          .yellowSwaim,
                                       size: 24,
                                     ),
                                     onPressed: () async {
@@ -393,7 +398,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
               buttonSize: 60,
               icon: Icon(
                 Icons.chevron_left,
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).yellowSwaim,
                 size: 30,
               ),
               onPressed: () async {
@@ -414,8 +419,8 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                   buttonSize: 40,
                   icon: FaIcon(
                     FontAwesomeIcons.ellipsisV,
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    size: 24,
+                    color: FlutterFlowTheme.of(context).yellowSwaim,
+                    size: 20,
                   ),
                   onPressed: () async {
                     scaffoldKey.currentState!.openEndDrawer();
@@ -430,195 +435,201 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(15, 16, 15, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                aggregationInfoAggregationsRecord.picture!,
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height: 200,
-                                fit: BoxFit.cover,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(1, 0, 0, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(20, 16, 20, 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  aggregationInfoAggregationsRecord.picture!,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AutoSizeText(
-                                    aggregationInfoAggregationsRecord.title!
-                                        .maybeHandleOverflow(maxChars: 20),
-                                    style: FlutterFlowTheme.of(context).title3,
-                                  ),
-                                  StreamBuilder<
-                                      List<FavoriteAggregationsRecord>>(
-                                    stream: queryFavoriteAggregationsRecord(
-                                      queryBuilder: (favoriteAggregationsRecord) =>
-                                          favoriteAggregationsRecord
-                                              .where('userId',
-                                                  isEqualTo:
-                                                      currentUserReference)
-                                              .where('aggregation',
-                                                  isEqualTo:
-                                                      aggregationInfoAggregationsRecord
-                                                          .reference),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(1, 10, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    AutoSizeText(
+                                      aggregationInfoAggregationsRecord.title!
+                                          .maybeHandleOverflow(maxChars: 20),
+                                      style:
+                                          FlutterFlowTheme.of(context).title3,
                                     ),
-                                    builder: (context, snapshot) {
-                                      // Customize what your widget looks like when it's loading.
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 30,
-                                            height: 30,
-                                            child: SpinKitRipple(
-                                              color: Color(0x80E8AA21),
-                                              size: 30,
+                                    StreamBuilder<
+                                        List<FavoriteAggregationsRecord>>(
+                                      stream: queryFavoriteAggregationsRecord(
+                                        queryBuilder: (favoriteAggregationsRecord) =>
+                                            favoriteAggregationsRecord
+                                                .where('userId',
+                                                    isEqualTo:
+                                                        currentUserReference)
+                                                .where('aggregation',
+                                                    isEqualTo:
+                                                        aggregationInfoAggregationsRecord
+                                                            .reference),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: SpinKitRipple(
+                                                color: Color(0x80E8AA21),
+                                                size: 30,
+                                              ),
                                             ),
+                                          );
+                                        }
+                                        List<FavoriteAggregationsRecord>
+                                            containerFavoriteAggregationsRecordList =
+                                            snapshot.data!;
+                                        return Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBtnText,
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              if (containerFavoriteAggregationsRecordList
+                                                      .length ==
+                                                  1)
+                                                FlutterFlowIconButton(
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  borderRadius: 20,
+                                                  borderWidth: 0,
+                                                  buttonSize: 40,
+                                                  icon: Icon(
+                                                    Icons.star_rate_rounded,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .yellowSwaim,
+                                                    size: 24,
+                                                  ),
+                                                  onPressed: () async {
+                                                    if (containerFavoriteAggregationsRecordList
+                                                            .length ==
+                                                        1) {
+                                                      apiResultRemoveAggregation =
+                                                          await RemoveAggregationFromFavesCall
+                                                              .call(
+                                                        favAggregationId: functions
+                                                            .getFavAggregationId(
+                                                                containerFavoriteAggregationsRecordList
+                                                                    .map((e) =>
+                                                                        e.reference)
+                                                                    .toList()),
+                                                      );
+                                                    } else {
+                                                      apiResultAddAggregation =
+                                                          await AddAggregationToFavesCall
+                                                              .call(
+                                                        aggregationId: functions
+                                                            .getEditeNoteId(
+                                                                'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
+                                                        userId: currentUserUid,
+                                                      );
+                                                    }
+
+                                                    setState(() {});
+                                                  },
+                                                ),
+                                              if (containerFavoriteAggregationsRecordList
+                                                      .length !=
+                                                  1)
+                                                FlutterFlowIconButton(
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  borderRadius: 20,
+                                                  borderWidth: 0,
+                                                  buttonSize: 40,
+                                                  icon: Icon(
+                                                    Icons.star_outline_rounded,
+                                                    color: Color(0xFF747474),
+                                                    size: 24,
+                                                  ),
+                                                  onPressed: () async {
+                                                    if (containerFavoriteAggregationsRecordList
+                                                            .length ==
+                                                        1) {
+                                                      apiResultnsu =
+                                                          await RemoveAggregationFromFavesCall
+                                                              .call(
+                                                        favAggregationId: functions
+                                                            .getFavAggregationId(
+                                                                containerFavoriteAggregationsRecordList
+                                                                    .map((e) =>
+                                                                        e.reference)
+                                                                    .toList()),
+                                                      );
+                                                    } else {
+                                                      apiResult2um =
+                                                          await AddAggregationToFavesCall
+                                                              .call(
+                                                        aggregationId: functions
+                                                            .getEditeNoteId(
+                                                                'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
+                                                        userId: currentUserUid,
+                                                      );
+                                                    }
+
+                                                    setState(() {});
+                                                  },
+                                                ),
+                                            ],
                                           ),
                                         );
-                                      }
-                                      List<FavoriteAggregationsRecord>
-                                          containerFavoriteAggregationsRecordList =
-                                          snapshot.data!;
-                                      return Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            if (containerFavoriteAggregationsRecordList
-                                                    .length ==
-                                                1)
-                                              FlutterFlowIconButton(
-                                                borderColor: Colors.transparent,
-                                                borderRadius: 20,
-                                                borderWidth: 0,
-                                                buttonSize: 40,
-                                                icon: Icon(
-                                                  Icons.star_rate_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  size: 24,
-                                                ),
-                                                onPressed: () async {
-                                                  if (containerFavoriteAggregationsRecordList
-                                                          .length ==
-                                                      1) {
-                                                    apiResultRemoveAggregation =
-                                                        await RemoveAggregationFromFavesCall
-                                                            .call(
-                                                      favAggregationId: functions
-                                                          .getFavAggregationId(
-                                                              containerFavoriteAggregationsRecordList
-                                                                  .map((e) => e
-                                                                      .reference)
-                                                                  .toList()),
-                                                    );
-                                                  } else {
-                                                    apiResultAddAggregation =
-                                                        await AddAggregationToFavesCall
-                                                            .call(
-                                                      aggregationId: functions
-                                                          .getEditeNoteId(
-                                                              'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
-                                                      userId: currentUserUid,
-                                                    );
-                                                  }
-
-                                                  setState(() {});
-                                                },
-                                              ),
-                                            if (containerFavoriteAggregationsRecordList
-                                                    .length !=
-                                                1)
-                                              FlutterFlowIconButton(
-                                                borderColor: Colors.transparent,
-                                                borderRadius: 20,
-                                                borderWidth: 0,
-                                                buttonSize: 40,
-                                                icon: Icon(
-                                                  Icons.star_outline_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  size: 24,
-                                                ),
-                                                onPressed: () async {
-                                                  if (containerFavoriteAggregationsRecordList
-                                                          .length ==
-                                                      1) {
-                                                    apiResultnsu =
-                                                        await RemoveAggregationFromFavesCall
-                                                            .call(
-                                                      favAggregationId: functions
-                                                          .getFavAggregationId(
-                                                              containerFavoriteAggregationsRecordList
-                                                                  .map((e) => e
-                                                                      .reference)
-                                                                  .toList()),
-                                                    );
-                                                  } else {
-                                                    apiResult2um =
-                                                        await AddAggregationToFavesCall
-                                                            .call(
-                                                      aggregationId: functions
-                                                          .getEditeNoteId(
-                                                              'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}'),
-                                                      userId: currentUserUid,
-                                                    );
-                                                  }
-
-                                                  setState(() {});
-                                                },
-                                              ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      aggregationInfoAggregationsRecord
-                                          .description!,
-                                      textAlign: TextAlign.justify,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
+                                      },
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        aggregationInfoAggregationsRecord
+                                            .description!,
+                                        textAlign: TextAlign.justify,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -671,7 +682,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                 EdgeInsetsDirectional.fromSTEB(24, 0, 24, 20),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 StreamBuilder<List<LabelsRecord>>(
                                   stream: queryLabelsRecord(
@@ -754,8 +765,9 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                 ),
                                 FFButtonWidget(
                                   onPressed: () async {
-                                    setState(
-                                        () => FFAppState().isSwaimsMode = true);
+                                    setState(() {
+                                      FFAppState().isSwaimsMode = true;
+                                    });
 
                                     context.pushNamed(
                                       'MapPage',

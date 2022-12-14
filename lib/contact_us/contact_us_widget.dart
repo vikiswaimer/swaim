@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsWidget extends StatefulWidget {
@@ -33,6 +34,8 @@ class _ContactUsWidgetState extends State<ContactUsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
@@ -46,7 +49,7 @@ class _ContactUsWidgetState extends State<ContactUsWidget> {
           buttonSize: 60,
           icon: Icon(
             Icons.chevron_left,
-            color: FlutterFlowTheme.of(context).primaryColor,
+            color: FlutterFlowTheme.of(context).yellowSwaim,
             size: 30,
           ),
           onPressed: () async {
@@ -131,7 +134,7 @@ class _ContactUsWidgetState extends State<ContactUsWidget> {
                 onPressed: () async {
                   await launchUrl(Uri(
                       scheme: 'mailto',
-                      path: 'support@swaim.app',
+                      path: 'swaimnotesmaps@gmail.com',
                       query: {
                         'subject': 'Feedback from user',
                         'body': textController!.text,
@@ -156,6 +159,27 @@ class _ContactUsWidgetState extends State<ContactUsWidget> {
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    'And you can also go to our page and find yourself with us places of power!',
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Syne',
+                        ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                    child: Text(
+                      'www.swaim.co/website',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

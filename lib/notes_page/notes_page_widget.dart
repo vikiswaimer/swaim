@@ -19,6 +19,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:text_search/text_search.dart';
 
@@ -64,6 +65,8 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<AggregationsRecord>>(
       stream: queryAggregationsRecord(
         queryBuilder: (aggregationsRecord) =>
@@ -204,7 +207,9 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                 icon: Icon(
                                                   Icons
                                                       .keyboard_arrow_down_outlined,
-                                                  color: Color(0xFFBFBFBF),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .yellowSwaim,
                                                   size: 14,
                                                 ),
                                                 onPressed: () {
@@ -231,12 +236,15 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                           buttonSize: 30,
                                           icon: FaIcon(
                                             FontAwesomeIcons.ellipsisV,
-                                            color: Color(0xFF808080),
+                                            color: FlutterFlowTheme.of(context)
+                                                .yellowSwaim,
                                             size: 18,
                                           ),
                                           onPressed: () async {
-                                            setState(() => FFAppState()
-                                                .isSettingsOpened = true);
+                                            setState(() {
+                                              FFAppState().isSettingsOpened =
+                                                  true;
+                                            });
                                           },
                                         ),
                                       if (FFAppState().isSettingsOpened)
@@ -247,12 +255,15 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                           buttonSize: 30,
                                           icon: Icon(
                                             Icons.close,
-                                            color: Color(0xFF808080),
+                                            color: FlutterFlowTheme.of(context)
+                                                .yellowSwaim,
                                             size: 18,
                                           ),
                                           onPressed: () async {
-                                            setState(() => FFAppState()
-                                                .isSettingsOpened = false);
+                                            setState(() {
+                                              FFAppState().isSettingsOpened =
+                                                  false;
+                                            });
                                           },
                                         ),
                                     ],
@@ -270,419 +281,97 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.8,
                                 decoration: BoxDecoration(),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 10, 0, 10),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          FFButtonWidget(
-                                            onPressed: () async {
-                                              setState(() => FFAppState()
-                                                  .isSwaimsMode = false);
-                                            },
-                                            text: 'NOTES',
-                                            options: FFButtonOptions(
-                                              width: 100,
-                                              height: 26,
-                                              color: FFAppState().isSwaimsMode
-                                                  ? Colors.white
-                                                  : Color(0xFFBFBFBF),
-                                              textStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle2
-                                                      .override(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: FFAppState()
-                                                                .isSwaimsMode
-                                                            ? Color(0xFFBFBFBF)
-                                                            : Colors.white,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              borderSide: BorderSide(
-                                                color: Color(0xFFBFBFBF),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(0),
-                                            ),
-                                          ),
-                                          FFButtonWidget(
-                                            onPressed: () async {
-                                              setState(() => FFAppState()
-                                                  .isSwaimsMode = true);
-                                            },
-                                            text: 'SWAIMS',
-                                            options: FFButtonOptions(
-                                              width: 100,
-                                              height: 26,
-                                              color: FFAppState().isSwaimsMode
-                                                  ? Color(0xFFBFBFBF)
-                                                  : Colors.white,
-                                              textStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle2
-                                                      .override(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: FFAppState()
-                                                                .isSwaimsMode
-                                                            ? Colors.white
-                                                            : Color(0xFFBFBFBF),
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              borderSide: BorderSide(
-                                                color: Color(0xFFBFBFBF),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(0),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    if (FFAppState().isSwaimsMode)
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 10, 0, 10),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              context: context,
-                                              builder: (context) {
-                                                return Padding(
-                                                  padding:
-                                                      MediaQuery.of(context)
-                                                          .viewInsets,
-                                                  child: CountrySelectWidget(),
-                                                );
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            FFButtonWidget(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  FFAppState().isSwaimsMode =
+                                                      false;
+                                                });
                                               },
-                                            ).then((value) => setState(() {}));
-                                          },
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                FFAppState().countrySearch,
-                                                style: FlutterFlowTheme.of(
+                                              text: 'NOTES',
+                                              options: FFButtonOptions(
+                                                width: 100,
+                                                height: 26,
+                                                color: FFAppState().isSwaimsMode
+                                                    ? Colors.white
+                                                    : Color(0xFFBFBFBF),
+                                                textStyle: FlutterFlowTheme.of(
                                                         context)
-                                                    .bodyText1
+                                                    .subtitle2
                                                     .override(
                                                       fontFamily: 'Montserrat',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .yellowSwaim,
-                                                      fontSize: 16,
+                                                      color: FFAppState()
+                                                              .isSwaimsMode
+                                                          ? Color(0xFFBFBFBF)
+                                                          : Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.normal,
                                                     ),
+                                                borderSide: BorderSide(
+                                                  color: Color(0xFFBFBFBF),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(0),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            FFButtonWidget(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  FFAppState().isSwaimsMode =
+                                                      true;
+                                                });
+                                              },
+                                              text: 'SWAIMS',
+                                              options: FFButtonOptions(
+                                                width: 100,
+                                                height: 26,
+                                                color: FFAppState().isSwaimsMode
+                                                    ? Color(0xFFBFBFBF)
+                                                    : Colors.white,
+                                                textStyle: FlutterFlowTheme.of(
+                                                        context)
+                                                    .subtitle2
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: FFAppState()
+                                                              .isSwaimsMode
+                                                          ? Colors.white
+                                                          : Color(0xFFBFBFBF),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                borderSide: BorderSide(
+                                                  color: Color(0xFFBFBFBF),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(0),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    if (!FFAppState().isSwaimsMode)
-                                      Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          FutureBuilder<List<LabelsRecord>>(
-                                            future: queryLabelsRecordOnce(
-                                              queryBuilder: (labelsRecord) =>
-                                                  labelsRecord
-                                                      .where('is_base',
-                                                          isEqualTo: true)
-                                                      .where('name',
-                                                          isNotEqualTo:
-                                                              'Not set'),
-                                            ),
-                                            builder: (context, snapshot) {
-                                              // Customize what your widget looks like when it's loading.
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: SpinKitRipple(
-                                                      color: Color(0x80E8AA21),
-                                                      size: 30,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                              List<LabelsRecord>
-                                                  baseLabelsLabelsRecordList =
-                                                  snapshot.data!;
-                                              return ListView.builder(
-                                                padding: EdgeInsets.zero,
-                                                shrinkWrap: true,
-                                                scrollDirection: Axis.vertical,
-                                                itemCount:
-                                                    baseLabelsLabelsRecordList
-                                                        .length,
-                                                itemBuilder:
-                                                    (context, baseLabelsIndex) {
-                                                  final baseLabelsLabelsRecord =
-                                                      baseLabelsLabelsRecordList[
-                                                          baseLabelsIndex];
-                                                  return Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 0, 4),
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              'Filtered by this category',
-                                                              style: TextStyle(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                              ),
-                                                            ),
-                                                            duration: Duration(
-                                                                milliseconds:
-                                                                    4000),
-                                                            backgroundColor:
-                                                                Color(
-                                                                    0x00000000),
-                                                          ),
-                                                        );
-                                                        if (FFAppState()
-                                                                .filterByLabel
-                                                                .contains(
-                                                                    baseLabelsLabelsRecord
-                                                                        .reference) ==
-                                                            true) {
-                                                          setState(() => FFAppState()
-                                                              .filterByLabel
-                                                              .remove(
-                                                                  baseLabelsLabelsRecord
-                                                                      .reference));
-                                                        } else {
-                                                          setState(() => FFAppState()
-                                                              .filterByLabel
-                                                              .add(baseLabelsLabelsRecord
-                                                                  .reference));
-                                                        }
-                                                      },
-                                                      child: Text(
-                                                        baseLabelsLabelsRecord
-                                                            .name!,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                  color: FFAppState().filterByLabel.contains(baseLabelsLabelsRecord
-                                                                              .reference) ==
-                                                                          true
-                                                                      ? FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .background
-                                                                      : FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .text2Gray,
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
-                                          StreamBuilder<List<LabelsRecord>>(
-                                            stream: queryLabelsRecord(
-                                              queryBuilder: (labelsRecord) =>
-                                                  labelsRecord
-                                                      .where('is_base',
-                                                          isEqualTo: false)
-                                                      .where('userId',
-                                                          isEqualTo:
-                                                              currentUserReference),
-                                            ),
-                                            builder: (context, snapshot) {
-                                              // Customize what your widget looks like when it's loading.
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: SpinKitRipple(
-                                                      color: Color(0x80E8AA21),
-                                                      size: 30,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                              List<LabelsRecord>
-                                                  customLabelsLabelsRecordList =
-                                                  snapshot.data!;
-                                              return ListView.builder(
-                                                padding: EdgeInsets.zero,
-                                                shrinkWrap: true,
-                                                scrollDirection: Axis.vertical,
-                                                itemCount:
-                                                    customLabelsLabelsRecordList
-                                                        .length,
-                                                itemBuilder: (context,
-                                                    customLabelsIndex) {
-                                                  final customLabelsLabelsRecord =
-                                                      customLabelsLabelsRecordList[
-                                                          customLabelsIndex];
-                                                  return Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 0, 4),
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              'Filtered by query',
-                                                              style: TextStyle(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                              ),
-                                                            ),
-                                                            duration: Duration(
-                                                                milliseconds:
-                                                                    4000),
-                                                            backgroundColor:
-                                                                Color(
-                                                                    0x00000000),
-                                                          ),
-                                                        );
-                                                        if (FFAppState()
-                                                                .filterByLabel
-                                                                .contains(
-                                                                    customLabelsLabelsRecord
-                                                                        .reference) ==
-                                                            true) {
-                                                          setState(() => FFAppState()
-                                                              .filterByLabel
-                                                              .remove(
-                                                                  customLabelsLabelsRecord
-                                                                      .reference));
-                                                        } else {
-                                                          setState(() => FFAppState()
-                                                              .filterByLabel
-                                                              .add(customLabelsLabelsRecord
-                                                                  .reference));
-                                                        }
-                                                      },
-                                                      onLongPress: () async {
-                                                        var confirmDialogResponse =
-                                                            await showDialog<
-                                                                    bool>(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (alertDialogContext) {
-                                                                    return AlertDialog(
-                                                                      title: Text(
-                                                                          'Delete this label'),
-                                                                      content: Text(
-                                                                          'Do you want to delete this label?'),
-                                                                      actions: [
-                                                                        TextButton(
-                                                                          onPressed: () => Navigator.pop(
-                                                                              alertDialogContext,
-                                                                              false),
-                                                                          child:
-                                                                              Text('No'),
-                                                                        ),
-                                                                        TextButton(
-                                                                          onPressed: () => Navigator.pop(
-                                                                              alertDialogContext,
-                                                                              true),
-                                                                          child:
-                                                                              Text('Yes'),
-                                                                        ),
-                                                                      ],
-                                                                    );
-                                                                  },
-                                                                ) ??
-                                                                false;
-                                                        if (confirmDialogResponse) {
-                                                          apiResult7xmggg =
-                                                              await RemoveLabelCall
-                                                                  .call(
-                                                            labelId: functions
-                                                                .getLabelId(
-                                                                    customLabelsLabelsRecord
-                                                                        .reference),
-                                                          );
-                                                          setState(() =>
-                                                              FFAppState()
-                                                                      .filterByLabel =
-                                                                  []);
-                                                        } else {
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-
-                                                        setState(() {});
-                                                      },
-                                                      child: Text(
-                                                        customLabelsLabelsRecord
-                                                            .name!,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                  color: FFAppState().filterByLabel.contains(customLabelsLabelsRecord
-                                                                              .reference) ==
-                                                                          true
-                                                                      ? FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .background
-                                                                      : FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .text2Gray,
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
-                                          InkWell(
+                                      if (FFAppState().isSwaimsMode)
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 10, 0, 10),
+                                          child: InkWell(
                                             onTap: () async {
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
@@ -694,149 +383,501 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                     padding:
                                                         MediaQuery.of(context)
                                                             .viewInsets,
-                                                    child: Container(
-                                                      height: 250,
-                                                      child: PopupWidget(),
-                                                    ),
+                                                    child:
+                                                        CountrySelectWidget(),
                                                   );
                                                 },
                                               ).then(
                                                   (value) => setState(() {}));
                                             },
-                                            child: Text(
-                                              '+ add',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyText1
-                                                  .override(
-                                                    fontFamily: 'Montserrat',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .grayIcon,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    if (FFAppState().isSwaimsMode)
-                                      Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          StreamBuilder<
-                                              List<
-                                                  AggregationCategoriesRecord>>(
-                                            stream:
-                                                queryAggregationCategoriesRecord(),
-                                            builder: (context, snapshot) {
-                                              // Customize what your widget looks like when it's loading.
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: SpinKitRipple(
-                                                      color: Color(0x80E8AA21),
-                                                      size: 30,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                              List<AggregationCategoriesRecord>
-                                                  listViewAggregationCategoriesRecordList =
-                                                  snapshot.data!;
-                                              return ListView.builder(
-                                                padding: EdgeInsets.zero,
-                                                shrinkWrap: true,
-                                                scrollDirection: Axis.vertical,
-                                                itemCount:
-                                                    listViewAggregationCategoriesRecordList
-                                                        .length,
-                                                itemBuilder:
-                                                    (context, listViewIndex) {
-                                                  final listViewAggregationCategoriesRecord =
-                                                      listViewAggregationCategoriesRecordList[
-                                                          listViewIndex];
-                                                  return Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 0, 4),
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              'Filtered by this category',
-                                                              style: TextStyle(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                              ),
-                                                            ),
-                                                            duration: Duration(
-                                                                milliseconds:
-                                                                    4000),
-                                                            backgroundColor:
-                                                                Color(
-                                                                    0x00000000),
-                                                          ),
-                                                        );
-                                                        if (FFAppState()
-                                                                .selectedSwaimsCategoriesInFilter
-                                                                .contains(
-                                                                    listViewAggregationCategoriesRecord
-                                                                        .reference) ==
-                                                            true) {
-                                                          setState(() => FFAppState()
-                                                              .selectedSwaimsCategoriesInFilter
-                                                              .remove(
-                                                                  listViewAggregationCategoriesRecord
-                                                                      .reference));
-                                                        } else {
-                                                          setState(() => FFAppState()
-                                                              .selectedSwaimsCategoriesInFilter
-                                                              .add(listViewAggregationCategoriesRecord
-                                                                  .reference));
-                                                        }
-                                                      },
-                                                      child: Text(
-                                                        listViewAggregationCategoriesRecord
-                                                            .name!,
-                                                        style:
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Text(
+                                                  FFAppState().countrySearch,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                  color: FFAppState().selectedSwaimsCategoriesInFilter.contains(listViewAggregationCategoriesRecord
-                                                                              .reference) ==
-                                                                          true
-                                                                      ? FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .background
-                                                                      : FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .text2Gray,
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                ),
+                                                                .yellowSwaim,
+                                                        fontSize: 16,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      if (!FFAppState().isSwaimsMode)
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            FutureBuilder<List<LabelsRecord>>(
+                                              future: queryLabelsRecordOnce(
+                                                queryBuilder: (labelsRecord) =>
+                                                    labelsRecord
+                                                        .where('is_base',
+                                                            isEqualTo: true)
+                                                        .where('name',
+                                                            isNotEqualTo:
+                                                                'Not set'),
+                                              ),
+                                              builder: (context, snapshot) {
+                                                // Customize what your widget looks like when it's loading.
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: SpinKitRipple(
+                                                        color:
+                                                            Color(0x80E8AA21),
+                                                        size: 30,
                                                       ),
                                                     ),
                                                   );
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                  ],
+                                                }
+                                                List<LabelsRecord>
+                                                    baseLabelsLabelsRecordList =
+                                                    snapshot.data!;
+                                                return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemCount:
+                                                      baseLabelsLabelsRecordList
+                                                          .length,
+                                                  itemBuilder: (context,
+                                                      baseLabelsIndex) {
+                                                    final baseLabelsLabelsRecord =
+                                                        baseLabelsLabelsRecordList[
+                                                            baseLabelsIndex];
+                                                    return Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 0, 0, 4),
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'Filtered by this category',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      4000),
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0x00000000),
+                                                            ),
+                                                          );
+                                                          if (FFAppState()
+                                                                  .filterByLabel
+                                                                  .contains(
+                                                                      baseLabelsLabelsRecord
+                                                                          .reference) ==
+                                                              true) {
+                                                            setState(() {
+                                                              setState(() => FFAppState()
+                                                                  .removeFromFilterByLabel(
+                                                                      baseLabelsLabelsRecord
+                                                                          .reference));
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              setState(() => FFAppState()
+                                                                  .addToFilterByLabel(
+                                                                      baseLabelsLabelsRecord
+                                                                          .reference));
+                                                            });
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          baseLabelsLabelsRecord
+                                                              .name!,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                color: FFAppState()
+                                                                            .filterByLabel
+                                                                            .contains(baseLabelsLabelsRecord
+                                                                                .reference) ==
+                                                                        true
+                                                                    ? FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .background
+                                                                    : FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .text2Gray,
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                            StreamBuilder<List<LabelsRecord>>(
+                                              stream: queryLabelsRecord(
+                                                queryBuilder: (labelsRecord) =>
+                                                    labelsRecord
+                                                        .where('is_base',
+                                                            isEqualTo: false)
+                                                        .where('userId',
+                                                            isEqualTo:
+                                                                currentUserReference),
+                                              ),
+                                              builder: (context, snapshot) {
+                                                // Customize what your widget looks like when it's loading.
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: SpinKitRipple(
+                                                        color:
+                                                            Color(0x80E8AA21),
+                                                        size: 30,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                                List<LabelsRecord>
+                                                    customLabelsLabelsRecordList =
+                                                    snapshot.data!;
+                                                return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemCount:
+                                                      customLabelsLabelsRecordList
+                                                          .length,
+                                                  itemBuilder: (context,
+                                                      customLabelsIndex) {
+                                                    final customLabelsLabelsRecord =
+                                                        customLabelsLabelsRecordList[
+                                                            customLabelsIndex];
+                                                    return Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 0, 0, 4),
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'Filtered by query',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      4000),
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0x00000000),
+                                                            ),
+                                                          );
+                                                          if (FFAppState()
+                                                                  .filterByLabel
+                                                                  .contains(
+                                                                      customLabelsLabelsRecord
+                                                                          .reference) ==
+                                                              true) {
+                                                            setState(() {
+                                                              setState(() => FFAppState()
+                                                                  .removeFromFilterByLabel(
+                                                                      customLabelsLabelsRecord
+                                                                          .reference));
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              setState(() => FFAppState()
+                                                                  .addToFilterByLabel(
+                                                                      customLabelsLabelsRecord
+                                                                          .reference));
+                                                            });
+                                                          }
+                                                        },
+                                                        onLongPress: () async {
+                                                          var confirmDialogResponse =
+                                                              await showDialog<
+                                                                      bool>(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (alertDialogContext) {
+                                                                      return AlertDialog(
+                                                                        title: Text(
+                                                                            'Delete this label'),
+                                                                        content:
+                                                                            Text('Do you want to delete this label?'),
+                                                                        actions: [
+                                                                          TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(alertDialogContext, false),
+                                                                            child:
+                                                                                Text('No'),
+                                                                          ),
+                                                                          TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(alertDialogContext, true),
+                                                                            child:
+                                                                                Text('Yes'),
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  ) ??
+                                                                  false;
+                                                          if (confirmDialogResponse) {
+                                                            apiResult7xmggg =
+                                                                await RemoveLabelCall
+                                                                    .call(
+                                                              labelId: functions
+                                                                  .getLabelId(
+                                                                      customLabelsLabelsRecord
+                                                                          .reference),
+                                                            );
+                                                            setState(() {
+                                                              FFAppState()
+                                                                  .filterByLabel = [];
+                                                            });
+                                                          } else {
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+
+                                                          setState(() {});
+                                                        },
+                                                        child: Text(
+                                                          customLabelsLabelsRecord
+                                                              .name!,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                color: FFAppState()
+                                                                            .filterByLabel
+                                                                            .contains(customLabelsLabelsRecord
+                                                                                .reference) ==
+                                                                        true
+                                                                    ? FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .background
+                                                                    : FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .text2Gray,
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                            InkWell(
+                                              onTap: () async {
+                                                await showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Padding(
+                                                      padding:
+                                                          MediaQuery.of(context)
+                                                              .viewInsets,
+                                                      child: Container(
+                                                        height: 250,
+                                                        child: PopupWidget(),
+                                                      ),
+                                                    );
+                                                  },
+                                                ).then(
+                                                    (value) => setState(() {}));
+                                              },
+                                              child: Text(
+                                                '+ add',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyText1
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .grayIcon,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      if (FFAppState().isSwaimsMode)
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            StreamBuilder<
+                                                List<
+                                                    AggregationCategoriesRecord>>(
+                                              stream:
+                                                  queryAggregationCategoriesRecord(),
+                                              builder: (context, snapshot) {
+                                                // Customize what your widget looks like when it's loading.
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: SpinKitRipple(
+                                                        color:
+                                                            Color(0x80E8AA21),
+                                                        size: 30,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                                List<AggregationCategoriesRecord>
+                                                    listViewAggregationCategoriesRecordList =
+                                                    snapshot.data!;
+                                                return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemCount:
+                                                      listViewAggregationCategoriesRecordList
+                                                          .length,
+                                                  itemBuilder:
+                                                      (context, listViewIndex) {
+                                                    final listViewAggregationCategoriesRecord =
+                                                        listViewAggregationCategoriesRecordList[
+                                                            listViewIndex];
+                                                    return Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 0, 0, 4),
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'Filtered by this category',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      4000),
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0x00000000),
+                                                            ),
+                                                          );
+                                                          if (FFAppState()
+                                                                  .selectedSwaimsCategoriesInFilter
+                                                                  .contains(
+                                                                      listViewAggregationCategoriesRecord
+                                                                          .reference) ==
+                                                              true) {
+                                                            setState(() {
+                                                              setState(() => FFAppState()
+                                                                  .removeFromSelectedSwaimsCategoriesInFilter(
+                                                                      listViewAggregationCategoriesRecord
+                                                                          .reference));
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              setState(() => FFAppState()
+                                                                  .addToSelectedSwaimsCategoriesInFilter(
+                                                                      listViewAggregationCategoriesRecord
+                                                                          .reference));
+                                                            });
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          listViewAggregationCategoriesRecord
+                                                              .name!,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                color: FFAppState()
+                                                                            .selectedSwaimsCategoriesInFilter
+                                                                            .contains(listViewAggregationCategoriesRecord
+                                                                                .reference) ==
+                                                                        true
+                                                                    ? FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .background
+                                                                    : FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .text2Gray,
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -903,7 +944,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                         child: InkWell(
                                           onTap: () async {
                                             await Share.share(
-                                                'https://swaim.com');
+                                                'https://swaim.co');
                                           },
                                           child: Text(
                                             'Share',
@@ -924,6 +965,8 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                         child: InkWell(
                                           onTap: () async {
                                             HapticFeedback.lightImpact();
+                                            await launchURL(
+                                                'https://www.linkedin.com/company/swaim-geonotes/?viewAsMember=true');
                                           },
                                           child: Text(
                                             'Rate Us',
@@ -972,7 +1015,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                       14, 6, 14, 0),
                                   child: SelectionArea(
                                       child: Text(
-                                    'Switch List and Map modes by double tap ',
+                                    'Switch List and Map modes by  button double tap ------>',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
@@ -984,8 +1027,9 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                 ),
                                 InkWell(
                                   onTap: () async {
-                                    setState(() =>
-                                        FFAppState().isGuideVisible = false);
+                                    setState(() {
+                                      FFAppState().isGuideVisible = false;
+                                    });
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
@@ -1034,7 +1078,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
               buttonSize: 60,
               icon: Icon(
                 Icons.menu,
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).yellowSwaim,
                 size: 30,
               ),
               onPressed: () async {
@@ -1119,15 +1163,73 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                       style: FlutterFlowTheme.of(context).bodyText1,
                     ),
                   ),
-                if (!FFAppState().isSearchModeOnSwaimsEnabled ||
-                    !FFAppState().isSearchOnNotesListEnabled)
-                  Align(
-                    alignment: AlignmentDirectional(-0.06, 0.67),
-                    child: Text(
-                      'LIST',
-                      style: FlutterFlowTheme.of(context).title2,
-                    ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FFButtonWidget(
+                        onPressed: () async {
+                          setState(() {
+                            FFAppState().isSwaimsMode = false;
+                          });
+                        },
+                        text: 'NOTES',
+                        options: FFButtonOptions(
+                          width: 100,
+                          height: 26,
+                          color: FFAppState().isSwaimsMode
+                              ? Colors.white
+                              : Color(0xFFBFBFBF),
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Montserrat',
+                                    color: FFAppState().isSwaimsMode
+                                        ? Color(0xFFBFBFBF)
+                                        : Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Color(0xFFBFBFBF),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                      ),
+                      FFButtonWidget(
+                        onPressed: () async {
+                          setState(() {
+                            FFAppState().isSwaimsMode = true;
+                          });
+                        },
+                        text: 'SWAIMS',
+                        options: FFButtonOptions(
+                          width: 100,
+                          height: 26,
+                          color: FFAppState().isSwaimsMode
+                              ? Color(0xFFBFBFBF)
+                              : Colors.white,
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Montserrat',
+                                    color: FFAppState().isSwaimsMode
+                                        ? Colors.white
+                                        : Color(0xFFBFBFBF),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Color(0xFFBFBFBF),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                      ),
+                    ],
                   ),
+                ),
                 if (FFAppState().isSearchModeOnSwaimsEnabled)
                   Align(
                     alignment: AlignmentDirectional(0, 0),
@@ -1225,7 +1327,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                     ),
                     offIcon: Icon(
                       Icons.search,
-                      color: Colors.black,
+                      color: FlutterFlowTheme.of(context).yellowSwaim,
                       size: 20,
                     ),
                   ),
@@ -1246,7 +1348,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                   ),
                   offIcon: Icon(
                     Icons.search,
-                    color: Colors.black,
+                    color: FlutterFlowTheme.of(context).yellowSwaim,
                     size: 20,
                   ),
                 ),
@@ -1418,241 +1520,259 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
-                                                    0.3,
+                                                    0.4,
                                                 fit: BoxFit.cover,
                                               ),
                                               Align(
                                                 alignment: AlignmentDirectional(
-                                                    0.87, -0.88),
-                                                child: StreamBuilder<
-                                                    List<
-                                                        FavoriteAggregationsRecord>>(
-                                                  stream:
-                                                      queryFavoriteAggregationsRecord(
-                                                    queryBuilder: (favoriteAggregationsRecord) =>
-                                                        favoriteAggregationsRecord
-                                                            .where('userId',
-                                                                isEqualTo:
-                                                                    currentUserReference)
-                                                            .where(
-                                                                'aggregation',
-                                                                isEqualTo:
-                                                                    listViewAggregationsRecord
-                                                                        .reference),
-                                                  ),
-                                                  builder: (context, snapshot) {
-                                                    // Customize what your widget looks like when it's loading.
-                                                    if (!snapshot.hasData) {
-                                                      return Center(
-                                                        child: SizedBox(
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: SpinKitRipple(
-                                                            color: Color(
-                                                                0x80E8AA21),
-                                                            size: 30,
-                                                          ),
+                                                    0.9, -0.9),
+                                                child: Container(
+                                                  width: 90,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      StreamBuilder<
+                                                          List<LabelsRecord>>(
+                                                        stream:
+                                                            queryLabelsRecord(
+                                                          queryBuilder:
+                                                              (labelsRecord) =>
+                                                                  labelsRecord.where(
+                                                                      'name',
+                                                                      isEqualTo:
+                                                                          'Not set'),
+                                                          singleRecord: true,
                                                         ),
-                                                      );
-                                                    }
-                                                    List<FavoriteAggregationsRecord>
-                                                        containerFavoriteAggregationsRecordList =
-                                                        snapshot.data!;
-                                                    return Container(
-                                                      width: 40,
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          // Customize what your widget looks like when it's loading.
+                                                          if (!snapshot
+                                                              .hasData) {
+                                                            return Center(
+                                                              child: SizedBox(
+                                                                width: 30,
+                                                                height: 30,
+                                                                child:
+                                                                    SpinKitRipple(
+                                                                  color: Color(
+                                                                      0x80E8AA21),
+                                                                  size: 30,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
+                                                          List<LabelsRecord>
+                                                              iconButtonLabelsRecordList =
+                                                              snapshot.data!;
+                                                          // Return an empty Container when the document does not exist.
+                                                          if (snapshot
+                                                              .data!.isEmpty) {
+                                                            return Container();
+                                                          }
+                                                          final iconButtonLabelsRecord =
+                                                              iconButtonLabelsRecordList
+                                                                      .isNotEmpty
+                                                                  ? iconButtonLabelsRecordList
+                                                                      .first
+                                                                  : null;
+                                                          return FlutterFlowIconButton(
+                                                            borderColor: Colors
+                                                                .transparent,
+                                                            borderRadius: 0,
+                                                            borderWidth: 1,
+                                                            buttonSize: 40,
+                                                            fillColor: FlutterFlowTheme
+                                                                    .of(context)
                                                                 .primaryBtnText,
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          if (containerFavoriteAggregationsRecordList
-                                                                  .length ==
-                                                              1)
-                                                            FlutterFlowIconButton(
-                                                              borderColor: Colors
-                                                                  .transparent,
-                                                              borderRadius: 20,
-                                                              borderWidth: 0,
-                                                              buttonSize: 40,
-                                                              icon: Icon(
-                                                                Icons
-                                                                    .star_rate_rounded,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                size: 24,
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                if (containerFavoriteAggregationsRecordList
-                                                                        .length ==
-                                                                    1) {
-                                                                  apiResultRemoveAggregation =
-                                                                      await RemoveAggregationFromFavesCall
-                                                                          .call(
-                                                                    favAggregationId: functions.getFavAggregationId(containerFavoriteAggregationsRecordList
-                                                                        .map((e) =>
-                                                                            e.reference)
-                                                                        .toList()),
-                                                                  );
-                                                                } else {
-                                                                  apiResultAddAggregation =
-                                                                      await AddAggregationToFavesCall
-                                                                          .call(
-                                                                    aggregationId:
-                                                                        functions
-                                                                            .getIdFromAggregation(listViewAggregationsRecord.reference),
-                                                                    userId:
-                                                                        currentUserUid,
-                                                                  );
-                                                                }
-
-                                                                setState(() {});
-                                                              },
+                                                            icon: Icon(
+                                                              Icons.add,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .yellowSwaim,
+                                                              size: 24,
                                                             ),
-                                                          if (containerFavoriteAggregationsRecordList
-                                                                  .length !=
-                                                              1)
-                                                            FlutterFlowIconButton(
-                                                              borderColor: Colors
-                                                                  .transparent,
-                                                              borderRadius: 20,
-                                                              borderWidth: 0,
-                                                              buttonSize: 40,
-                                                              icon: Icon(
-                                                                Icons
-                                                                    .star_outline_rounded,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                size: 24,
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                if (containerFavoriteAggregationsRecordList
-                                                                        .length ==
-                                                                    1) {
-                                                                  apiResultnsu =
-                                                                      await RemoveAggregationFromFavesCall
-                                                                          .call(
-                                                                    favAggregationId: functions.getFavAggregationId(containerFavoriteAggregationsRecordList
-                                                                        .map((e) =>
-                                                                            e.reference)
-                                                                        .toList()),
-                                                                  );
-                                                                } else {
-                                                                  apiResult2um =
-                                                                      await AddAggregationToFavesCall
-                                                                          .call(
-                                                                    aggregationId:
-                                                                        functions
-                                                                            .getIdFromAggregation(listViewAggregationsRecord.reference),
-                                                                    userId:
-                                                                        currentUserUid,
-                                                                  );
-                                                                }
-
-                                                                setState(() {});
-                                                              },
-                                                            ),
-                                                        ],
+                                                            onPressed:
+                                                                () async {
+                                                              context.pushNamed(
+                                                                'addSwaim',
+                                                                queryParams: {
+                                                                  'payloadFromAggregation':
+                                                                      serializeParam(
+                                                                    listViewAggregationsRecord
+                                                                        .reference,
+                                                                    ParamType
+                                                                        .DocumentReference,
+                                                                  ),
+                                                                  'initialLabel':
+                                                                      serializeParam(
+                                                                    iconButtonLabelsRecord,
+                                                                    ParamType
+                                                                        .Document,
+                                                                  ),
+                                                                }.withoutNulls,
+                                                                extra: <String,
+                                                                    dynamic>{
+                                                                  'initialLabel':
+                                                                      iconButtonLabelsRecord,
+                                                                },
+                                                              );
+                                                            },
+                                                          );
+                                                        },
                                                       ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.62, -0.9),
-                                                child: StreamBuilder<
-                                                    List<LabelsRecord>>(
-                                                  stream: queryLabelsRecord(
-                                                    queryBuilder:
-                                                        (labelsRecord) =>
-                                                            labelsRecord.where(
-                                                                'name',
-                                                                isEqualTo:
-                                                                    'Not set'),
-                                                    singleRecord: true,
-                                                  ),
-                                                  builder: (context, snapshot) {
-                                                    // Customize what your widget looks like when it's loading.
-                                                    if (!snapshot.hasData) {
-                                                      return Center(
-                                                        child: SizedBox(
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: SpinKitRipple(
-                                                            color: Color(
-                                                                0x80E8AA21),
-                                                            size: 30,
-                                                          ),
+                                                      StreamBuilder<
+                                                          List<
+                                                              FavoriteAggregationsRecord>>(
+                                                        stream:
+                                                            queryFavoriteAggregationsRecord(
+                                                          queryBuilder: (favoriteAggregationsRecord) =>
+                                                              favoriteAggregationsRecord
+                                                                  .where(
+                                                                      'userId',
+                                                                      isEqualTo:
+                                                                          currentUserReference)
+                                                                  .where(
+                                                                      'aggregation',
+                                                                      isEqualTo:
+                                                                          listViewAggregationsRecord
+                                                                              .reference),
                                                         ),
-                                                      );
-                                                    }
-                                                    List<LabelsRecord>
-                                                        iconButtonLabelsRecordList =
-                                                        snapshot.data!;
-                                                    // Return an empty Container when the document does not exist.
-                                                    if (snapshot
-                                                        .data!.isEmpty) {
-                                                      return Container();
-                                                    }
-                                                    final iconButtonLabelsRecord =
-                                                        iconButtonLabelsRecordList
-                                                                .isNotEmpty
-                                                            ? iconButtonLabelsRecordList
-                                                                .first
-                                                            : null;
-                                                    return FlutterFlowIconButton(
-                                                      borderColor:
-                                                          Colors.transparent,
-                                                      borderRadius: 0,
-                                                      borderWidth: 1,
-                                                      buttonSize: 40,
-                                                      fillColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryBtnText,
-                                                      icon: Icon(
-                                                        Icons.add,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        size: 24,
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          // Customize what your widget looks like when it's loading.
+                                                          if (!snapshot
+                                                              .hasData) {
+                                                            return Center(
+                                                              child: SizedBox(
+                                                                width: 30,
+                                                                height: 30,
+                                                                child:
+                                                                    SpinKitRipple(
+                                                                  color: Color(
+                                                                      0x80E8AA21),
+                                                                  size: 30,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
+                                                          List<FavoriteAggregationsRecord>
+                                                              containerFavoriteAggregationsRecordList =
+                                                              snapshot.data!;
+                                                          return Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryBtnText,
+                                                            ),
+                                                            child: Stack(
+                                                              children: [
+                                                                if (containerFavoriteAggregationsRecordList
+                                                                        .length ==
+                                                                    1)
+                                                                  FlutterFlowIconButton(
+                                                                    borderColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    borderRadius:
+                                                                        20,
+                                                                    borderWidth:
+                                                                        0,
+                                                                    buttonSize:
+                                                                        40,
+                                                                    icon: Icon(
+                                                                      Icons
+                                                                          .star_rate_rounded,
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .yellowSwaim,
+                                                                      size: 24,
+                                                                    ),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      if (containerFavoriteAggregationsRecordList
+                                                                              .length ==
+                                                                          1) {
+                                                                        apiResultRemoveAggregation =
+                                                                            await RemoveAggregationFromFavesCall.call(
+                                                                          favAggregationId: functions.getFavAggregationId(containerFavoriteAggregationsRecordList
+                                                                              .map((e) => e.reference)
+                                                                              .toList()),
+                                                                        );
+                                                                      } else {
+                                                                        apiResultAddAggregation =
+                                                                            await AddAggregationToFavesCall.call(
+                                                                          aggregationId:
+                                                                              functions.getIdFromAggregation(listViewAggregationsRecord.reference),
+                                                                          userId:
+                                                                              currentUserUid,
+                                                                        );
+                                                                      }
+
+                                                                      setState(
+                                                                          () {});
+                                                                    },
+                                                                  ),
+                                                                if (containerFavoriteAggregationsRecordList
+                                                                        .length !=
+                                                                    1)
+                                                                  FlutterFlowIconButton(
+                                                                    borderColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    borderRadius:
+                                                                        20,
+                                                                    borderWidth:
+                                                                        0,
+                                                                    buttonSize:
+                                                                        40,
+                                                                    icon: Icon(
+                                                                      Icons
+                                                                          .star_outline_rounded,
+                                                                      color: Color(
+                                                                          0xFF747474),
+                                                                      size: 24,
+                                                                    ),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      if (containerFavoriteAggregationsRecordList
+                                                                              .length ==
+                                                                          1) {
+                                                                        apiResultnsu =
+                                                                            await RemoveAggregationFromFavesCall.call(
+                                                                          favAggregationId: functions.getFavAggregationId(containerFavoriteAggregationsRecordList
+                                                                              .map((e) => e.reference)
+                                                                              .toList()),
+                                                                        );
+                                                                      } else {
+                                                                        apiResult2um =
+                                                                            await AddAggregationToFavesCall.call(
+                                                                          aggregationId:
+                                                                              functions.getIdFromAggregation(listViewAggregationsRecord.reference),
+                                                                          userId:
+                                                                              currentUserUid,
+                                                                        );
+                                                                      }
+
+                                                                      setState(
+                                                                          () {});
+                                                                    },
+                                                                  ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
-                                                      onPressed: () async {
-                                                        context.pushNamed(
-                                                          'addSwaim',
-                                                          queryParams: {
-                                                            'payloadFromAggregation':
-                                                                serializeParam(
-                                                              listViewAggregationsRecord
-                                                                  .reference,
-                                                              ParamType
-                                                                  .DocumentReference,
-                                                            ),
-                                                            'initialLabel':
-                                                                serializeParam(
-                                                              iconButtonLabelsRecord,
-                                                              ParamType
-                                                                  .Document,
-                                                            ),
-                                                          }.withoutNulls,
-                                                          extra: <String,
-                                                              dynamic>{
-                                                            'initialLabel':
-                                                                iconButtonLabelsRecord,
-                                                          },
-                                                        );
-                                                      },
-                                                    );
-                                                  },
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -1801,11 +1921,15 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                             secondaryActions: [
                                               IconSlideAction(
                                                 caption: 'Show on map',
-                                                color: Color(0xFF999999),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .yellowSwaim,
                                                 icon: Icons.map,
                                                 onTap: () async {
-                                                  setState(() => FFAppState()
-                                                      .isSwaimsMode = false);
+                                                  setState(() {
+                                                    FFAppState().isSwaimsMode =
+                                                        false;
+                                                  });
 
                                                   context.pushNamed(
                                                     'MapPage',
@@ -1822,11 +1946,13 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                               ),
                                               IconSlideAction(
                                                 caption: 'Share',
-                                                color: Color(0xFF999999),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .yellowSwaim,
                                                 icon: Icons.ios_share,
                                                 onTap: () async {
                                                   await Share.share(
-                                                      'swaimoriginalsaved://swaimplayground.com${GoRouter.of(context).location}');
+                                                      'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}');
                                                 },
                                               ),
                                               IconSlideAction(
@@ -2013,13 +2139,17 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                     .selectedSwaimsCategoriesInFilter
                                                     .contains(bbbbItem) ==
                                                 true) {
-                                              setState(() => FFAppState()
-                                                  .selectedSwaimsCategoriesInFilter
-                                                  .remove(bbbbItem));
+                                              setState(() {
+                                                setState(() => FFAppState()
+                                                    .removeFromSelectedSwaimsCategoriesInFilter(
+                                                        bbbbItem));
+                                              });
                                             } else {
-                                              setState(() => FFAppState()
-                                                  .selectedSwaimsCategoriesInFilter
-                                                  .add(bbbbItem));
+                                              setState(() {
+                                                setState(() => FFAppState()
+                                                    .addToSelectedSwaimsCategoriesInFilter(
+                                                        bbbbItem));
+                                              });
                                             }
                                           },
                                           child: Container(
@@ -2164,13 +2294,17 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                     .filterByLabel
                                                     .contains(bbbbItem) ==
                                                 true) {
-                                              setState(() => FFAppState()
-                                                  .filterByLabel
-                                                  .remove(bbbbItem));
+                                              setState(() {
+                                                setState(() => FFAppState()
+                                                    .removeFromFilterByLabel(
+                                                        bbbbItem));
+                                              });
                                             } else {
-                                              setState(() => FFAppState()
-                                                  .filterByLabel
-                                                  .add(bbbbItem));
+                                              setState(() {
+                                                setState(() => FFAppState()
+                                                    .addToFilterByLabel(
+                                                        bbbbItem));
+                                              });
                                             }
                                           },
                                           child: Container(
@@ -2391,50 +2525,38 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                         iconButtonLabelsRecordList.isNotEmpty
                                             ? iconButtonLabelsRecordList.first
                                             : null;
-                                    return InkWell(
-                                      onDoubleTap: () async {
-                                        if (FFAppState().isSwaimsMode) {
-                                          context.pushNamed(
-                                              'AgregateDatatListPage');
-                                        } else {
-                                          context.pushNamed('NotesPage');
-                                        }
-                                      },
-                                      child: FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 30,
-                                        borderWidth: 0,
-                                        buttonSize: 60,
-                                        fillColor: FlutterFlowTheme.of(context)
-                                            .primaryBtnText,
-                                        icon: Icon(
-                                          Icons.add,
-                                          color: Color(0xFF747474),
-                                          size: 30,
-                                        ),
-                                        onPressed: () async {
-                                          context.pushNamed(
-                                            'addSwaim',
-                                            queryParams: {
-                                              'initialLabel': serializeParam(
-                                                iconButtonLabelsRecord,
-                                                ParamType.Document,
-                                              ),
-                                            }.withoutNulls,
-                                            extra: <String, dynamic>{
-                                              'initialLabel':
-                                                  iconButtonLabelsRecord,
-                                              kTransitionInfoKey:
-                                                  TransitionInfo(
-                                                hasTransition: true,
-                                                transitionType:
-                                                    PageTransitionType
-                                                        .rightToLeft,
-                                              ),
-                                            },
-                                          );
-                                        },
+                                    return FlutterFlowIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 30,
+                                      borderWidth: 0,
+                                      buttonSize: 60,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: Color(0xFF747474),
+                                        size: 30,
                                       ),
+                                      onPressed: () async {
+                                        context.pushNamed(
+                                          'addSwaim',
+                                          queryParams: {
+                                            'initialLabel': serializeParam(
+                                              iconButtonLabelsRecord,
+                                              ParamType.Document,
+                                            ),
+                                          }.withoutNulls,
+                                          extra: <String, dynamic>{
+                                            'initialLabel':
+                                                iconButtonLabelsRecord,
+                                            kTransitionInfoKey: TransitionInfo(
+                                              hasTransition: true,
+                                              transitionType: PageTransitionType
+                                                  .rightToLeft,
+                                            ),
+                                          },
+                                        );
+                                      },
                                     );
                                   },
                                 ),

@@ -20,8 +20,8 @@ export 'serialization_util.dart';
 const kTransitionInfoKey = '__transition_info__';
 
 class AppStateNotifier extends ChangeNotifier {
-  SwaimPlayGroundFirebaseUser? initialUser;
-  SwaimPlayGroundFirebaseUser? user;
+  SwaimFirebaseUser? initialUser;
+  SwaimFirebaseUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -46,7 +46,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(SwaimPlayGroundFirebaseUser newUser) {
+  void update(SwaimFirebaseUser newUser) {
     initialUser ??= newUser;
     user = newUser;
     // Refresh the app on auth change unless explicitly marked otherwise.
@@ -69,13 +69,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? MapPageWidget() : WelcomePageWidget(),
+          appStateNotifier.loggedIn ? NotesPageWidget() : WelcomePageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) =>
-              appStateNotifier.loggedIn ? MapPageWidget() : WelcomePageWidget(),
+          builder: (context, _) => appStateNotifier.loggedIn
+              ? NotesPageWidget()
+              : WelcomePageWidget(),
           routes: [
             FFRoute(
               name: 'WelcomePage',
@@ -104,12 +105,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => NotesPageWidget(
                 notes: params.getParam('notes', ParamType.Document),
               ),
-            ),
-            FFRoute(
-              name: 'AgregateDatatListPage',
-              path: 'agregateDatatListPage',
-              requireAuth: true,
-              builder: (context, params) => AgregateDatatListPageWidget(),
             ),
             FFRoute(
               name: 'addSwaim',
@@ -151,27 +146,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'AuthenticatePage',
-              path: 'authenticatePage',
-              builder: (context, params) => AuthenticatePageWidget(),
-            ),
-            FFRoute(
-              name: 'NotificationSettings',
-              path: 'notificationSettings',
-              requireAuth: true,
-              builder: (context, params) => NotificationSettingsWidget(),
-            ),
-            FFRoute(
               name: 'FavoriteAggregationsListPage',
               path: 'favoriteAggregationsListPage',
               requireAuth: true,
               builder: (context, params) =>
                   FavoriteAggregationsListPageWidget(),
-            ),
-            FFRoute(
-              name: 'LoginAndSignup',
-              path: 'loginAndSignup',
-              builder: (context, params) => LoginAndSignupWidget(),
             ),
             FFRoute(
               name: 'FavoriteSwaimPage',
@@ -194,10 +173,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'ExampleSwaimContentpage',
-              path: 'exampleSwaimContentpage',
-              requireAuth: true,
-              builder: (context, params) => ExampleSwaimContentpageWidget(),
+              name: 'LoginAndSignup',
+              path: 'loginAndSignup',
+              builder: (context, params) => LoginAndSignupWidget(),
             ),
             FFRoute(
               name: 'TypeEmailCodePage',
@@ -396,13 +374,10 @@ class FFRoute {
               : builder(context, ffParams);
           final child = appStateNotifier.loading
               ? Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/Group_39.png',
-                      width: 70,
-                      fit: BoxFit.cover,
-                    ),
+                  color: FlutterFlowTheme.of(context).primaryBackground,
+                  child: Image.asset(
+                    'assets/images/Word-S.svg',
+                    fit: BoxFit.fill,
                   ),
                 )
               : page;

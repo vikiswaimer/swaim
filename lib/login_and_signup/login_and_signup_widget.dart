@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class LoginAndSignupWidget extends StatefulWidget {
   const LoginAndSignupWidget({Key? key}) : super(key: key);
@@ -53,6 +54,8 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
@@ -104,6 +107,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.8,
+                                        height: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -116,87 +120,80 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  2, 2, 2, 2),
-                                          child: TextFormField(
-                                            controller: emailTextController1,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'Your email address',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                        child: TextFormField(
+                                          controller: emailTextController1,
+                                          obscureText: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'Your email address',
+                                            labelStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Color(0xFF57636C),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                            hintStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Color(0xFF57636C),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
                                               ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              contentPadding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(20, 24, 20, 24),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Syne',
-                                                  color: Color(0xFF0F1113),
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                            keyboardType:
-                                                TextInputType.emailAddress,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    20, 24, 20, 24),
                                           ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Montserrat',
+                                                color: Color(0xFF0F1113),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                          keyboardType:
+                                              TextInputType.emailAddress,
                                         ),
                                       ),
                                     ),
@@ -207,6 +204,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.8,
+                                        height: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -219,102 +217,94 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  2, 2, 2, 2),
-                                          child: TextFormField(
-                                            controller: passwordTextController1,
-                                            obscureText: !passwordVisibility1,
-                                            decoration: InputDecoration(
-                                              labelText: 'Password',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                        child: TextFormField(
+                                          controller: passwordTextController1,
+                                          obscureText: !passwordVisibility1,
+                                          decoration: InputDecoration(
+                                            labelText: 'Password',
+                                            labelStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Color(0xFF57636C),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                            hintStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Color(0xFF57636C),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
                                               ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
                                               ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
                                               ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
                                               ),
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              contentPadding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(20, 24, 20, 24),
-                                              suffixIcon: InkWell(
-                                                onTap: () => setState(
-                                                  () => passwordVisibility1 =
-                                                      !passwordVisibility1,
-                                                ),
-                                                focusNode: FocusNode(
-                                                    skipTraversal: true),
-                                                child: Icon(
-                                                  passwordVisibility1
-                                                      ? Icons
-                                                          .visibility_outlined
-                                                      : Icons
-                                                          .visibility_off_outlined,
-                                                  color: Color(0xFF57636C),
-                                                  size: 22,
-                                                ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    20, 24, 20, 24),
+                                            suffixIcon: InkWell(
+                                              onTap: () => setState(
+                                                () => passwordVisibility1 =
+                                                    !passwordVisibility1,
+                                              ),
+                                              focusNode: FocusNode(
+                                                  skipTraversal: true),
+                                              child: Icon(
+                                                passwordVisibility1
+                                                    ? Icons.visibility_outlined
+                                                    : Icons
+                                                        .visibility_off_outlined,
+                                                color: Color(0xFF57636C),
+                                                size: 22,
                                               ),
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Syne',
-                                                  color: Color(0xFF0F1113),
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
                                           ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Montserrat',
+                                                color: Color(0xFF0F1113),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.normal,
+                                              ),
                                         ),
                                       ),
                                     ),
@@ -345,8 +335,8 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                                   return;
                                                 }
 
-                                                context.pushNamedAuth(
-                                                    'MapPage', mounted);
+                                                context.goNamedAuth(
+                                                    'NotesPage', mounted);
                                               },
                                               text: 'Sign In',
                                               options: FFButtonOptions(
@@ -379,7 +369,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                         options: FFButtonOptions(
                                           width: 150,
                                           height: 40,
-                                          color: Color(0x00F1F4F8),
+                                          color: Color(0xFFF1F4F8),
                                           textStyle: FlutterFlowTheme.of(
                                                   context)
                                               .subtitle2
@@ -390,7 +380,6 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                                         .yellowSwaim,
                                               ),
                                           borderSide: BorderSide(
-                                            color: Color(0xFFF1F4F8),
                                             width: 0,
                                           ),
                                           borderRadius:
@@ -412,6 +401,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.8,
+                                        height: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -433,28 +423,26 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                             obscureText: false,
                                             decoration: InputDecoration(
                                               labelText: 'Your email address',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
+                                              labelStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyText2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFF57636C),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                              hintStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyText2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFF57636C),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(0x00000000),
@@ -497,7 +485,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1
                                                 .override(
-                                                  fontFamily: 'Syne',
+                                                  fontFamily: 'Montserrat',
                                                   color: Color(0xFF0F1113),
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.normal,
@@ -515,6 +503,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.8,
+                                        height: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -536,28 +525,26 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                             obscureText: !passwordVisibility2,
                                             decoration: InputDecoration(
                                               labelText: 'Password',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
+                                              labelStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyText2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFF57636C),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                              hintStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyText2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFF57636C),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(0x00000000),
@@ -617,7 +604,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1
                                                 .override(
-                                                  fontFamily: 'Syne',
+                                                  fontFamily: 'Montserrat',
                                                   color: Color(0xFF0F1113),
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.normal,
@@ -633,6 +620,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.8,
+                                        height: 60,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -655,28 +643,26 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                             obscureText: !passwordVisibility3,
                                             decoration: InputDecoration(
                                               labelText: 'Password',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Syne',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
+                                              labelStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyText2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFF57636C),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                              hintStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyText2
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFF57636C),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(0x00000000),
@@ -736,7 +722,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1
                                                 .override(
-                                                  fontFamily: 'Syne',
+                                                  fontFamily: 'Montserrat',
                                                   color: Color(0xFF0F1113),
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.normal,
@@ -786,8 +772,8 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                                   return;
                                                 }
 
-                                                context.pushNamedAuth(
-                                                    'MapPage', mounted);
+                                                context.goNamedAuth(
+                                                    'NotesPage', mounted);
                                               },
                                               text: 'Sign up',
                                               options: FFButtonOptions(
@@ -805,36 +791,6 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 20, 0, 0),
-                                      child: FFButtonWidget(
-                                        onPressed: () async {
-                                          context.pushNamed('PrivacyPolicy');
-                                        },
-                                        text: 'Privacy Policy',
-                                        options: FFButtonOptions(
-                                          width: 120,
-                                          height: 40,
-                                          color: Color(0x00F1F4F8),
-                                          textStyle: FlutterFlowTheme.of(
-                                                  context)
-                                              .subtitle2
-                                              .override(
-                                                fontFamily: 'Montserrat',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .yellowSwaim,
-                                              ),
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFF1F4F8),
-                                            width: 0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
                                         ),
                                       ),
                                     ),

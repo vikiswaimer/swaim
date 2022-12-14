@@ -1,23 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SwaimPlayGroundFirebaseUser {
-  SwaimPlayGroundFirebaseUser(this.user);
+class SwaimFirebaseUser {
+  SwaimFirebaseUser(this.user);
   User? user;
   bool get loggedIn => user != null;
 }
 
-SwaimPlayGroundFirebaseUser? currentUser;
+SwaimFirebaseUser? currentUser;
 bool get loggedIn => currentUser?.loggedIn ?? false;
-Stream<SwaimPlayGroundFirebaseUser> swaimPlayGroundFirebaseUserStream() =>
-    FirebaseAuth.instance
+Stream<SwaimFirebaseUser> swaimFirebaseUserStream() => FirebaseAuth.instance
         .authStateChanges()
         .debounce((user) => user == null && !loggedIn
             ? TimerStream(true, const Duration(seconds: 1))
             : Stream.value(user))
-        .map<SwaimPlayGroundFirebaseUser>(
+        .map<SwaimFirebaseUser>(
       (user) {
-        currentUser = SwaimPlayGroundFirebaseUser(user);
+        currentUser = SwaimFirebaseUser(user);
         return currentUser!;
       },
     );

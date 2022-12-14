@@ -7,6 +7,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FavoriteAggregationsListPageWidget extends StatefulWidget {
   const FavoriteAggregationsListPageWidget({Key? key}) : super(key: key);
@@ -29,6 +30,8 @@ class _FavoriteAggregationsListPageWidgetState
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -42,7 +45,7 @@ class _FavoriteAggregationsListPageWidgetState
           buttonSize: 60,
           icon: Icon(
             Icons.chevron_left,
-            color: FlutterFlowTheme.of(context).primaryColor,
+            color: FlutterFlowTheme.of(context).yellowSwaim,
             size: 30,
           ),
           onPressed: () async {
@@ -312,6 +315,17 @@ class _FavoriteAggregationsListPageWidgetState
                                               .bodyText1,
                                         );
                                       },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 20, 0, 0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFD9D9D9),
+                                      ),
                                     ),
                                   ),
                                 ],
