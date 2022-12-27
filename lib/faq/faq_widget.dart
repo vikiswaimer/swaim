@@ -85,7 +85,7 @@ class _FaqWidgetState extends State<FaqWidget> {
                       InkWell(
                         onTap: () async {
                           await launchURL(
-                              'https://swaim.notion.site/FAQ-aa9c61fcad2f4a52a928f1bc58ff27c2');
+                              'https://www.notion.so/swaim/swaim-links-terms-privasy-1f9dfd5617c2487193d4fed3936814e9#c8064abf2e904b59ac9ecf748726b777');
                         },
                         child: Text(
                           'Link',

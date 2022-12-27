@@ -20,121 +20,92 @@ class FFAppState extends ChangeNotifier {
     _isGuideVisible = prefs.getBool('ff_isGuideVisible') ?? _isGuideVisible;
   }
 
+  void update(VoidCallback callback) {
+    callback();
+    notifyListeners();
+  }
+
   late SharedPreferences prefs;
 
   String _noteName = '';
   String get noteName => _noteName;
   set noteName(String _value) {
-    notifyListeners();
-
     _noteName = _value;
   }
 
   List<DocumentReference> _filterByLabel = [];
   List<DocumentReference> get filterByLabel => _filterByLabel;
   set filterByLabel(List<DocumentReference> _value) {
-    notifyListeners();
-
     _filterByLabel = _value;
   }
 
   void addToFilterByLabel(DocumentReference _value) {
-    notifyListeners();
     _filterByLabel.add(_value);
   }
 
   void removeFromFilterByLabel(DocumentReference _value) {
-    notifyListeners();
     _filterByLabel.remove(_value);
   }
 
   DocumentReference? _labelInAddSwaim;
   DocumentReference? get labelInAddSwaim => _labelInAddSwaim;
   set labelInAddSwaim(DocumentReference? _value) {
-    notifyListeners();
-    if (_value == null) {
-      return;
-    }
     _labelInAddSwaim = _value;
   }
 
   DocumentReference? _labelForSwaim;
   DocumentReference? get labelForSwaim => _labelForSwaim;
   set labelForSwaim(DocumentReference? _value) {
-    notifyListeners();
-    if (_value == null) {
-      return;
-    }
     _labelForSwaim = _value;
   }
 
   List<DocumentReference> _searchResults = [];
   List<DocumentReference> get searchResults => _searchResults;
   set searchResults(List<DocumentReference> _value) {
-    notifyListeners();
-
     _searchResults = _value;
   }
 
   void addToSearchResults(DocumentReference _value) {
-    notifyListeners();
     _searchResults.add(_value);
   }
 
   void removeFromSearchResults(DocumentReference _value) {
-    notifyListeners();
     _searchResults.remove(_value);
   }
 
   DocumentReference? _firstSearchREsult;
   DocumentReference? get firstSearchREsult => _firstSearchREsult;
   set firstSearchREsult(DocumentReference? _value) {
-    notifyListeners();
-    if (_value == null) {
-      return;
-    }
     _firstSearchREsult = _value;
   }
 
   DocumentReference? _labelInEditSwaim;
   DocumentReference? get labelInEditSwaim => _labelInEditSwaim;
   set labelInEditSwaim(DocumentReference? _value) {
-    notifyListeners();
-    if (_value == null) {
-      return;
-    }
     _labelInEditSwaim = _value;
   }
 
   bool _isSwaimsMode = false;
   bool get isSwaimsMode => _isSwaimsMode;
   set isSwaimsMode(bool _value) {
-    notifyListeners();
-
     _isSwaimsMode = _value;
   }
 
   bool _isSearchOnMapEnabled = false;
   bool get isSearchOnMapEnabled => _isSearchOnMapEnabled;
   set isSearchOnMapEnabled(bool _value) {
-    notifyListeners();
-
     _isSearchOnMapEnabled = _value;
   }
 
   String _searchInputValue = '';
   String get searchInputValue => _searchInputValue;
   set searchInputValue(String _value) {
-    notifyListeners();
-
     _searchInputValue = _value;
   }
 
   bool _isSearchOnNotesListEnabled = false;
   bool get isSearchOnNotesListEnabled => _isSearchOnNotesListEnabled;
   set isSearchOnNotesListEnabled(bool _value) {
-    notifyListeners();
-
     _isSearchOnNotesListEnabled = _value;
   }
 
@@ -142,42 +113,32 @@ class FFAppState extends ChangeNotifier {
   List<DocumentReference> get selectedSwaimsCategoriesInFilter =>
       _selectedSwaimsCategoriesInFilter;
   set selectedSwaimsCategoriesInFilter(List<DocumentReference> _value) {
-    notifyListeners();
-
     _selectedSwaimsCategoriesInFilter = _value;
   }
 
   void addToSelectedSwaimsCategoriesInFilter(DocumentReference _value) {
-    notifyListeners();
     _selectedSwaimsCategoriesInFilter.add(_value);
   }
 
   void removeFromSelectedSwaimsCategoriesInFilter(DocumentReference _value) {
-    notifyListeners();
     _selectedSwaimsCategoriesInFilter.remove(_value);
   }
 
   bool _isSettingsOpened = false;
   bool get isSettingsOpened => _isSettingsOpened;
   set isSettingsOpened(bool _value) {
-    notifyListeners();
-
     _isSettingsOpened = _value;
   }
 
   bool _isSearchModeOnSwaimsEnabled = false;
   bool get isSearchModeOnSwaimsEnabled => _isSearchModeOnSwaimsEnabled;
   set isSearchModeOnSwaimsEnabled(bool _value) {
-    notifyListeners();
-
     _isSearchModeOnSwaimsEnabled = _value;
   }
 
   bool _isGuideVisible = true;
   bool get isGuideVisible => _isGuideVisible;
   set isGuideVisible(bool _value) {
-    notifyListeners();
-
     _isGuideVisible = _value;
     prefs.setBool('ff_isGuideVisible', _value);
   }
@@ -185,24 +146,18 @@ class FFAppState extends ChangeNotifier {
   bool _isCodeSent = false;
   bool get isCodeSent => _isCodeSent;
   set isCodeSent(bool _value) {
-    notifyListeners();
-
     _isCodeSent = _value;
   }
 
   String _citySearch = 'Warsaw';
   String get citySearch => _citySearch;
   set citySearch(String _value) {
-    notifyListeners();
-
     _citySearch = _value;
   }
 
   String _countrySearch = 'Poland';
   String get countrySearch => _countrySearch;
   set countrySearch(String _value) {
-    notifyListeners();
-
     _countrySearch = _value;
   }
 }

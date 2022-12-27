@@ -197,7 +197,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                   List<FavoriteAggregationsRecord>
                                       containerFavoriteAggregationsRecordList =
                                       snapshot.data!;
-                                  // Return an empty Container when the document does not exist.
+                                  // Return an empty Container when the item does not exist.
                                   if (snapshot.data!.isEmpty) {
                                     return Container();
                                   }
@@ -359,7 +359,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                           ),
                                           onPressed: () async {
                                             await Share.share(
-                                                'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}');
+                                                'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}');
                                           },
                                         ),
                                       ),
@@ -574,7 +574,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                                                   .call(
                                                             aggregationId: functions
                                                                 .getEditeNoteId(
-                                                                    'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
+                                                                    'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}'),
                                                             userId:
                                                                 currentUserUid,
                                                           );
@@ -619,7 +619,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                                                   .call(
                                                             aggregationId: functions
                                                                 .getEditeNoteId(
-                                                                    'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
+                                                                    'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}'),
                                                             userId:
                                                                 currentUserUid,
                                                           );
@@ -743,7 +743,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                         List<LabelsRecord>
                                             buttonLabelsRecordList =
                                             snapshot.data!;
-                                        // Return an empty Container when the document does not exist.
+                                        // Return an empty Container when the item does not exist.
                                         if (snapshot.data!.isEmpty) {
                                           return Container();
                                         }
@@ -808,7 +808,7 @@ class _AggregationInfoWidgetState extends State<AggregationInfoWidget> {
                                     ),
                                     FFButtonWidget(
                                       onPressed: () async {
-                                        setState(() {
+                                        FFAppState().update(() {
                                           FFAppState().isSwaimsMode = true;
                                         });
 

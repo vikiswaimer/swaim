@@ -185,7 +185,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                           context)
                                                       .bodyText1
                                                       .override(
-                                                        fontFamily: 'Lato',
+                                                        fontFamily: 'Syne',
                                                         fontSize: 14,
                                                       ),
                                                 ),
@@ -232,7 +232,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                             size: 18,
                                           ),
                                           onPressed: () async {
-                                            setState(() {
+                                            FFAppState().update(() {
                                               FFAppState().isSettingsOpened =
                                                   true;
                                             });
@@ -251,7 +251,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                             size: 18,
                                           ),
                                           onPressed: () async {
-                                            setState(() {
+                                            FFAppState().update(() {
                                               FFAppState().isSettingsOpened =
                                                   false;
                                             });
@@ -286,7 +286,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                           children: [
                                             FFButtonWidget(
                                               onPressed: () async {
-                                                setState(() {
+                                                FFAppState().update(() {
                                                   FFAppState().isSwaimsMode =
                                                       false;
                                                 });
@@ -321,7 +321,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                             ),
                                             FFButtonWidget(
                                               onPressed: () async {
-                                                setState(() {
+                                                FFAppState().update(() {
                                                   FFAppState().isSwaimsMode =
                                                       true;
                                                 });
@@ -484,18 +484,18 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                                       baseLabelsLabelsRecord
                                                                           .reference) ==
                                                               true) {
-                                                            setState(() {
-                                                              setState(() => FFAppState()
-                                                                  .removeFromFilterByLabel(
-                                                                      baseLabelsLabelsRecord
-                                                                          .reference));
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState().removeFromFilterByLabel(
+                                                                  baseLabelsLabelsRecord
+                                                                      .reference);
                                                             });
                                                           } else {
-                                                            setState(() {
-                                                              setState(() => FFAppState()
-                                                                  .addToFilterByLabel(
-                                                                      baseLabelsLabelsRecord
-                                                                          .reference));
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState().addToFilterByLabel(
+                                                                  baseLabelsLabelsRecord
+                                                                      .reference);
                                                             });
                                                           }
                                                         },
@@ -606,18 +606,18 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                                       customLabelsLabelsRecord
                                                                           .reference) ==
                                                               true) {
-                                                            setState(() {
-                                                              setState(() => FFAppState()
-                                                                  .removeFromFilterByLabel(
-                                                                      customLabelsLabelsRecord
-                                                                          .reference));
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState().removeFromFilterByLabel(
+                                                                  customLabelsLabelsRecord
+                                                                      .reference);
                                                             });
                                                           } else {
-                                                            setState(() {
-                                                              setState(() => FFAppState()
-                                                                  .addToFilterByLabel(
-                                                                      customLabelsLabelsRecord
-                                                                          .reference));
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState().addToFilterByLabel(
+                                                                  customLabelsLabelsRecord
+                                                                      .reference);
                                                             });
                                                           }
                                                         },
@@ -661,7 +661,8 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                                       customLabelsLabelsRecord
                                                                           .reference),
                                                             );
-                                                            setState(() {
+                                                            FFAppState()
+                                                                .update(() {
                                                               FFAppState()
                                                                   .filterByLabel = [];
                                                             });
@@ -818,18 +819,18 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                                       listViewAggregationCategoriesRecord
                                                                           .reference) ==
                                                               true) {
-                                                            setState(() {
-                                                              setState(() => FFAppState()
-                                                                  .removeFromSelectedSwaimsCategoriesInFilter(
-                                                                      listViewAggregationCategoriesRecord
-                                                                          .reference));
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState().removeFromSelectedSwaimsCategoriesInFilter(
+                                                                  listViewAggregationCategoriesRecord
+                                                                      .reference);
                                                             });
                                                           } else {
-                                                            setState(() {
-                                                              setState(() => FFAppState()
-                                                                  .addToSelectedSwaimsCategoriesInFilter(
-                                                                      listViewAggregationCategoriesRecord
-                                                                          .reference));
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState().addToSelectedSwaimsCategoriesInFilter(
+                                                                  listViewAggregationCategoriesRecord
+                                                                      .reference);
                                                             });
                                                           }
                                                         },
@@ -1018,7 +1019,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                 ),
                                 InkWell(
                                   onTap: () async {
-                                    setState(() {
+                                    FFAppState().update(() {
                                       FFAppState().isGuideVisible = false;
                                     });
                                   },
@@ -1087,7 +1088,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                         'textController',
                         Duration(milliseconds: 2000),
                         () async {
-                          setState(() {
+                          FFAppState().update(() {
                             FFAppState().searchInputValue =
                                 textController!.text;
                           });
@@ -1150,7 +1151,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                     children: [
                       FFButtonWidget(
                         onPressed: () async {
-                          setState(() {
+                          FFAppState().update(() {
                             FFAppState().isSwaimsMode = false;
                           });
                         },
@@ -1179,7 +1180,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
-                          setState(() {
+                          FFAppState().update(() {
                             FFAppState().isSwaimsMode = true;
                           });
                         },
@@ -1239,7 +1240,9 @@ class _MapPageWidgetState extends State<MapPageWidget> {
           body: Stack(
             children: [
               StreamBuilder<List<AggregationCategoriesRecord>>(
-                stream: queryAggregationCategoriesRecord(),
+                stream: queryAggregationCategoriesRecord(
+                  limit: 20,
+                ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -1285,7 +1288,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                           .where('country',
                                               isEqualTo:
                                                   FFAppState().countrySearch),
-                                  limit: 100,
+                                  limit: 20,
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -1383,6 +1386,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                           isEqualTo: currentUserReference)
                                       .whereIn(
                                           'label', FFAppState().filterByLabel),
+                                  limit: 20,
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -1522,7 +1526,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                     List<LabelsRecord>
                                         iconButtonLabelsRecordList =
                                         snapshot.data!;
-                                    // Return an empty Container when the document does not exist.
+                                    // Return an empty Container when the item does not exist.
                                     if (snapshot.data!.isEmpty) {
                                       return Container();
                                     }
@@ -1598,7 +1602,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                     List<LabelsRecord>
                                         iconButtonLabelsRecordList =
                                         snapshot.data!;
-                                    // Return an empty Container when the document does not exist.
+                                    // Return an empty Container when the item does not exist.
                                     if (snapshot.data!.isEmpty) {
                                       return Container();
                                     }
@@ -1671,7 +1675,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                   List<LabelsRecord>
                                       iconButtonLabelsRecordList =
                                       snapshot.data!;
-                                  // Return an empty Container when the document does not exist.
+                                  // Return an empty Container when the item does not exist.
                                   if (snapshot.data!.isEmpty) {
                                     return Container();
                                   }
@@ -1759,7 +1763,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                   List<LabelsRecord>
                                       iconButtonLabelsRecordList =
                                       snapshot.data!;
-                                  // Return an empty Container when the document does not exist.
+                                  // Return an empty Container when the item does not exist.
                                   if (snapshot.data!.isEmpty) {
                                     return Container();
                                   }
@@ -1848,16 +1852,16 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                   .selectedSwaimsCategoriesInFilter
                                                   .contains(bbbbItem) ==
                                               true) {
-                                            setState(() {
-                                              setState(() => FFAppState()
+                                            FFAppState().update(() {
+                                              FFAppState()
                                                   .removeFromSelectedSwaimsCategoriesInFilter(
-                                                      bbbbItem));
+                                                      bbbbItem);
                                             });
                                           } else {
-                                            setState(() {
-                                              setState(() => FFAppState()
+                                            FFAppState().update(() {
+                                              FFAppState()
                                                   .addToSelectedSwaimsCategoriesInFilter(
-                                                      bbbbItem));
+                                                      bbbbItem);
                                             });
                                           }
                                         },
@@ -1994,16 +1998,15 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                                   .filterByLabel
                                                   .contains(bbbbItem) ==
                                               true) {
-                                            setState(() {
-                                              setState(() => FFAppState()
+                                            FFAppState().update(() {
+                                              FFAppState()
                                                   .removeFromFilterByLabel(
-                                                      bbbbItem));
+                                                      bbbbItem);
                                             });
                                           } else {
-                                            setState(() {
-                                              setState(() => FFAppState()
-                                                  .addToFilterByLabel(
-                                                      bbbbItem));
+                                            FFAppState().update(() {
+                                              FFAppState()
+                                                  .addToFilterByLabel(bbbbItem);
                                             });
                                           }
                                         },

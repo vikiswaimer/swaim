@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import '../../flutter_flow/flutter_flow_util.dart';
 
@@ -61,6 +62,8 @@ class AddNoteCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -121,6 +124,8 @@ class UpdateNoteCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -143,6 +148,8 @@ class DeleteNoteCall {
       headers: {},
       params: {},
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -177,6 +184,8 @@ class AddAggregationToFavesCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -194,6 +203,8 @@ class RemoveAggregationFromFavesCall {
       headers: {},
       params: {},
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -230,6 +241,8 @@ class SetLabelForSwaimCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -264,6 +277,8 @@ class AddLabelCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -281,6 +296,8 @@ class RemoveLabelCall {
       headers: {},
       params: {},
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }
@@ -340,6 +357,8 @@ class AddNoteWithAttachedSwaimCall {
       body: body,
       bodyType: BodyType.JSON,
       returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
       cache: false,
     );
   }

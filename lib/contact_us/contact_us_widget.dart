@@ -83,7 +83,8 @@ class _ContactUsWidgetState extends State<ContactUsWidget> {
                     autofocus: true,
                     obscureText: false,
                     decoration: InputDecoration(
-                      hintText: 'Type your message here',
+                      hintText:
+                          'Type your message here. Send screenshots in the mail window.',
                       hintStyle: FlutterFlowTheme.of(context).bodyText2,
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -171,7 +172,7 @@ class _ContactUsWidgetState extends State<ContactUsWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        'And you can also go to our page and find yourself with us places of power!',
+                        '\n\nAlso go to our page and find yourself with us places of power!',
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Syne',
                             ),

@@ -16,16 +16,14 @@ class LoginAndSignupWidget extends StatefulWidget {
 
 class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
   TextEditingController? confirmPasswordTextController0;
-
   late bool passwordVisibility3;
   TextEditingController? emailTextController2;
   TextEditingController? passwordTextController2;
-
   late bool passwordVisibility2;
   TextEditingController? emailTextController1;
   TextEditingController? passwordTextController1;
-
   late bool passwordVisibility1;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -44,6 +42,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     confirmPasswordTextController0?.dispose();
     emailTextController2?.dispose();
     passwordTextController2?.dispose();
@@ -64,7 +63,7 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
           backgroundColor: Color(0xFFF1F4F8),
           body: SafeArea(
             child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
+              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(24, 24, 24, 24),
                 child: Column(
@@ -408,6 +407,11 @@ class _LoginAndSignupWidgetState extends State<LoginAndSignupWidget> {
                                                             context)
                                                         .yellowSwaim,
                                                   ),
+                                              borderSide: BorderSide(
+                                                width: 0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                         ),

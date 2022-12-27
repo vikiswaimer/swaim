@@ -131,7 +131,7 @@ class _ChooseLabelForEditNoteWidgetState
                                       4, 4, 0, 0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      setState(() {
+                                      FFAppState().update(() {
                                         FFAppState().labelInEditSwaim =
                                             defaultLabelsLabelsRecord.reference;
                                       });
@@ -211,7 +211,7 @@ class _ChooseLabelForEditNoteWidgetState
                                       4, 4, 0, 0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      setState(() {
+                                      FFAppState().update(() {
                                         FFAppState().labelInEditSwaim =
                                             customLabelsLabelsRecord.reference;
                                       });

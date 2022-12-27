@@ -6,7 +6,7 @@
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
    <application
-        android:label="Swaim assistant"
+        android:label="Swaim"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
@@ -46,7 +46,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="swaimoriginalsaved" android:host="swaim.com" />
+                <data android:scheme="swaimoriginalsaved" android:host="swaim.co" />
             </intent-filter>
 
         </activity>

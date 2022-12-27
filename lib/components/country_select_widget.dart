@@ -92,7 +92,7 @@ class _CountrySelectWidgetState extends State<CountrySelectWidget> {
                         options: ['Poland', 'Lithuania'],
                         onChanged: (val) async {
                           setState(() => countryValue = val);
-                          setState(() {
+                          FFAppState().update(() {
                             FFAppState().countrySearch = countryValue!;
                           });
                         },

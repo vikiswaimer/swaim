@@ -43,7 +43,7 @@ class _AddSwaimWidgetState extends State<AddSwaimWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
+      FFAppState().update(() {
         FFAppState().labelInAddSwaim = widget.initialLabel!.reference;
       });
     });

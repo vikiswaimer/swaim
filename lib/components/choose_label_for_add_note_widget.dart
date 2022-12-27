@@ -131,7 +131,7 @@ class _ChooseLabelForAddNoteWidgetState
                                         4, 4, 0, 0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        setState(() {
+                                        FFAppState().update(() {
                                           FFAppState().labelInAddSwaim =
                                               defaultLabelsLabelsRecord
                                                   .reference;
@@ -212,7 +212,7 @@ class _ChooseLabelForAddNoteWidgetState
                                         4, 4, 0, 0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        setState(() {
+                                        FFAppState().update(() {
                                           FFAppState().labelInAddSwaim =
                                               customLabelsLabelsRecord
                                                   .reference;

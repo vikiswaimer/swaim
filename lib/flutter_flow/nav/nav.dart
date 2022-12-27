@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
+
 import '../../auth/firebase_user_provider.dart';
 
 import '../../index.dart';
@@ -89,7 +90,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               builder: (context, params) => MapPageWidget(
                 note: params.getParam(
-                    'note', ParamType.DocumentReference, false, 'notes'),
+                    'note', ParamType.DocumentReference, false, ['notes']),
                 noteLocation: params.getParam('noteLocation', ParamType.LatLng),
                 swaimLocation:
                     params.getParam('swaimLocation', ParamType.LatLng),
@@ -100,7 +101,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'notesPage',
               requireAuth: true,
               asyncParams: {
-                'notes': getDoc('notes', NotesRecord.serializer),
+                'notes': getDoc(['notes'], NotesRecord.serializer),
               },
               builder: (context, params) => NotesPageWidget(
                 notes: params.getParam('notes', ParamType.Document),
@@ -111,14 +112,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'addSwaim',
               requireAuth: true,
               asyncParams: {
-                'initialLabel': getDoc('labels', LabelsRecord.serializer),
+                'initialLabel': getDoc(['labels'], LabelsRecord.serializer),
               },
               builder: (context, params) => AddSwaimWidget(
                 payloadFromAggregation: params.getParam(
                     'payloadFromAggregation',
                     ParamType.DocumentReference,
                     false,
-                    'aggregations'),
+                    ['aggregations']),
                 initialLabel:
                     params.getParam('initialLabel', ParamType.Document),
               ),
@@ -128,11 +129,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'editSwaim',
               requireAuth: true,
               asyncParams: {
-                'label': getDoc('labels', LabelsRecord.serializer),
+                'label': getDoc(['labels'], LabelsRecord.serializer),
               },
               builder: (context, params) => EditSwaimWidget(
                 note: params.getParam(
-                    'note', ParamType.DocumentReference, false, 'notes'),
+                    'note', ParamType.DocumentReference, false, ['notes']),
                 label: params.getParam('label', ParamType.Document),
               ),
             ),
@@ -142,7 +143,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               builder: (context, params) => AggregationInfoWidget(
                 aggregation: params.getParam('aggregation',
-                    ParamType.DocumentReference, false, 'aggregations'),
+                    ParamType.DocumentReference, false, ['aggregations']),
               ),
             ),
             FFRoute(
@@ -157,7 +158,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'favoriteSwaimPage',
               requireAuth: true,
               asyncParams: {
-                'favAggregation': getDoc('favorite_aggregations',
+                'favAggregation': getDoc(['favorite_aggregations'],
                     FavoriteAggregationsRecord.serializer),
               },
               builder: (context, params) => FavoriteSwaimPageWidget(
@@ -167,9 +168,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     'swaimRef',
                     ParamType.DocumentReference,
                     false,
-                    'favorite_aggregations'),
+                    ['favorite_aggregations']),
                 label: params.getParam(
-                    'label', ParamType.DocumentReference, false, 'labels'),
+                    'label', ParamType.DocumentReference, false, ['labels']),
               ),
             ),
             FFRoute(
@@ -193,14 +194,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => TermConditionsWidget(),
             ),
             FFRoute(
-              name: 'ContactUs',
-              path: 'ContactUs',
-              builder: (context, params) => ContactUsWidget(),
-            ),
-            FFRoute(
               name: 'FAQ',
               path: 'FAQ',
               builder: (context, params) => FaqWidget(),
+            ),
+            FFRoute(
+              name: 'ContactUs',
+              path: 'ContactUs',
+              builder: (context, params) => ContactUsWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
@@ -313,7 +314,7 @@ class FFParameters {
     String paramName,
     ParamType type, [
     bool isList = false,
-    String? collectionName,
+    List<String>? collectionNamePath,
   ]) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -327,7 +328,7 @@ class FFParameters {
       return param;
     }
     // Return serialized value.
-    return deserializeParam<T>(param, type, isList, collectionName);
+    return deserializeParam<T>(param, type, isList, collectionNamePath);
   }
 }
 

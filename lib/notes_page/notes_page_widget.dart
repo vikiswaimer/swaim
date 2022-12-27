@@ -89,7 +89,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
         }
         List<AggregationsRecord> notesPageAggregationsRecordList =
             snapshot.data!;
-        // Return an empty Container when the document does not exist.
+        // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }
@@ -202,7 +202,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                               .of(context)
                                                           .bodyText1
                                                           .override(
-                                                            fontFamily: 'Lato',
+                                                            fontFamily: 'Syne',
                                                             fontSize: 14,
                                                           ),
                                                     ),
@@ -252,7 +252,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                 size: 18,
                                               ),
                                               onPressed: () async {
-                                                setState(() {
+                                                FFAppState().update(() {
                                                   FFAppState()
                                                       .isSettingsOpened = true;
                                                 });
@@ -272,7 +272,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                 size: 18,
                                               ),
                                               onPressed: () async {
-                                                setState(() {
+                                                FFAppState().update(() {
                                                   FFAppState()
                                                       .isSettingsOpened = false;
                                                 });
@@ -308,7 +308,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                               children: [
                                                 FFButtonWidget(
                                                   onPressed: () async {
-                                                    setState(() {
+                                                    FFAppState().update(() {
                                                       FFAppState()
                                                           .isSwaimsMode = false;
                                                     });
@@ -347,7 +347,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                 ),
                                                 FFButtonWidget(
                                                   onPressed: () async {
-                                                    setState(() {
+                                                    FFAppState().update(() {
                                                       FFAppState()
                                                           .isSwaimsMode = true;
                                                     });
@@ -516,18 +516,18 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                                           baseLabelsLabelsRecord
                                                                               .reference) ==
                                                                   true) {
-                                                                setState(() {
-                                                                  setState(() =>
-                                                                      FFAppState()
-                                                                          .removeFromFilterByLabel(
-                                                                              baseLabelsLabelsRecord.reference));
+                                                                FFAppState()
+                                                                    .update(() {
+                                                                  FFAppState().removeFromFilterByLabel(
+                                                                      baseLabelsLabelsRecord
+                                                                          .reference);
                                                                 });
                                                               } else {
-                                                                setState(() {
-                                                                  setState(() =>
-                                                                      FFAppState()
-                                                                          .addToFilterByLabel(
-                                                                              baseLabelsLabelsRecord.reference));
+                                                                FFAppState()
+                                                                    .update(() {
+                                                                  FFAppState().addToFilterByLabel(
+                                                                      baseLabelsLabelsRecord
+                                                                          .reference);
                                                                 });
                                                               }
                                                             },
@@ -636,18 +636,18 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                                           customLabelsLabelsRecord
                                                                               .reference) ==
                                                                   true) {
-                                                                setState(() {
-                                                                  setState(() =>
-                                                                      FFAppState()
-                                                                          .removeFromFilterByLabel(
-                                                                              customLabelsLabelsRecord.reference));
+                                                                FFAppState()
+                                                                    .update(() {
+                                                                  FFAppState().removeFromFilterByLabel(
+                                                                      customLabelsLabelsRecord
+                                                                          .reference);
                                                                 });
                                                               } else {
-                                                                setState(() {
-                                                                  setState(() =>
-                                                                      FFAppState()
-                                                                          .addToFilterByLabel(
-                                                                              customLabelsLabelsRecord.reference));
+                                                                FFAppState()
+                                                                    .update(() {
+                                                                  FFAppState().addToFilterByLabel(
+                                                                      customLabelsLabelsRecord
+                                                                          .reference);
                                                                 });
                                                               }
                                                             },
@@ -688,7 +688,8 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                                           customLabelsLabelsRecord
                                                                               .reference),
                                                                 );
-                                                                setState(() {
+                                                                FFAppState()
+                                                                    .update(() {
                                                                   FFAppState()
                                                                       .filterByLabel = [];
                                                                 });
@@ -843,18 +844,18 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                                           listViewAggregationCategoriesRecord
                                                                               .reference) ==
                                                                   true) {
-                                                                setState(() {
-                                                                  setState(() =>
-                                                                      FFAppState()
-                                                                          .removeFromSelectedSwaimsCategoriesInFilter(
-                                                                              listViewAggregationCategoriesRecord.reference));
+                                                                FFAppState()
+                                                                    .update(() {
+                                                                  FFAppState().removeFromSelectedSwaimsCategoriesInFilter(
+                                                                      listViewAggregationCategoriesRecord
+                                                                          .reference);
                                                                 });
                                                               } else {
-                                                                setState(() {
-                                                                  setState(() =>
-                                                                      FFAppState()
-                                                                          .addToSelectedSwaimsCategoriesInFilter(
-                                                                              listViewAggregationCategoriesRecord.reference));
+                                                                FFAppState()
+                                                                    .update(() {
+                                                                  FFAppState().addToSelectedSwaimsCategoriesInFilter(
+                                                                      listViewAggregationCategoriesRecord
+                                                                          .reference);
                                                                 });
                                                               }
                                                             },
@@ -1052,7 +1053,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                     ),
                                     InkWell(
                                       onTap: () async {
-                                        setState(() {
+                                        FFAppState().update(() {
                                           FFAppState().isGuideVisible = false;
                                         });
                                       },
@@ -1199,7 +1200,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                         children: [
                           FFButtonWidget(
                             onPressed: () async {
-                              setState(() {
+                              FFAppState().update(() {
                                 FFAppState().isSwaimsMode = false;
                               });
                             },
@@ -1229,7 +1230,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                           ),
                           FFButtonWidget(
                             onPressed: () async {
-                              setState(() {
+                              FFAppState().update(() {
                                 FFAppState().isSwaimsMode = true;
                               });
                             },
@@ -1407,7 +1408,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                   .where('title', isNotEqualTo: 'null')
                                   .where('country',
                                       isEqualTo: FFAppState().countrySearch),
-                          limit: 30,
+                          limit: 10,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -1616,7 +1617,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                                   iconButtonLabelsRecordList =
                                                                   snapshot
                                                                       .data!;
-                                                              // Return an empty Container when the document does not exist.
+                                                              // Return an empty Container when the item does not exist.
                                                               if (snapshot.data!
                                                                   .isEmpty) {
                                                                 return Container();
@@ -1874,6 +1875,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                       .toList()
                                       .where((e) => e != null && e != '')
                                       .toList()),
+                          limit: 10,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -1969,7 +1971,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                         .yellowSwaim,
                                                     icon: Icons.map,
                                                     onTap: () async {
-                                                      setState(() {
+                                                      FFAppState().update(() {
                                                         FFAppState()
                                                                 .isSwaimsMode =
                                                             false;
@@ -1996,7 +1998,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                     icon: Icons.ios_share,
                                                     onTap: () async {
                                                       await Share.share(
-                                                          'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}');
+                                                          'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}');
                                                     },
                                                   ),
                                                   IconSlideAction(
@@ -2193,16 +2195,16 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                         .selectedSwaimsCategoriesInFilter
                                                         .contains(bbbbItem) ==
                                                     true) {
-                                                  setState(() {
-                                                    setState(() => FFAppState()
+                                                  FFAppState().update(() {
+                                                    FFAppState()
                                                         .removeFromSelectedSwaimsCategoriesInFilter(
-                                                            bbbbItem));
+                                                            bbbbItem);
                                                   });
                                                 } else {
-                                                  setState(() {
-                                                    setState(() => FFAppState()
+                                                  FFAppState().update(() {
+                                                    FFAppState()
                                                         .addToSelectedSwaimsCategoriesInFilter(
-                                                            bbbbItem));
+                                                            bbbbItem);
                                                   });
                                                 }
                                               },
@@ -2356,16 +2358,16 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                                         .filterByLabel
                                                         .contains(bbbbItem) ==
                                                     true) {
-                                                  setState(() {
-                                                    setState(() => FFAppState()
+                                                  FFAppState().update(() {
+                                                    FFAppState()
                                                         .removeFromFilterByLabel(
-                                                            bbbbItem));
+                                                            bbbbItem);
                                                   });
                                                 } else {
-                                                  setState(() {
-                                                    setState(() => FFAppState()
+                                                  FFAppState().update(() {
+                                                    FFAppState()
                                                         .addToFilterByLabel(
-                                                            bbbbItem));
+                                                            bbbbItem);
                                                   });
                                                 }
                                               },
@@ -2513,7 +2515,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                     List<LabelsRecord>
                                         iconButtonLabelsRecordList =
                                         snapshot.data!;
-                                    // Return an empty Container when the document does not exist.
+                                    // Return an empty Container when the item does not exist.
                                     if (snapshot.data!.isEmpty) {
                                       return Container();
                                     }
@@ -2589,7 +2591,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                         List<LabelsRecord>
                                             iconButtonLabelsRecordList =
                                             snapshot.data!;
-                                        // Return an empty Container when the document does not exist.
+                                        // Return an empty Container when the item does not exist.
                                         if (snapshot.data!.isEmpty) {
                                           return Container();
                                         }
@@ -2688,7 +2690,7 @@ class _NotesPageWidgetState extends State<NotesPageWidget> {
                                         List<LabelsRecord>
                                             iconButtonLabelsRecordList =
                                             snapshot.data!;
-                                        // Return an empty Container when the document does not exist.
+                                        // Return an empty Container when the item does not exist.
                                         if (snapshot.data!.isEmpty) {
                                           return Container();
                                         }

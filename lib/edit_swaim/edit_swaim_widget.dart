@@ -46,7 +46,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
+      FFAppState().update(() {
         FFAppState().labelInEditSwaim = widget.label!.reference;
       });
     });
@@ -494,7 +494,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                               ),
                                               onPressed: () async {
                                                 await Share.share(
-                                                    'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}');
+                                                    'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}');
                                               },
                                             ),
                                           ),
@@ -556,7 +556,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                                               apiResultb9b =
                                                   await DeleteNoteCall.call(
                                                 noteId: functions.getEditeNoteId(
-                                                    'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
+                                                    'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}'),
                                               );
                                               _shouldSetState = true;
                                               if ((apiResultb9b?.succeeded ??
@@ -653,7 +653,7 @@ class _EditSwaimWidgetState extends State<EditSwaimWidget> {
                         description: textController2?.text ?? '',
                         user: currentUserUid,
                         noteId: functions.getEditeNoteId(
-                            'swaimoriginalsaved://swaim.com${GoRouter.of(context).location}'),
+                            'swaimoriginalsaved://swaim.co${GoRouter.of(context).location}'),
                         latitude: functions
                                     .getLatitude(placePickerValue.latLng)
                                     .toString() !=

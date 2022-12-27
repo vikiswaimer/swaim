@@ -94,7 +94,7 @@ class _EmptyListWidgetState extends State<EmptyListWidget> {
                     );
                   }
                   List<LabelsRecord> buttonLabelsRecordList = snapshot.data!;
-                  // Return an empty Container when the document does not exist.
+                  // Return an empty Container when the item does not exist.
                   if (snapshot.data!.isEmpty) {
                     return Container();
                   }
@@ -142,7 +142,7 @@ class _EmptyListWidgetState extends State<EmptyListWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
               child: FFButtonWidget(
                 onPressed: () async {
-                  setState(() {
+                  FFAppState().update(() {
                     FFAppState().isSwaimsMode = true;
                   });
 
